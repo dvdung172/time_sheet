@@ -1,0 +1,22 @@
+{
+  "app": {
+    "title": "Cửa hàng bán lẻ"
+  },
+  "common": {
+    "ok": "Xác nhận",
+    "cancel": "Bỏ qua",
+    "select_language": "Ngôn ngữ",
+    "delete": "Xóa",
+    "close": "Đóng",
+    "back": "Trở về",
+    "login": "Đăng nhập"
+  },
+  "messages": {
+    "no_internet_connection": "No Internet connection",
+    "connection_timed_out": "Connection timed out",
+    "try_again": "Try again",
+    "offline": "You're offline, please connect and try again",
+    "server_error": "An error occurred, please try again later",
+    "can_not_connect_server": "Can't connect to the server"
+  }
+}
