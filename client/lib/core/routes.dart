@@ -1,9 +1,9 @@
-import 'package:client/presentation/providers/bottom_navigation_bar_provider.dart';
+import 'package:client/presentation/providers/tab_index.dart';
 import 'package:client/presentation/providers/product_detail_provider.dart';
 import 'package:client/presentation/providers/product_list_provider.dart';
 import 'package:client/presentation/views/home_screen.dart';
 import 'package:client/presentation/views/login_screen.dart';
-import 'package:client/presentation/views/product_detail_screen.dart';
+import 'package:client/presentation/views/add_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -18,6 +18,7 @@ class Routes {
   static const search = '/search';
   static const settings = '/settings';
   static const productDetails = '/product_details';
+  static const newTimeSheet = '/new_time_sheet';
 }
 
 final Map<String, WidgetBuilder> routes = <String, WidgetBuilder>{
@@ -26,21 +27,13 @@ final Map<String, WidgetBuilder> routes = <String, WidgetBuilder>{
         child: HomeScreen(),
         providers: [
           ChangeNotifierProvider.value(
-              value: sl<BottomNavigationBarProvider>()),
+              value: sl<TabIndex>()),
           ChangeNotifierProvider.value(value: sl<ProductListProvider>()),
           // ChangeNotifierProvider.value(value: sl<ProductDetailProvider>()),
         ],
       ),
-  Routes.productDetails: (BuildContext context) {
-    final productId = ModalRoute.of(context)!.settings.arguments as int;
 
-    return MultiProvider(
-      child: ProductDetail(productId),
-      providers: [
-        ChangeNotifierProvider.value(value: sl<ProductDetailProvider>()),
-      ],
-    );
-  },
+  Routes.newTimeSheet: (BuildContext context) =>  NewTimeSheet(),
 
   // Routes.search: (BuildContext context) {
   //   var searchArguments = const SearchArguments.empty();

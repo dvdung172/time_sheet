@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class CustomColor {
   static const Color white = Color(0xFFFFFFFF);
   static const Color fontBlack = Color(0xDE000000);
-  static const Color logoBlue = Color(0xFF245f97);
+  static const Color logoBlue = Color(0xff26b3d7);
   static const Color textFieldBackground = Color(0x1E000000);
   static const Color hintColor = Color(0x99000000);
   static const Color statusBarColor = Color(0x1e000000);
@@ -23,9 +23,9 @@ class CustomTheme {
     // text styling for headlines, titles, bodies of text, and etc.
     textTheme: const TextTheme(
       headline1: TextStyle(
-        fontSize: 20.0,
+        fontSize: 25.0,
         fontWeight: FontWeight.bold,
-        color: CustomColor.fontBlack,
+        color: CustomColor.logoBlue,
       ),
       headline2: TextStyle(
         fontSize: 18.0,

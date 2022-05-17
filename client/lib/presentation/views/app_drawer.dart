@@ -1,7 +1,7 @@
 import 'package:client/core/routes.dart';
 import 'package:client/core/utility.dart';
 import 'package:client/data/models/user.dart';
-import 'package:client/presentation/providers/bottom_navigation_bar_provider.dart';
+import 'package:client/presentation/providers/tab_index.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -83,7 +83,7 @@ class AppDrawer extends StatelessWidget {
   }
 
   Widget _buildBody(BuildContext context) {
-    var provider = Provider.of<BottomNavigationBarProvider>(context);
+    var provider = Provider.of<TabIndex>(context);
 
     return Column(
       children: [
@@ -97,8 +97,8 @@ class AppDrawer extends StatelessWidget {
           },
         ),
         ListTile(
-          title: Text(tr('tabs.shoppingcart.title')),
-          leading: const Icon(Icons.shopping_cart),
+          title: Text(tr('tabs.views.title')),
+          leading: const Icon(Icons.book_outlined),
           selected: provider.currentIndex == 1,
           onTap: () {
             Navigator.pop(context);

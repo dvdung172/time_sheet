@@ -31,10 +31,10 @@
   },
   "tabs": {
     "home": {
-      "title": "Products"
+      "title": "Dash Board"
     },
-    "shoppingcart": {
-      "title": "Shopping"
+    "views": {
+      "title": "Time Sheets"
     },
     "settings": {
       "title": "Settings"
