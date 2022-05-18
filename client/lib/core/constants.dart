@@ -23,6 +23,9 @@ class Endpoints {
 
   // Product
   static final String productApiUrl = '$apiURL/products';
+
+  //timessheet
+  static final String timeSheetApiUrl = '$apiURL/timeSheet';
 }
 
 class ResultCode {

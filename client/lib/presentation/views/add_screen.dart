@@ -1,3 +1,6 @@
+import 'package:client/core/di.dart';
+import 'package:client/core/routes.dart';
+import 'package:client/presentation/providers/tab_index.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
@@ -13,18 +16,17 @@ class NewTimeSheet extends StatefulWidget {
 }
 
 class _NewTimeSheet extends State<NewTimeSheet> {
-  dynamic calendarTapCallback;
-  var _date = DateTime.now();
   late List<String> _dropdownValue;
 
   @override
   Widget build(BuildContext context) {
+    final _date = ModalRoute.of(context)!.settings.arguments as DateTime;//get argrument
     var numItems = DateUtils.getDaysInMonth(_date.year, _date.month);
     return Scaffold(
       appBar: AppBar(
         title: const Text('New Time Sheet'),
-        actions: [
-          IconButton(onPressed: null, icon: Icon(Icons.save_outlined))
+        actions:  [
+          IconButton(onPressed: () {}, icon: Icon(Icons.save_outlined))
         ],
         backgroundColor: Theme.of(context).primaryColor,
       ),
@@ -56,12 +58,12 @@ class _NewTimeSheet extends State<NewTimeSheet> {
             numItems,
             (int index) => DataRow(
               color: MaterialStateProperty.resolveWith<Color?>(
-                      (Set<MaterialState> states) {
-                    // All rows will have the same selected color.
-                    if (DateTime(_date.year, _date.month, index + 1).weekday > 5) {
-                      return Theme.of(context).primaryColor.withOpacity(0.4);
-                    } // Use default value for other states and odd rows.
-                  }),
+                  (Set<MaterialState> states) {
+                // All rows will have the same selected color.
+                if (DateTime(_date.year, _date.month, index + 1).weekday > 5) {
+                  return Theme.of(context).primaryColor.withOpacity(0.4);
+                } // Use default value for other states and odd rows.
+              }),
               cells: <DataCell>[
                 DataCell(Text(
                     '${DateFormat(DateFormat.YEAR_NUM_MONTH_WEEKDAY_DAY).format(DateTime(_date.year, _date.month, index + 1))}')),
@@ -83,14 +85,16 @@ class _NewTimeSheet extends State<NewTimeSheet> {
                     controller: TextEditingController(),
                   ),
                 ),
-                DataCell(Text('-'),onTap: ()=>showDialog<String>(
-                  context: context,
-                  builder: (BuildContext context) => const LeaveDialog(),
-                )),
+                DataCell(Text('-'),
+                    onTap: () => showDialog<String>(
+                          context: context,
+                          builder: (BuildContext context) =>
+                              const LeaveDialog(),
+                        )),
                 const DataCell(
-                    TextField(
-                      maxLines: 8, //or null
-                    ),
+                  TextField(
+                    maxLines: 8, //or null
+                  ),
                 ),
               ],
             ),
@@ -99,5 +103,5 @@ class _NewTimeSheet extends State<NewTimeSheet> {
       ),
     );
   }
-}
 
+}

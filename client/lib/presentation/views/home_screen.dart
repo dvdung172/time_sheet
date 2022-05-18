@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:client/core/di.dart';
 import 'package:client/presentation/providers/tab_index.dart';
 import 'package:client/presentation/views/tabs/dashboard_tab.dart';
@@ -5,9 +7,11 @@ import 'package:client/presentation/views/tabs/settings_tab.dart';
 import 'package:client/presentation/views/tabs/viewsheets_tab.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:provider/provider.dart';
 
 import '../../core/routes.dart';
+import '../widgets/custom_month_picker.dart';
 import 'app_drawer.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -39,12 +43,27 @@ class HomeScreen extends StatelessWidget {
       ),
       drawer: AppDrawer(scaffoldKey: _scaffoldKey),
       body: _tabList[provider.currentIndex],
-      floatingActionButton: FloatingActionButton(
-        onPressed: () { Navigator.pushNamed(context, Routes.newTimeSheet);
+      floatingActionButton: provider.currentIndex==0? FloatingActionButton(
+        onPressed: () {
+          DatePicker.showPicker(
+            context,
+            pickerModel: CustomMonthPicker(
+                minTime: DateTime(2020, 1, 1),
+                maxTime: DateTime.now(),
+                currentTime: DateTime.now()),
+            showTitleActions: true,
+            onConfirm: (date) {
+              Navigator.pushNamed(context, Routes.newTimeSheet, arguments: date);
+            },
+          );
         },
+        // onPressed: () { Navigator.pushNamed(context, Routes.newTimeSheet);
+        // },
         backgroundColor: Theme.of(context).primaryColor,
         child: const Icon(Icons.add),
-      ),
+      ):null,
     );
   }
 }
+
+
