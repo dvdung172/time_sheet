@@ -10,8 +10,18 @@ class LeaveDialog extends StatefulWidget {
 }
 
 class _LeaveDialog extends State<LeaveDialog> {
-  String dropdownValue = '-Select leave-';
-
+  late String? dropdownValue = null ;
+  final _textcontroller = TextEditingController();
+  List<String> leaveList = [];
+  @override
+  void initState() {
+    super.initState();
+  }
+@override
+  void dispose() {
+    _textcontroller.dispose();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -21,6 +31,8 @@ class _LeaveDialog extends State<LeaveDialog> {
           children: [
             DropdownButton<String>(
               value: dropdownValue,
+              hint: const Text('-Select reason-'),
+              disabledHint: null,
               elevation: 16,
               onChanged: (String? newValue) {
                 setState(() {
@@ -28,7 +40,6 @@ class _LeaveDialog extends State<LeaveDialog> {
                 });
               },
               items: <String>[
-                '-Select leave-',
                 'Annual leave',
                 'Special holiday',
                 'Sick leave',
@@ -42,8 +53,9 @@ class _LeaveDialog extends State<LeaveDialog> {
               }).toList(),
             ),
             TextField(
+              controller: _textcontroller,
               keyboardType: TextInputType.number,
-              decoration: new InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Time off',
               ),
             ),
@@ -52,11 +64,15 @@ class _LeaveDialog extends State<LeaveDialog> {
       ),
       actions: <Widget>[
         TextButton(
-          onPressed: () => Navigator.pop(context, 'Cancel'),
+          onPressed: () => Navigator.pop(context, leaveList),
           child: const Text('Cancel'),
         ),
         TextButton(
-          onPressed: () => Navigator.pop(context, 'OK'),
+          onPressed: () {
+            leaveList.add(dropdownValue!);
+            leaveList.add(_textcontroller.text);
+            Navigator.pop(context, leaveList);
+          },
           child: const Text('OK'),
         ),
       ],

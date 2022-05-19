@@ -1,6 +1,3 @@
-import 'package:client/core/di.dart';
-import 'package:client/core/routes.dart';
-import 'package:client/presentation/providers/tab_index.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
@@ -16,17 +13,15 @@ class NewTimeSheet extends StatefulWidget {
 }
 
 class _NewTimeSheet extends State<NewTimeSheet> {
-  late List<String> _dropdownValue;
-
   @override
   Widget build(BuildContext context) {
-    final _date = ModalRoute.of(context)!.settings.arguments as DateTime;//get argrument
+    DateTime _date = ModalRoute.of(context)!.settings.arguments as DateTime;//get argrument
     var numItems = DateUtils.getDaysInMonth(_date.year, _date.month);
     return Scaffold(
       appBar: AppBar(
         title: const Text('New Time Sheet'),
         actions:  [
-          IconButton(onPressed: () {}, icon: Icon(Icons.save_outlined))
+          IconButton(onPressed: () {}, icon: const Icon(Icons.save_outlined))
         ],
         backgroundColor: Theme.of(context).primaryColor,
       ),
@@ -66,7 +61,7 @@ class _NewTimeSheet extends State<NewTimeSheet> {
               }),
               cells: <DataCell>[
                 DataCell(Text(
-                    '${DateFormat(DateFormat.YEAR_NUM_MONTH_WEEKDAY_DAY).format(DateTime(_date.year, _date.month, index + 1))}')),
+                    DateFormat(DateFormat.YEAR_NUM_MONTH_WEEKDAY_DAY).format(DateTime(_date.year, _date.month, index + 1)))),
                 DataCell(
                   TextField(
                     keyboardType: TextInputType.number,
@@ -85,12 +80,16 @@ class _NewTimeSheet extends State<NewTimeSheet> {
                     controller: TextEditingController(),
                   ),
                 ),
-                DataCell(Text('-'),
-                    onTap: () => showDialog<String>(
-                          context: context,
-                          builder: (BuildContext context) =>
-                              const LeaveDialog(),
-                        )),
+                DataCell(const Text("-"),
+                    onTap: () async {
+                  List<String> _leave =  await showDialog<dynamic>(
+                        context: context,
+                        builder: (BuildContext context) =>
+                        const LeaveDialog(),
+                      );
+                  print('sdas');
+                  print(_leave[0]);
+                    }),
                 const DataCell(
                   TextField(
                     maxLines: 8, //or null

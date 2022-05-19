@@ -21,8 +21,6 @@ class Endpoints {
   static final String authApiURL = '$apiURL/auth';
   static final String logoutApiURL = '$apiURL/logout';
 
-  // Product
-  static final String productApiUrl = '$apiURL/products';
 
   //timessheet
   static final String timeSheetApiUrl = '$apiURL/timeSheet';

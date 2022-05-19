@@ -17,27 +17,28 @@ class Leave {
   }
 }
 
-class DataRow {
+class SheetsRow {
+
   final DateTime date;
   final double generalComing;
   final double overTime;
   final Leave? leave;
-  final String contents;
+  final String? contents;
 
-  DataRow(
+  SheetsRow(
       {required this.date,
       required this.generalComing,
       required this.overTime,
-      required this.contents,
+      this.contents,
       this.leave});
 
-  factory DataRow.fromJson(Map<String, dynamic> json) {
+  factory SheetsRow.fromJson(Map<String, dynamic> json) {
     try {
-      return DataRow(
+      return SheetsRow(
         date: DateTime.parse(json['date']),
         generalComing: double.parse("${json['generalComing']}"),
         overTime: double.parse("${json['overTime']}"),
-        contents: json['contents'],
+        contents: json['contents'] ?? '' ,
         leave: json['leave'] == null ? null : Leave.fromJson(json['leave']),
       );
     } catch (e) {
@@ -48,28 +49,32 @@ class DataRow {
 }
 
 class TimeSheet {
-  final DateTime id;
+  final int id;
+  final DateTime sheetsDate;
   final int userId;
-  final List<DataRow> rows;
+  final List<SheetsRow> rows;
 
-  TimeSheet({required this.id, required this.userId, required this.rows});
+  TimeSheet( {required this.id,required this.sheetsDate, required this.userId, required this.rows});
 
   factory TimeSheet.fromJson(Map<String, dynamic> json) {
-    final List<DataRow> temprows = [];
-    json["rows"].forEach((row) => temprows.add(DataRow.fromJson(row)));
+    final List<SheetsRow> temps = [];
+    json["rows"].forEach((row) => temps.add(SheetsRow.fromJson(row)));
     try {
       return TimeSheet(
-        id: DateTime.parse(json['id']),
+        id:json['id'] ,
+        sheetsDate: DateTime.parse(json['sheetsDate']),
         userId: json['userId'],
-        rows: temprows,
+        rows: temps,
       );
     } catch (e) {
       print(e);
       rethrow;
     }
   }
+
   Map<String, dynamic> toJson() => {
         "id": id,
+    "sheetsDate": sheetsDate,
         "userId": userId,
         "rows": List<dynamic>.from(rows.map((x) => x)),
       };

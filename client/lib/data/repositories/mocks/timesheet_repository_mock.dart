@@ -16,4 +16,19 @@ class TimeSheetRepositoryMock extends TimeSheetRepository {
     return TimeSheet.fromJson(json.decode(data));
     
   }
+  @override
+  Future<List<TimeSheet>> getAllTimeSheet() async {
+    // dummy service
+    // simulate calling to server take time 300 ms
+    await Future<void>.delayed(const Duration(milliseconds: 300));
+    final data = await rootBundle.loadString('assets/mocks/all_sheets.json');
+
+    // logger.d('Response: $data');
+
+    final timeSheets = await json
+        .decode(data)
+        .map<TimeSheet>((item) => TimeSheet.fromJson(item))
+        .toList();
+    return timeSheets;
+  }
 }

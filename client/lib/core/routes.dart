@@ -1,6 +1,4 @@
 import 'package:client/presentation/providers/tab_index.dart';
-import 'package:client/presentation/providers/product_detail_provider.dart';
-import 'package:client/presentation/providers/product_list_provider.dart';
 import 'package:client/presentation/providers/timesheet_provider.dart';
 import 'package:client/presentation/views/home_screen.dart';
 import 'package:client/presentation/views/login_screen.dart';
@@ -28,7 +26,6 @@ final Map<String, WidgetBuilder> routes = <String, WidgetBuilder>{
         child: HomeScreen(),
         providers: [
           ChangeNotifierProvider.value(value: sl<TabIndex>()),
-          ChangeNotifierProvider.value(value: sl<ProductListProvider>()),
           ChangeNotifierProvider.value(value: sl<TimeSheetProvider>()),
           // ChangeNotifierProvider.value(value: sl<ProductDetailProvider>()),
         ],

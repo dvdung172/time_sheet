@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:client/core/di.dart';
 import 'package:client/presentation/providers/tab_index.dart';
 import 'package:client/presentation/views/tabs/dashboard_tab.dart';
@@ -11,6 +9,7 @@ import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:provider/provider.dart';
 
 import '../../core/routes.dart';
+import '../providers/timesheet_provider.dart';
 import '../widgets/custom_month_picker.dart';
 import 'app_drawer.dart';
 
@@ -34,7 +33,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<TabIndex>(context);
-
+    sl<TimeSheetProvider>().getAllTimeSheets();
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
