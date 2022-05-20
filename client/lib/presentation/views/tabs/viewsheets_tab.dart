@@ -5,6 +5,7 @@ import 'package:client/presentation/widgets/custom_month_picker.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:flutter_expandable_table/flutter_expandable_table.dart';
 import 'package:provider/provider.dart';
 import 'package:collection/collection.dart';
 
@@ -19,12 +20,13 @@ class ViewSheets extends StatefulWidget {
 
 class _ViewSheets extends State<ViewSheets> {
   late DateTime _date = DateTime.now();
-
-  @override
-  void initState() {
-    super.initState();
-
-  }
+  final List _headers = [
+    'Date',
+    'General Coming',
+    'Over Time',
+    'Leave',
+    'Task Content'
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -52,88 +54,107 @@ class _ViewSheets extends State<ViewSheets> {
                 style: CustomTheme.mainTheme.textTheme.headline2,
               )),
         ),
-        Expanded(
-          child: SingleChildScrollView(
-            scrollDirection: Axis.vertical,
-            child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Consumer<TimeSheetProvider>(
-                    builder: (context, provider, child) {
-                  if (provider.loading) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
-                  final TimeSheet? timeSheet = provider.timeSheets
-                      .firstWhereOrNull((p) =>
-                          DateFormat(DateFormat.YEAR_MONTH)
-                              .format(p.sheetsDate)
-                              .compareTo(DateFormat(DateFormat.YEAR_MONTH)
-                                  .format(_date)) ==
-                          0);
-                  if (timeSheet == null) {
-                    return const Center(
-                      child: Text('No Time Sheet Available'),
-                    );
-                  } else {
-                    return DataTable(
-                      dividerThickness: 0,
-                      columns: const <DataColumn>[
-                        DataColumn(
-                          label: Text('Date'),
-                        ),
-                        DataColumn(
-                          label: Text(
-                            'General\ncoming',
-                            maxLines: 2,
-                          ),
-                        ),
-                        DataColumn(
-                          label: Text('OverTime'),
-                        ),
-                        DataColumn(
-                          label: Text('Leave'),
-                        ),
-                        DataColumn(
-                          label: Text('Task contents'),
-                        ),
-                      ],
-                      rows: List<DataRow>.generate(
-                        timeSheet.rows.length,
-                        (int index) => DataRow(
-                          color: MaterialStateProperty.resolveWith<Color?>(
-                              (Set<MaterialState> states) {
-                            if (timeSheet.rows[index].date.weekday > 5) {
-                              return Theme.of(context)
-                                  .primaryColor
-                                  .withOpacity(0.4);
-                            }
-                          }),
-                          cells: <DataCell>[
-                            DataCell(Text(
-                                DateFormat(DateFormat.YEAR_NUM_MONTH_WEEKDAY_DAY).format(timeSheet.rows[index].date))),
-                            DataCell(
-                              Text('${timeSheet.rows[index].generalComing}'),
-                            ),
-                            DataCell(
-                              Text(
-                                  timeSheet.rows[index].overTime.toString()),
-                            ),
-                            DataCell(
-                              Text(timeSheet.rows[index].leave == null
-                                  ? '-'
-                                  : '${timeSheet.rows[index].leave?.reason}: ${timeSheet.rows[index].leave?.timeoff}'),
-                            ),
-                            DataCell(
-                              Text('${timeSheet.rows[index].contents}'),
-                            ),
-                          ],
-                          onLongPress: () {},
-                        ),
-                      ),
-                    );
-                  }
-                })),
-          ),
-        ),
+        Consumer<TimeSheetProvider>(builder: (context, provider, child) {
+          if (provider.loading) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          final TimeSheet? timeSheet = provider.timeSheets.firstWhereOrNull(
+              (p) =>
+                  DateFormat(DateFormat.YEAR_MONTH)
+                      .format(p.sheetsDate)
+                      .compareTo(
+                          DateFormat(DateFormat.YEAR_MONTH).format(_date)) ==
+                  0);
+          if (timeSheet == null) {
+            return const Center(
+              child: Text('No Time Sheet Available'),
+            );
+          } else {
+            return Expanded(
+              child: ExpandableTable(
+                headerHeight: 50,
+                firstColumnWidth: 100,
+                header: ExpandableTableHeader(
+                    firstCell: Container(
+                        margin: EdgeInsets.all(1),
+                        child: Center(
+                            child: Text(
+                          _headers[0],
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ))),
+                    children: List.generate(
+                        _headers.length - 1,
+                        (index) => Container(
+                            margin: EdgeInsets.all(1),
+                            child: Center(
+                                child: Text(
+                              _headers[index + 1],
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ))))),
+                rows: List.generate(
+                    timeSheet.rows.length,
+                    (rowIndex) => ExpandableTableRow(
+                            height: 60,
+                            firstCell: Container(
+                                color: timeSheet.rows[rowIndex].date.weekday > 5
+                                    ? Theme.of(context)
+                                        .primaryColor
+                                        .withOpacity(0.4)
+                                    : null,
+                                child: Center(
+                                    child: Text(DateFormat('EE, dd/MM').format(
+                                        timeSheet.rows[rowIndex].date)))),
+                            children: <Widget>[
+                              Container(
+                                  color: timeSheet.rows[rowIndex].date.weekday > 5
+                                      ? Theme.of(context)
+                                      .primaryColor
+                                      .withOpacity(0.4)
+                                      : null,
+                                  child: Center(
+                                      child: Text(
+                                    timeSheet.rows[rowIndex].generalComing
+                                        .toString(),
+                                  ))),
+                              Container(
+                                  color: timeSheet.rows[rowIndex].date.weekday > 5
+                                      ? Theme.of(context)
+                                      .primaryColor
+                                      .withOpacity(0.4)
+                                      : null,
+                                  child: Center(
+                                      child: Text(
+                                    timeSheet.rows[rowIndex].overTime
+                                        .toString(),
+                                  ))),
+                              Container(
+                                  color: timeSheet.rows[rowIndex].date.weekday > 5
+                                      ? Theme.of(context)
+                                      .primaryColor
+                                      .withOpacity(0.4)
+                                      : null,
+                                  child: Center(
+                                    child: Text(timeSheet
+                                                .rows[rowIndex].leave ==
+                                            null
+                                        ? '-'
+                                        : '${timeSheet.rows[rowIndex].leave?.reason}: ${timeSheet.rows[rowIndex].leave?.timeoff}'),
+                                  )),
+                              Container(
+                                  color: timeSheet.rows[rowIndex].date.weekday > 5
+                                      ? Theme.of(context)
+                                      .primaryColor
+                                      .withOpacity(0.4)
+                                      : null,
+                                  child: Center(
+                                      child: Text(
+                                    "${timeSheet.rows[rowIndex].contents}",
+                                  ))),
+                            ])),
+              ),
+            );
+          }
+        })
       ],
     );
   }

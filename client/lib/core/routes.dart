@@ -2,7 +2,7 @@ import 'package:client/presentation/providers/tab_index.dart';
 import 'package:client/presentation/providers/timesheet_provider.dart';
 import 'package:client/presentation/views/home_screen.dart';
 import 'package:client/presentation/views/login_screen.dart';
-import 'package:client/presentation/views/add_screen.dart';
+import 'package:client/presentation/views/create_timesheet_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
