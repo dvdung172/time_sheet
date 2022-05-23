@@ -1,5 +1,6 @@
 import 'package:client/core/di.dart';
 import 'package:client/presentation/providers/tab_index.dart';
+import 'package:client/presentation/providers/timesheet_provider.dart';
 import 'package:client/presentation/views/tabs/dashboard_tab.dart';
 import 'package:client/presentation/views/tabs/settings_tab.dart';
 import 'package:client/presentation/views/tabs/viewsheets_tab.dart';
@@ -9,14 +10,13 @@ import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:provider/provider.dart';
 
 import '../../core/routes.dart';
-import '../providers/timesheet_provider.dart';
 import '../widgets/custom_month_picker.dart';
 import 'app_drawer.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({Key? key}) : super(key: key) {
     _tabList = <Widget>[
-       DashBoardTab(key: ValueKey(0)),
+       const DashBoardTab(key: ValueKey(0)),
       const ViewSheets(key: ValueKey(1)),
       const SettingsTab(key: ValueKey(2)),
     ];
@@ -33,7 +33,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<TabIndex>(context);
-    sl<TimeSheetProvider>().getAllTimeSheets();
+    // sl<TimeSheetProvider>().getAllTimeSheets();
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
@@ -52,7 +52,8 @@ class HomeScreen extends StatelessWidget {
                 currentTime: DateTime.now()),
             showTitleActions: true,
             onConfirm: (date) {
-              Navigator.pushNamed(context, Routes.newTimeSheet, arguments: date);
+              sl<TimeSheetProvider>().createTimeSheet(date);
+              Navigator.pushNamed(context, Routes.newTimeSheet);
             },
           );
         },

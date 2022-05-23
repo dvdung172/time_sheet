@@ -1,6 +1,8 @@
 import 'package:client/core/constants.dart';
+import 'package:client/core/di.dart';
 import 'package:client/core/routes.dart';
 import 'package:client/core/theme.dart';
+import 'package:client/presentation/providers/list_timesheet_provider.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
@@ -132,6 +134,7 @@ class _LoginScreenState extends State<LoginScreen> {
       // ),
       // color: CustomColor.logoBlue,
       onPressed: () async {
+        sl<ListTimeSheetsProvider>().getAllTimeSheets();
         await Navigator.of(context)
             .pushNamedAndRemoveUntil(Routes.home, (Route route) => false);
       },

@@ -19,8 +19,8 @@ class _SettingsTabState extends State<SettingsTab> {
     ExpandableTableHeader header = ExpandableTableHeader(
         firstCell: Container(
             color: primaryColor,
-            margin: EdgeInsets.all(1),
-            child: Center(
+            margin: const EdgeInsets.all(1),
+            child: const Center(
                 child: Text(
                   'Simple\nTable',
                   style: textStyle,
@@ -29,7 +29,7 @@ class _SettingsTabState extends State<SettingsTab> {
             COLUMN_COUNT - 1,
                 (index) => Container(
                 color: primaryColor,
-                margin: EdgeInsets.all(1),
+                margin: const EdgeInsets.all(1),
                 child: Center(
                     child: Text(
                       'Column $index',
@@ -43,7 +43,7 @@ class _SettingsTabState extends State<SettingsTab> {
           firstCell: Container(
             width: 10,
               color: primaryColor,
-              margin: EdgeInsets.all(1),
+              margin: const EdgeInsets.all(1),
               child: Center(
                   child: Text(
                     'Row $rowIndex',
@@ -53,7 +53,7 @@ class _SettingsTabState extends State<SettingsTab> {
               COLUMN_COUNT - 1,
                   (columnIndex) => Container(
                   color: primaryColor,
-                  margin: EdgeInsets.all(1),
+                  margin: const EdgeInsets.all(1),
                   child: Center(
                       child: Text(
                         'Cell $rowIndex:$columnIndex',

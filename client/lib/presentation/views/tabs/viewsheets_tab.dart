@@ -1,6 +1,6 @@
 import 'package:client/core/theme.dart';
 import 'package:client/data/models/timesheet.dart';
-import 'package:client/presentation/providers/timesheet_provider.dart';
+import 'package:client/presentation/providers/list_timesheet_provider.dart';
 import 'package:client/presentation/widgets/custom_month_picker.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -30,6 +30,20 @@ class _ViewSheets extends State<ViewSheets> {
 
   @override
   Widget build(BuildContext context) {
+    CustomeCell({
+      required DateTime date,
+      required Widget child,
+    }) {
+      return Container(
+          margin: const EdgeInsets.only(bottom: 0.5),
+          color: date.weekday > 5
+              ? Theme.of(context).primaryColor.withOpacity(0.4)
+              : null,
+          child: Center(
+            child: child,
+          ));
+    }
+
     return Column(
       children: [
         Center(
@@ -54,7 +68,7 @@ class _ViewSheets extends State<ViewSheets> {
                 style: CustomTheme.mainTheme.textTheme.headline2,
               )),
         ),
-        Consumer<TimeSheetProvider>(builder: (context, provider, child) {
+        Consumer<ListTimeSheetsProvider>(builder: (context, provider, child) {
           if (provider.loading) {
             return const Center(child: CircularProgressIndicator());
           }
@@ -76,80 +90,55 @@ class _ViewSheets extends State<ViewSheets> {
                 firstColumnWidth: 100,
                 header: ExpandableTableHeader(
                     firstCell: Container(
-                        margin: EdgeInsets.all(1),
+                        margin: const EdgeInsets.all(1),
                         child: Center(
                             child: Text(
                           _headers[0],
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                          style: const TextStyle(fontWeight: FontWeight.bold),
                         ))),
                     children: List.generate(
                         _headers.length - 1,
                         (index) => Container(
-                            margin: EdgeInsets.all(1),
+                            margin: const EdgeInsets.all(1),
                             child: Center(
                                 child: Text(
                               _headers[index + 1],
-                              style: TextStyle(fontWeight: FontWeight.bold),
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
                             ))))),
                 rows: List.generate(
                     timeSheet.rows.length,
                     (rowIndex) => ExpandableTableRow(
                             height: 60,
-                            firstCell: Container(
-                                color: timeSheet.rows[rowIndex].date.weekday > 5
-                                    ? Theme.of(context)
-                                        .primaryColor
-                                        .withOpacity(0.4)
-                                    : null,
-                                child: Center(
-                                    child: Text(DateFormat('EE, dd/MM').format(
-                                        timeSheet.rows[rowIndex].date)))),
+                            firstCell: CustomeCell(
+                                date: timeSheet.rows[rowIndex].date,
+                                child: Text(DateFormat('EE, dd/MM').format(
+                                    DateTime(_date.year, _date.month,
+                                        rowIndex + 1)))),
                             children: <Widget>[
-                              Container(
-                                  color: timeSheet.rows[rowIndex].date.weekday > 5
-                                      ? Theme.of(context)
-                                      .primaryColor
-                                      .withOpacity(0.4)
-                                      : null,
-                                  child: Center(
-                                      child: Text(
+                              CustomeCell(
+                                  date: timeSheet.rows[rowIndex].date,
+                                  child: Text(
                                     timeSheet.rows[rowIndex].generalComing
                                         .toString(),
-                                  ))),
-                              Container(
-                                  color: timeSheet.rows[rowIndex].date.weekday > 5
-                                      ? Theme.of(context)
-                                      .primaryColor
-                                      .withOpacity(0.4)
-                                      : null,
-                                  child: Center(
-                                      child: Text(
+                                  )),
+                              CustomeCell(
+                                  date: timeSheet.rows[rowIndex].date,
+                                  child: Text(
                                     timeSheet.rows[rowIndex].overTime
                                         .toString(),
-                                  ))),
-                              Container(
-                                  color: timeSheet.rows[rowIndex].date.weekday > 5
-                                      ? Theme.of(context)
-                                      .primaryColor
-                                      .withOpacity(0.4)
-                                      : null,
-                                  child: Center(
-                                    child: Text(timeSheet
-                                                .rows[rowIndex].leave ==
-                                            null
-                                        ? '-'
-                                        : '${timeSheet.rows[rowIndex].leave?.reason}: ${timeSheet.rows[rowIndex].leave?.timeoff}'),
                                   )),
-                              Container(
-                                  color: timeSheet.rows[rowIndex].date.weekday > 5
-                                      ? Theme.of(context)
-                                      .primaryColor
-                                      .withOpacity(0.4)
-                                      : null,
-                                  child: Center(
-                                      child: Text(
+                              CustomeCell(
+                                  date: timeSheet.rows[rowIndex].date,
+                                  child: Text(timeSheet.rows[rowIndex].leave ==
+                                          null
+                                      ? '-'
+                                      : '${timeSheet.rows[rowIndex].leave?.reason}: ${timeSheet.rows[rowIndex].leave?.timeoff}')),
+                              CustomeCell(
+                                  date: timeSheet.rows[rowIndex].date,
+                                  child: Text(
                                     "${timeSheet.rows[rowIndex].contents}",
-                                  ))),
+                                  )),
                             ])),
               ),
             );
