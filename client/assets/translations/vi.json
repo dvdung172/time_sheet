@@ -38,6 +38,9 @@
     },
     "settings": {
       "title": "Settings"
+    },
+    "manage": {
+      "title": "Manage Only"
     }
   }
 }

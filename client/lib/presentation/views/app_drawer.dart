@@ -106,12 +106,21 @@ class AppDrawer extends StatelessWidget {
           },
         ),
         ListTile(
-          title: Text(tr('tabs.settings.title')),
-          leading: const Icon(Icons.settings),
+          title: Text(tr('tabs.manage.title')),
+          leading: const Icon(Icons.people_alt),
           selected: provider.currentIndex == 2,
           onTap: () {
             Navigator.pop(context);
             provider.currentIndex = 2;
+          },
+        ),
+        ListTile(
+          title: Text(tr('tabs.settings.title')),
+          leading: const Icon(Icons.settings),
+          selected: provider.currentIndex == 3,
+          onTap: () {
+            Navigator.pop(context);
+            provider.currentIndex = 3;
           },
         ),
         const Divider(),

@@ -1,26 +1,11 @@
 import 'package:client/core/logger.dart';
 import 'package:client/data/models/timesheet.dart';
 import 'package:client/data/repositories/mocks/timesheet_repository_mock.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:collection/collection.dart';
 
 class ListTimeSheetsProvider extends ChangeNotifier {
-  // final TimeSheetRepositoryMock timSheetRepository;
-  // bool loading = false;
-  // TimeSheet? timeSheet;
-  //
-  // TimeSheetProvider(this.timSheetRepository);
-  //
-  // Future<void> getTimeSheetById(int timeSheetId) async {
-  //   loading = true;
-  //   notifyListeners();
-  //
-  //   logger.d('getTimeSheet');
-  //
-  //   final value = await timSheetRepository.getTimeSheetById(timeSheetId);
-  //   loading = false;
-  //   timeSheet = value;
-  //   notifyListeners();
-  // }
 
   final TimeSheetRepositoryMock timeSheetRepository;
   bool loading = false;
@@ -41,5 +26,18 @@ class ListTimeSheetsProvider extends ChangeNotifier {
       timeSheets = value;
       notifyListeners();
     }
+  }
+
+  List<TimeSheet> get4Month(DateTime userCreatedDate){
+    DateFormat dateFormat=DateFormat(DateFormat.YEAR_NUM_MONTH);
+    List<TimeSheet> list = [];
+    for(int i=3;i>=0;i--){
+      final date = DateTime(userCreatedDate.year, userCreatedDate.month - i);
+      var ts = timeSheets.firstWhereOrNull((element) => dateFormat.format(element.sheetsDate) == dateFormat.format(date));
+      if(ts != null){
+        list.add(ts);
+      }
+    }
+    return list;
   }
 }

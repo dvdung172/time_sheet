@@ -1,6 +1,7 @@
 import 'package:client/core/theme.dart';
 import 'package:client/data/models/timesheet.dart';
 import 'package:client/presentation/providers/list_timesheet_provider.dart';
+import 'package:client/presentation/providers/tab_index.dart';
 import 'package:client/presentation/widgets/custom_month_picker.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +20,7 @@ class ViewSheets extends StatefulWidget {
 }
 
 class _ViewSheets extends State<ViewSheets> {
-  late DateTime _date = DateTime.now();
+  late DateTime _date = Provider.of<TabIndex>(context).date;
   final List _headers = [
     'Date',
     'General Coming',
@@ -37,7 +38,7 @@ class _ViewSheets extends State<ViewSheets> {
       return Container(
           margin: const EdgeInsets.only(bottom: 0.5),
           color: date.weekday > 5
-              ? Theme.of(context).primaryColor.withOpacity(0.4)
+              ? Theme.of(context).primaryColor.withOpacity(0.2)
               : null,
           child: Center(
             child: child,

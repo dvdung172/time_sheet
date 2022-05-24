@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:client/data/models/timesheet.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -10,10 +12,15 @@ class TimeSheetProvider extends ChangeNotifier {
   void createTimeSheet(DateTime _date){
         date = _date;
         List<SheetsRow> list = [];
-        for(int i = 0; i<DateUtils.getDaysInMonth(_date.year, _date.month); i ++ ){
-          list.add(SheetsRow(date: DateTime(_date.year, _date.month, i + 1), generalComing: 8, overTime: 0, contents: null, leave: null));
+        for(int i = 1; i<=DateUtils.getDaysInMonth(_date.year, _date.month); i ++ ){
+          if(DateTime(_date.year,_date.month,i).weekday>5){
+            list.add(SheetsRow(date: DateTime(_date.year, _date.month, i ), generalComing: 0, overTime: 0, contents: null, leave: null));
+          }
+          else {
+            list.add(SheetsRow(date: DateTime(_date.year, _date.month, i ), generalComing: 8, overTime: 0, contents: null, leave: null));
+          }
         }
-        _timesheet = TimeSheet(rows: list, sheetsDate: _date);
+        _timesheet = TimeSheet(rows: list, sheetsDate: _date, userId: 1);
 
   }
   void setLeave(int index, String reason, double timeoff){

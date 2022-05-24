@@ -2,6 +2,7 @@ import 'package:client/core/di.dart';
 import 'package:client/presentation/providers/tab_index.dart';
 import 'package:client/presentation/providers/timesheet_provider.dart';
 import 'package:client/presentation/views/tabs/dashboard_tab.dart';
+import 'package:client/presentation/views/tabs/manage_tab.dart';
 import 'package:client/presentation/views/tabs/settings_tab.dart';
 import 'package:client/presentation/views/tabs/viewsheets_tab.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -18,7 +19,8 @@ class HomeScreen extends StatelessWidget {
     _tabList = <Widget>[
        const DashBoardTab(key: ValueKey(0)),
       const ViewSheets(key: ValueKey(1)),
-      const SettingsTab(key: ValueKey(2)),
+      const ManageTab(key:ValueKey(2)),
+      const SettingsTab(key: ValueKey(3)),
     ];
   }
 
@@ -27,6 +29,7 @@ class HomeScreen extends StatelessWidget {
   final _tabTitleList = [
     tr('tabs.home.title'),
     tr('tabs.views.title'),
+    tr('tabs.manage.title'),
     tr('tabs.settings.title'),
   ];
 
@@ -60,7 +63,7 @@ class HomeScreen extends StatelessWidget {
         // onPressed: () { Navigator.pushNamed(context, Routes.newTimeSheet);
         // },
         backgroundColor: Theme.of(context).primaryColor,
-        child: const Icon(Icons.add),
+        child: const Icon(Icons.border_color),
       ):null,
     );
   }

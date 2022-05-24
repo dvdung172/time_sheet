@@ -71,11 +71,11 @@ class _NewTimeSheet extends State<NewTimeSheet> {
                               provider.timeSheet.rows[rowIndex].date.weekday > 5
                                   ? Theme.of(context)
                                       .primaryColor
-                                      .withOpacity(0.4)
+                                      .withOpacity(0.2)
                                   : null,
                           child: Center(
-                            child: Text(DateFormat('EE, dd/MM')
-                                .format(provider.timeSheet.rows[rowIndex].date)),
+                            child: Text(DateFormat('EE, dd/MM').format(
+                                provider.timeSheet.rows[rowIndex].date)),
                           ),
                         ),
                         children: <Widget>[
@@ -87,25 +87,25 @@ class _NewTimeSheet extends State<NewTimeSheet> {
                                         5
                                     ? Theme.of(context)
                                         .primaryColor
-                                        .withOpacity(0.4)
+                                        .withOpacity(0.2)
                                     : null,
                             child: TextField(
                               keyboardType: TextInputType.number,
                               textAlign: TextAlign.center,
-                              decoration:
-                                  const InputDecoration(border: InputBorder.none),
+                              decoration: const InputDecoration(
+                                  border: InputBorder.none),
                               controller: TextEditingController(
                                   text: provider
                                       .timeSheet.rows[rowIndex].generalComing
                                       .toString()),
                               onChanged: (String value) {
-                                if(value ==''){
+                                if (value == '') {
                                   value = '0';
                                 }
                                 provider.timeSheet.rows[rowIndex]
                                     .generalComing = double.parse(value);
-                                print(provider.timeSheet.rows[rowIndex]
-                                    .generalComing);
+                                print(provider
+                                    .timeSheet.rows[rowIndex].generalComing);
                               },
                             ),
                           ),
@@ -117,37 +117,49 @@ class _NewTimeSheet extends State<NewTimeSheet> {
                                         5
                                     ? Theme.of(context)
                                         .primaryColor
-                                        .withOpacity(0.4)
+                                        .withOpacity(0.2)
                                     : null,
                             child: TextField(
                               keyboardType: TextInputType.number,
                               textAlign: TextAlign.center,
-                              decoration:
-                                  const InputDecoration(border: InputBorder.none),
+                              decoration: const InputDecoration(
+                                  border: InputBorder.none),
                               controller: TextEditingController(
                                   text: provider
                                       .timeSheet.rows[rowIndex].overTime
                                       .toString()),
                               onChanged: (String value) {
-                                if(value ==''){
+                                if (value == '') {
                                   value = '0';
                                 }
-                              provider.timeSheet.rows[rowIndex].overTime =
+                                provider.timeSheet.rows[rowIndex].overTime =
                                     double.parse(value);
                               },
                             ),
                           ),
                           //Leave
-                          GestureDetector(
-                            child: Container(
-                              margin: const EdgeInsets.only(bottom: 1),
-                              color: provider.timeSheet.rows[rowIndex].date
-                                          .weekday >
-                                      5
-                                  ? Theme.of(context)
-                                      .primaryColor
-                                      .withOpacity(0.4)
-                                  : null,
+                          Container(
+                            margin: const EdgeInsets.only(bottom: 1),
+                            color:
+                                provider.timeSheet.rows[rowIndex].date.weekday >
+                                        5
+                                    ? Theme.of(context)
+                                        .primaryColor
+                                        .withOpacity(0.2)
+                                    : null,
+                            child: FlatButton(
+                              onPressed: () {
+                                showDialog(
+                                        context: context,
+                                        builder: (_) => const LeaveDialog())
+                                    .then((value) {
+                                  if (value != null) {
+                                    provider.setLeave(rowIndex, value[0],
+                                        double.parse(value[1]));
+                                    provider.timeSheet.rows[rowIndex].generalComing-= double.parse(value[1]);
+                                  }
+                                });
+                              },
                               child: Center(
                                 child: Text(provider
                                             .timeSheet.rows[rowIndex].leave ==
@@ -156,45 +168,34 @@ class _NewTimeSheet extends State<NewTimeSheet> {
                                     : '${provider.timeSheet.rows[rowIndex].leave!.reason}: ${provider.timeSheet.rows[rowIndex].leave!.timeoff}'),
                               ),
                             ),
-                            onTap: () {
-                              showDialog(
-                                      context: context,
-                                      builder: (_) => const LeaveDialog())
-                                  .then((value) {
-                                    print(value);
-                                    if(value != null){
-                                      provider.setLeave(rowIndex, value[0], double.parse(value[1]));
-                                    }
-                              });
-                            },
                           ),
-                          //Contents
-                          Container(
-                            margin: const EdgeInsets.only(bottom: 1),
-                            color:
-                                provider.timeSheet.rows[rowIndex].date.weekday >
-                                        5
-                                    ? Theme.of(context)
-                                        .primaryColor
-                                        .withOpacity(0.4)
-                                    : null,
-                            child: TextField(
-                              keyboardType: TextInputType.multiline,
-                              textAlign: TextAlign.center,
-                              decoration:
-                                  const InputDecoration(border: InputBorder.none),
-                              controller: TextEditingController(
-                                  text: provider
-                                          .timeSheet.rows[rowIndex].contents ?? ''),
-                              onChanged: (String value) {
-                                if(value ==''){
-                                  provider.timeSheet.rows[rowIndex].contents = null;
-                                }
-                                provider.timeSheet.rows[rowIndex].contents =
-                                    value;
-                              },
-                            ),
-                          ),
+              Container(
+                margin: const EdgeInsets.only(bottom: 1),
+                color:
+                provider.timeSheet.rows[rowIndex].date.weekday >
+                    5
+                    ? Theme.of(context)
+                    .primaryColor
+                    .withOpacity(0.2)
+                    : null,
+                child: TextField(
+                  keyboardType: TextInputType.multiline,
+                  textAlign: TextAlign.center,
+                  decoration:
+                  const InputDecoration(border: InputBorder.none),
+                  controller: TextEditingController(
+                      text: provider
+                          .timeSheet.rows[rowIndex].contents ?? ''),
+                  onChanged: (String value) {
+                    if(value ==''){
+                      provider.timeSheet.rows[rowIndex].contents = null;
+                    }
+                    provider.timeSheet.rows[rowIndex].contents =
+                        value;
+                  },
+                ),
+              ),
+
                         ])),
           );
         },
