@@ -154,8 +154,7 @@ class _NewTimeSheet extends State<NewTimeSheet> {
                                         builder: (_) => const LeaveDialog())
                                     .then((value) {
                                   if (value != null) {
-                                    provider.setLeave(rowIndex, value[0],
-                                        double.parse(value[1]));
+                                    provider.setLeave(rowIndex, value[0], double.parse(value[1]));
                                     provider.timeSheet.rows[rowIndex].generalComing-= double.parse(value[1]);
                                   }
                                 });

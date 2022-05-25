@@ -1,6 +1,8 @@
+
 import 'package:client/core/routes.dart';
 import 'package:client/core/utility.dart';
 import 'package:client/data/models/user.dart';
+import 'package:client/presentation/providers/list_timesheet_provider.dart';
 import 'package:client/presentation/providers/tab_index.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
@@ -8,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+
 
 class AppDrawer extends StatelessWidget {
   const AppDrawer({Key? key, required this.scaffoldKey}) : super(key: key);
@@ -84,6 +87,7 @@ class AppDrawer extends StatelessWidget {
 
   Widget _buildBody(BuildContext context) {
     var provider = Provider.of<TabIndex>(context);
+    var ListSheetsProvider = Provider.of<ListTimeSheetsProvider>(context);
 
     return Column(
       children: [
@@ -101,6 +105,9 @@ class AppDrawer extends StatelessWidget {
           leading: const Icon(Icons.book_outlined),
           selected: provider.currentIndex == 1,
           onTap: () {
+            ListSheetsProvider.getAllTimeSheets(1);
+
+            print(ListSheetsProvider.timeSheets.length);
             Navigator.pop(context);
             provider.currentIndex = 1;
           },
@@ -110,6 +117,9 @@ class AppDrawer extends StatelessWidget {
           leading: const Icon(Icons.people_alt),
           selected: provider.currentIndex == 2,
           onTap: () {
+
+            ListSheetsProvider.getTimeSheetUnapproved();
+            print(ListSheetsProvider.timeSheets.length);
             Navigator.pop(context);
             provider.currentIndex = 2;
           },

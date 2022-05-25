@@ -205,13 +205,6 @@
             </list>
           </value>
         </entry>
-        <entry key="flutter_rating_bar">
-          <value>
-            <list>
-              <option value="$PROJECT_DIR$/../../Flutter/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_rating_bar-4.0.1/lib" />
-            </list>
-          </value>
-        </entry>
         <entry key="flutter_scroll_shadow">
           <value>
             <list>
@@ -634,7 +627,6 @@
       <root url="file://$PROJECT_DIR$/../../Flutter/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_dotenv-5.0.2/lib" />
       <root url="file://$PROJECT_DIR$/../../Flutter/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_expandable_table-1.0.2/lib" />
       <root url="file://$PROJECT_DIR$/../../Flutter/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_lints-1.0.4/lib" />
-      <root url="file://$PROJECT_DIR$/../../Flutter/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_rating_bar-4.0.1/lib" />
       <root url="file://$PROJECT_DIR$/../../Flutter/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_scroll_shadow-1.0.2/lib" />
       <root url="file://$PROJECT_DIR$/../../Flutter/flutter/.pub-cache/hosted/pub.dartlang.org/get_it-7.2.0/lib" />
       <root url="file://$PROJECT_DIR$/../../Flutter/flutter/.pub-cache/hosted/pub.dartlang.org/horizontal_data_table-3.6.5/lib" />

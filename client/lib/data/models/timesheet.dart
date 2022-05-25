@@ -51,9 +51,14 @@ class TimeSheet {
   late DateTime sheetsDate;
   late int userId;
   late List<SheetsRow> rows;
+  late bool approval;
 
-  TimeSheet(
-      {required this.sheetsDate, required this.rows, required this.userId});
+  TimeSheet({
+    required this.sheetsDate,
+    required this.rows,
+    required this.userId,
+    required this.approval,
+  });
 
   factory TimeSheet.fromJson(Map<String, dynamic> json) {
     final List<SheetsRow> temps = [];
@@ -62,6 +67,7 @@ class TimeSheet {
       return TimeSheet(
         userId: json['userId'],
         sheetsDate: DateTime.parse(json['sheetsDate']),
+        approval: json['approval'],
         rows: temps,
       );
     } catch (e) {
@@ -73,6 +79,7 @@ class TimeSheet {
   Map<String, dynamic> toJson() => {
         "userId": userId,
         "sheetsDate": sheetsDate,
+        "approval": approval,
         "rows": List<dynamic>.from(rows.map((x) => x)),
       };
 }

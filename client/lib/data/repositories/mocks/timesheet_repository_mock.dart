@@ -17,7 +17,7 @@ class TimeSheetRepositoryMock extends TimeSheetRepository {
     
   }
   @override
-  Future<List<TimeSheet>> getAllTimeSheet() async {
+  Future<List<TimeSheet>> getAllTimeSheet(int user) async {
     // dummy service
     // simulate calling to server take time 300 ms
     await Future<void>.delayed(const Duration(milliseconds: 300));
@@ -25,10 +25,23 @@ class TimeSheetRepositoryMock extends TimeSheetRepository {
 
     // logger.d('Response: $data');
 
-    final timeSheets = await json
+    final List<TimeSheet> timeSheets = await json
         .decode(data)
         .map<TimeSheet>((item) => TimeSheet.fromJson(item))
         .toList();
-    return timeSheets;
+    return timeSheets.where((e) => e.userId == user).toList();
+  }
+  @override
+  Future<List<TimeSheet>> getTimeSheetUnApproved() async {
+    await Future<void>.delayed(const Duration(milliseconds: 300));
+    final data = await rootBundle.loadString('assets/mocks/all_sheets.json');
+
+    // logger.d('Response: $data');
+
+    final List<TimeSheet> timeSheets = await json
+        .decode(data)
+        .map<TimeSheet>((item) => TimeSheet.fromJson(item))
+        .toList();
+    return timeSheets.where((e) => e.approval == false).toList();
   }
 }

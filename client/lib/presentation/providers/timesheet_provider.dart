@@ -20,13 +20,17 @@ class TimeSheetProvider extends ChangeNotifier {
             list.add(SheetsRow(date: DateTime(_date.year, _date.month, i ), generalComing: 8, overTime: 0, contents: null, leave: null));
           }
         }
-        _timesheet = TimeSheet(rows: list, sheetsDate: _date, userId: 1);
+        _timesheet = TimeSheet(rows: list, sheetsDate: _date, userId: 1, approval: false);
 
   }
   void setLeave(int index, String reason, double timeoff){
-    _timesheet.rows[index].leave = Leave(
+    if(timeoff == 0){
+      _timesheet.rows[index].leave = null;
+    }else {
+      _timesheet.rows[index].leave = Leave(
         reason: reason,
         timeoff: timeoff);
+    }
     notifyListeners();
   }
 

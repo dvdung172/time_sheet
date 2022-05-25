@@ -13,7 +13,7 @@ class ListTimeSheetsProvider extends ChangeNotifier {
 
   ListTimeSheetsProvider(this.timeSheetRepository);
 
-  void getAllTimeSheets() async {
+  void getAllTimeSheets(int userId) async {
 
     logger.d('getProducts');
 
@@ -21,9 +21,9 @@ class ListTimeSheetsProvider extends ChangeNotifier {
 
       loading = true;
       notifyListeners();
-      final value = await timeSheetRepository.getAllTimeSheet();
+      final value = await timeSheetRepository.getAllTimeSheet(userId);
       loading = false;
-      timeSheets = value;
+      timeSheets= value;
       notifyListeners();
     }
   }
@@ -40,4 +40,20 @@ class ListTimeSheetsProvider extends ChangeNotifier {
     }
     return list;
   }
+
+  void getTimeSheetUnapproved() async {
+
+    logger.d('getProducts');
+
+    if (timeSheets.isEmpty) {
+
+      loading = true;
+      notifyListeners();
+      final value = await timeSheetRepository.getTimeSheetUnApproved();
+      loading = false;
+      timeSheets= value;
+      notifyListeners();
+    }
+  }
+
 }

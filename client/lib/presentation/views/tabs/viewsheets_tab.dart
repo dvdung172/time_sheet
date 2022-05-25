@@ -2,8 +2,10 @@ import 'package:client/core/theme.dart';
 import 'package:client/data/models/timesheet.dart';
 import 'package:client/presentation/providers/list_timesheet_provider.dart';
 import 'package:client/presentation/providers/tab_index.dart';
+import 'package:client/presentation/widgets/Table_view.dart';
 import 'package:client/presentation/widgets/custom_month_picker.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_expandable_table/flutter_expandable_table.dart';
@@ -21,30 +23,10 @@ class ViewSheets extends StatefulWidget {
 
 class _ViewSheets extends State<ViewSheets> {
   late DateTime _date = Provider.of<TabIndex>(context).date;
-  final List _headers = [
-    'Date',
-    'General Coming',
-    'Over Time',
-    'Leave',
-    'Task Content'
-  ];
+
 
   @override
   Widget build(BuildContext context) {
-    CustomeCell({
-      required DateTime date,
-      required Widget child,
-    }) {
-      return Container(
-          margin: const EdgeInsets.only(bottom: 0.5),
-          color: date.weekday > 5
-              ? Theme.of(context).primaryColor.withOpacity(0.2)
-              : null,
-          child: Center(
-            child: child,
-          ));
-    }
-
     return Column(
       children: [
         Center(
@@ -85,64 +67,7 @@ class _ViewSheets extends State<ViewSheets> {
               child: Text('No Time Sheet Available'),
             );
           } else {
-            return Expanded(
-              child: ExpandableTable(
-                headerHeight: 50,
-                firstColumnWidth: 100,
-                header: ExpandableTableHeader(
-                    firstCell: Container(
-                        margin: const EdgeInsets.all(1),
-                        child: Center(
-                            child: Text(
-                          _headers[0],
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                        ))),
-                    children: List.generate(
-                        _headers.length - 1,
-                        (index) => Container(
-                            margin: const EdgeInsets.all(1),
-                            child: Center(
-                                child: Text(
-                              _headers[index + 1],
-                              style:
-                                  const TextStyle(fontWeight: FontWeight.bold),
-                            ))))),
-                rows: List.generate(
-                    timeSheet.rows.length,
-                    (rowIndex) => ExpandableTableRow(
-                            height: 60,
-                            firstCell: CustomeCell(
-                                date: timeSheet.rows[rowIndex].date,
-                                child: Text(DateFormat('EE, dd/MM').format(
-                                    DateTime(_date.year, _date.month,
-                                        rowIndex + 1)))),
-                            children: <Widget>[
-                              CustomeCell(
-                                  date: timeSheet.rows[rowIndex].date,
-                                  child: Text(
-                                    timeSheet.rows[rowIndex].generalComing
-                                        .toString(),
-                                  )),
-                              CustomeCell(
-                                  date: timeSheet.rows[rowIndex].date,
-                                  child: Text(
-                                    timeSheet.rows[rowIndex].overTime
-                                        .toString(),
-                                  )),
-                              CustomeCell(
-                                  date: timeSheet.rows[rowIndex].date,
-                                  child: Text(timeSheet.rows[rowIndex].leave ==
-                                          null
-                                      ? '-'
-                                      : '${timeSheet.rows[rowIndex].leave?.reason}: ${timeSheet.rows[rowIndex].leave?.timeoff}')),
-                              CustomeCell(
-                                  date: timeSheet.rows[rowIndex].date,
-                                  child: Text(
-                                    "${timeSheet.rows[rowIndex].contents}",
-                                  )),
-                            ])),
-              ),
-            );
+            return TableView(timeSheet: timeSheet);
           }
         })
       ],

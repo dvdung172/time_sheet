@@ -64,7 +64,7 @@ class _LeaveDialog extends State<LeaveDialog> {
       ),
       actions: <Widget>[
         TextButton(
-          onPressed: () => Navigator.pop(context, leaveList),
+          onPressed: () => Navigator.pop(context, null),
           child: const Text('Cancel'),
         ),
         TextButton(

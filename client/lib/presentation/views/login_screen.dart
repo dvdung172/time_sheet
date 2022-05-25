@@ -134,9 +134,10 @@ class _LoginScreenState extends State<LoginScreen> {
       // ),
       // color: CustomColor.logoBlue,
       onPressed: () async {
-        sl<ListTimeSheetsProvider>().getAllTimeSheets();
+        sl<ListTimeSheetsProvider>().getAllTimeSheets(1);
         await Navigator.of(context)
             .pushNamedAndRemoveUntil(Routes.home, (Route route) => false);
+
       },
       child: Text(
         tr('common.login'),
