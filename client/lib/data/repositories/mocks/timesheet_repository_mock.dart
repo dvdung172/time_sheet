@@ -13,13 +13,12 @@ class TimeSheetRepositoryMock extends TimeSheetRepository {
   Future<TimeSheet> getTimeSheetById(int timeSheetId) async {
     await Future<void>.delayed(const Duration(milliseconds: 300));
     final data = await rootBundle.loadString('assets/mocks/one_sheet.json');
+    print('ok');
     return TimeSheet.fromJson(json.decode(data));
     
   }
   @override
   Future<List<TimeSheet>> getAllTimeSheet(int user) async {
-    // dummy service
-    // simulate calling to server take time 300 ms
     await Future<void>.delayed(const Duration(milliseconds: 300));
     final data = await rootBundle.loadString('assets/mocks/all_sheets.json');
 
@@ -35,8 +34,6 @@ class TimeSheetRepositoryMock extends TimeSheetRepository {
   Future<List<TimeSheet>> getTimeSheetUnApproved() async {
     await Future<void>.delayed(const Duration(milliseconds: 300));
     final data = await rootBundle.loadString('assets/mocks/all_sheets.json');
-
-    // logger.d('Response: $data');
 
     final List<TimeSheet> timeSheets = await json
         .decode(data)

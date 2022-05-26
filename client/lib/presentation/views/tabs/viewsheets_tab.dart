@@ -5,10 +5,8 @@ import 'package:client/presentation/providers/tab_index.dart';
 import 'package:client/presentation/widgets/Table_view.dart';
 import 'package:client/presentation/widgets/custom_month_picker.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
-import 'package:flutter_expandable_table/flutter_expandable_table.dart';
 import 'package:provider/provider.dart';
 import 'package:collection/collection.dart';
 

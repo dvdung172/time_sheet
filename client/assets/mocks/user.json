@@ -1,7 +1,8 @@
-[
+
   {
     "userId": 1,
     "name": "Dũng",
-    "email": "dvdung172"
+    "email": "dvdung172",
+    "position": "Employee",
+    "avatar": "https://i.pravatar.cc/100"
   }
-]

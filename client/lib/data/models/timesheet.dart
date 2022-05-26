@@ -48,12 +48,14 @@ class SheetsRow {
 }
 
 class TimeSheet {
+  late int? id;
   late DateTime sheetsDate;
   late int userId;
   late List<SheetsRow> rows;
   late bool approval;
 
   TimeSheet({
+     this.id,
     required this.sheetsDate,
     required this.rows,
     required this.userId,
@@ -65,6 +67,7 @@ class TimeSheet {
     json["rows"].forEach((row) => temps.add(SheetsRow.fromJson(row)));
     try {
       return TimeSheet(
+        id: json['id'],
         userId: json['userId'],
         sheetsDate: DateTime.parse(json['sheetsDate']),
         approval: json['approval'],

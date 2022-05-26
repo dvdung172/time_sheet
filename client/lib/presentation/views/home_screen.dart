@@ -1,4 +1,5 @@
 import 'package:client/core/di.dart';
+import 'package:client/presentation/providers/list_timesheet_provider.dart';
 import 'package:client/presentation/providers/tab_index.dart';
 import 'package:client/presentation/providers/timesheet_provider.dart';
 import 'package:client/presentation/views/tabs/dashboard_tab.dart';
@@ -36,7 +37,10 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<TabIndex>(context);
-    // sl<TimeSheetProvider>().getAllTimeSheets();
+    Future.delayed(Duration.zero, () {
+      //your code goes here
+      sl<ListTimeSheetsProvider>().getAllTimeSheets(1);
+    });
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(

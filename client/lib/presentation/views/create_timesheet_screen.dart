@@ -68,7 +68,8 @@ class _NewTimeSheet extends State<NewTimeSheet> {
                         firstCell: Container(
                           margin: const EdgeInsets.only(bottom: 1),
                           color:
-                              provider.timeSheet.rows[rowIndex].date.weekday > 5
+                          (provider.timeSheet.rows[rowIndex].date.weekday >
+                              5 || provider.timeSheet.rows[rowIndex].leave != null)
                                   ? Theme.of(context)
                                       .primaryColor
                                       .withOpacity(0.2)
@@ -83,8 +84,8 @@ class _NewTimeSheet extends State<NewTimeSheet> {
                           Container(
                             margin: const EdgeInsets.only(bottom: 1),
                             color:
-                                provider.timeSheet.rows[rowIndex].date.weekday >
-                                        5
+                            (provider.timeSheet.rows[rowIndex].date.weekday >
+                                5 || provider.timeSheet.rows[rowIndex].leave != null)
                                     ? Theme.of(context)
                                         .primaryColor
                                         .withOpacity(0.2)
@@ -113,8 +114,8 @@ class _NewTimeSheet extends State<NewTimeSheet> {
                           Container(
                             margin: const EdgeInsets.only(bottom: 1),
                             color:
-                                provider.timeSheet.rows[rowIndex].date.weekday >
-                                        5
+                            (provider.timeSheet.rows[rowIndex].date.weekday >
+                                        5 || provider.timeSheet.rows[rowIndex].leave != null)
                                     ? Theme.of(context)
                                         .primaryColor
                                         .withOpacity(0.2)
@@ -141,8 +142,8 @@ class _NewTimeSheet extends State<NewTimeSheet> {
                           Container(
                             margin: const EdgeInsets.only(bottom: 1),
                             color:
-                                provider.timeSheet.rows[rowIndex].date.weekday >
-                                        5
+                            (provider.timeSheet.rows[rowIndex].date.weekday >
+                                5 || provider.timeSheet.rows[rowIndex].leave != null)
                                     ? Theme.of(context)
                                         .primaryColor
                                         .withOpacity(0.2)
@@ -171,8 +172,8 @@ class _NewTimeSheet extends State<NewTimeSheet> {
               Container(
                 margin: const EdgeInsets.only(bottom: 1),
                 color:
-                provider.timeSheet.rows[rowIndex].date.weekday >
-                    5
+                (provider.timeSheet.rows[rowIndex].date.weekday >
+                    5 || provider.timeSheet.rows[rowIndex].leave != null)
                     ? Theme.of(context)
                     .primaryColor
                     .withOpacity(0.2)

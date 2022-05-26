@@ -21,14 +21,17 @@ class TableView extends StatelessWidget {
       required DateTime date,
       required Widget child,
     }) {
-      return Container(
-          margin: const EdgeInsets.only(bottom: 0.5),
-          color: date.weekday > 5
-              ? Theme.of(context).primaryColor.withOpacity(0.2)
-              : null,
-          child: Center(
-            child: child,
-          ));
+      return InkWell(
+        onLongPress: (){},
+        child: Container(
+            margin: const EdgeInsets.only(bottom: 0.5),
+            color: date.weekday > 5
+                ? Theme.of(context).primaryColor.withOpacity(0.2)
+                : null,
+            child: Center(
+              child: child,
+            )),
+      );
     }
     return Expanded(
       child: ExpandableTable(

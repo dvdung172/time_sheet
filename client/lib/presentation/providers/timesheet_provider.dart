@@ -1,11 +1,19 @@
 import 'dart:convert';
 
 import 'package:client/data/models/timesheet.dart';
+import 'package:client/data/repositories/mocks/timesheet_repository_mock.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 class TimeSheetProvider extends ChangeNotifier {
+
+  final TimeSheetRepositoryMock timeSheetRepository;
+  TimeSheetProvider(this.timeSheetRepository);
+
   late DateTime date;
   late TimeSheet _timesheet;
+  late bool loading = false;
+
+
 
   TimeSheet get timeSheet=> _timesheet;
 
@@ -33,5 +41,15 @@ class TimeSheetProvider extends ChangeNotifier {
     }
     notifyListeners();
   }
+  void getTimeSheetById(int userId) async {
 
+    loading = true;
+    notifyListeners();
+    final value=await timeSheetRepository.getTimeSheetById(1);
+    loading = false;
+    _timesheet= value;
+    print(value);
+    notifyListeners();
+
+  }
 }

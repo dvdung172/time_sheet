@@ -1,6 +1,8 @@
 import 'package:client/data/repositories/api_connection.dart';
 import 'package:client/data/repositories/mocks/api_connection_mock.dart';
 import 'package:client/data/repositories/mocks/timesheet_repository_mock.dart';
+import 'package:client/data/repositories/mocks/user_repository_mock.dart';
+import 'package:client/presentation/providers/list_user_provider.dart';
 import 'package:client/presentation/providers/tab_index.dart';
 import 'package:client/presentation/providers/list_timesheet_provider.dart';
 import 'package:flutter/foundation.dart';
@@ -24,16 +26,22 @@ class DI {
     sl.registerLazySingleton<TimeSheetRepositoryMock>(
       () => TimeSheetRepositoryMock(connection: sl()),
     );
+    sl.registerLazySingleton<UserRepositoryMock>(
+          () => UserRepositoryMock(connection: sl()),
+    );
 
     // Providers
     sl.registerLazySingleton<TabIndex>(
       () => TabIndex(),
     );
     sl.registerLazySingleton<TimeSheetProvider>(
-          () => TimeSheetProvider(),
+          () => TimeSheetProvider(sl()),
     );
     sl.registerLazySingleton<ListTimeSheetsProvider>(
       () => ListTimeSheetsProvider(sl()),
+    );
+    sl.registerLazySingleton<ListUserProvider>(
+          () => ListUserProvider(sl()),
     );
   }
 }

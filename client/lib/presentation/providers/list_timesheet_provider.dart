@@ -1,4 +1,3 @@
-import 'package:client/core/logger.dart';
 import 'package:client/data/models/timesheet.dart';
 import 'package:client/data/repositories/mocks/timesheet_repository_mock.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -15,17 +14,13 @@ class ListTimeSheetsProvider extends ChangeNotifier {
 
   void getAllTimeSheets(int userId) async {
 
-    logger.d('getProducts');
-
-    if (timeSheets.isEmpty) {
-
       loading = true;
       notifyListeners();
       final value = await timeSheetRepository.getAllTimeSheet(userId);
       loading = false;
       timeSheets= value;
       notifyListeners();
-    }
+
   }
 
   List<TimeSheet> get4Month(DateTime userCreatedDate){
@@ -41,19 +36,12 @@ class ListTimeSheetsProvider extends ChangeNotifier {
     return list;
   }
 
-  void getTimeSheetUnapproved() async {
-
-    logger.d('getProducts');
-
-    if (timeSheets.isEmpty) {
-
+  Future<List<TimeSheet>> getTimeSheetUnapproved() async {
       loading = true;
       notifyListeners();
-      final value = await timeSheetRepository.getTimeSheetUnApproved();
+      final List<TimeSheet> value = await timeSheetRepository.getTimeSheetUnApproved();
       loading = false;
-      timeSheets= value;
       notifyListeners();
-    }
+      return value;
   }
-
 }

@@ -41,9 +41,10 @@ class AppDrawer extends StatelessWidget {
     );
     // TODO
     const currentUser = User(
-      id: '1',
+      id: 1,
       name: 'Demo User',
       email: 'demo@mail.com',
+      position: 'Empolyee',
       avatar: 'https://i.pravatar.cc/100',
     );
 
@@ -105,9 +106,6 @@ class AppDrawer extends StatelessWidget {
           leading: const Icon(Icons.book_outlined),
           selected: provider.currentIndex == 1,
           onTap: () {
-            ListSheetsProvider.getAllTimeSheets(1);
-
-            print(ListSheetsProvider.timeSheets.length);
             Navigator.pop(context);
             provider.currentIndex = 1;
           },
@@ -117,9 +115,6 @@ class AppDrawer extends StatelessWidget {
           leading: const Icon(Icons.people_alt),
           selected: provider.currentIndex == 2,
           onTap: () {
-
-            ListSheetsProvider.getTimeSheetUnapproved();
-            print(ListSheetsProvider.timeSheets.length);
             Navigator.pop(context);
             provider.currentIndex = 2;
           },

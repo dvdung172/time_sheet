@@ -18,9 +18,7 @@ class _SettingsTabState extends State<SettingsTab> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Container(
-          child: Text(Provider.of<ListTimeSheetsProvider>(context).timeSheets[0].sheetsDate.toString()),
-        ),
+        Text(Provider.of<ListTimeSheetsProvider>(context).timeSheets[0].sheetsDate.toString()),
         TableView(timeSheet: Provider.of<ListTimeSheetsProvider>(context).timeSheets[0],),
       ],
     );
