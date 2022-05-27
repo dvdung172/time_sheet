@@ -67,13 +67,13 @@ class _NewTimeSheet extends State<NewTimeSheet> {
                         height: 60,
                         firstCell: Container(
                           margin: const EdgeInsets.only(bottom: 1),
-                          color:
-                          (provider.timeSheet.rows[rowIndex].date.weekday >
-                              5 || provider.timeSheet.rows[rowIndex].leave != null)
-                                  ? Theme.of(context)
-                                      .primaryColor
-                                      .withOpacity(0.2)
-                                  : null,
+                          color: (provider.timeSheet.rows[rowIndex].date
+                                          .weekday >
+                                      5 ||
+                                  provider.timeSheet.rows[rowIndex].leave !=
+                                      null)
+                              ? Theme.of(context).primaryColor.withOpacity(0.2)
+                              : null,
                           child: Center(
                             child: Text(DateFormat('EE, dd/MM').format(
                                 provider.timeSheet.rows[rowIndex].date)),
@@ -83,13 +83,15 @@ class _NewTimeSheet extends State<NewTimeSheet> {
                           //General Coming
                           Container(
                             margin: const EdgeInsets.only(bottom: 1),
-                            color:
-                            (provider.timeSheet.rows[rowIndex].date.weekday >
-                                5 || provider.timeSheet.rows[rowIndex].leave != null)
-                                    ? Theme.of(context)
-                                        .primaryColor
-                                        .withOpacity(0.2)
-                                    : null,
+                            color: (provider.timeSheet.rows[rowIndex].date
+                                            .weekday >
+                                        5 ||
+                                    provider.timeSheet.rows[rowIndex].leave !=
+                                        null)
+                                ? Theme.of(context)
+                                    .primaryColor
+                                    .withOpacity(0.2)
+                                : null,
                             child: TextField(
                               keyboardType: TextInputType.number,
                               textAlign: TextAlign.center,
@@ -113,14 +115,17 @@ class _NewTimeSheet extends State<NewTimeSheet> {
                           //Overtime
                           Container(
                             margin: const EdgeInsets.only(bottom: 1),
-                            color:
-                            (provider.timeSheet.rows[rowIndex].date.weekday >
-                                        5 || provider.timeSheet.rows[rowIndex].leave != null)
-                                    ? Theme.of(context)
-                                        .primaryColor
-                                        .withOpacity(0.2)
-                                    : null,
+                            color: (provider.timeSheet.rows[rowIndex].date
+                                            .weekday >
+                                        5 ||
+                                    provider.timeSheet.rows[rowIndex].leave !=
+                                        null)
+                                ? Theme.of(context)
+                                    .primaryColor
+                                    .withOpacity(0.2)
+                                : null,
                             child: TextField(
+                              enabled: provider.timeSheet.rows[rowIndex].leave==null? true: false ,
                               keyboardType: TextInputType.number,
                               textAlign: TextAlign.center,
                               decoration: const InputDecoration(
@@ -141,13 +146,15 @@ class _NewTimeSheet extends State<NewTimeSheet> {
                           //Leave
                           Container(
                             margin: const EdgeInsets.only(bottom: 1),
-                            color:
-                            (provider.timeSheet.rows[rowIndex].date.weekday >
-                                5 || provider.timeSheet.rows[rowIndex].leave != null)
-                                    ? Theme.of(context)
-                                        .primaryColor
-                                        .withOpacity(0.2)
-                                    : null,
+                            color: (provider.timeSheet.rows[rowIndex].date
+                                            .weekday >
+                                        5 ||
+                                    provider.timeSheet.rows[rowIndex].leave !=
+                                        null)
+                                ? Theme.of(context)
+                                    .primaryColor
+                                    .withOpacity(0.2)
+                                : null,
                             child: FlatButton(
                               onPressed: () {
                                 showDialog(
@@ -155,8 +162,12 @@ class _NewTimeSheet extends State<NewTimeSheet> {
                                         builder: (_) => const LeaveDialog())
                                     .then((value) {
                                   if (value != null) {
-                                    provider.setLeave(rowIndex, value[0], double.parse(value[1]));
-                                    provider.timeSheet.rows[rowIndex].generalComing-= double.parse(value[1]);
+                                    provider.setLeave(rowIndex, value[0],
+                                        double.parse(value[1]));
+                                    provider.timeSheet.rows[rowIndex].overTime = 0;
+                                    provider.timeSheet.rows[rowIndex]
+                                            .generalComing -=
+                                        double.parse(value[1]);
                                   }
                                 });
                               },
@@ -169,33 +180,36 @@ class _NewTimeSheet extends State<NewTimeSheet> {
                               ),
                             ),
                           ),
-              Container(
-                margin: const EdgeInsets.only(bottom: 1),
-                color:
-                (provider.timeSheet.rows[rowIndex].date.weekday >
-                    5 || provider.timeSheet.rows[rowIndex].leave != null)
-                    ? Theme.of(context)
-                    .primaryColor
-                    .withOpacity(0.2)
-                    : null,
-                child: TextField(
-                  keyboardType: TextInputType.multiline,
-                  textAlign: TextAlign.center,
-                  decoration:
-                  const InputDecoration(border: InputBorder.none),
-                  controller: TextEditingController(
-                      text: provider
-                          .timeSheet.rows[rowIndex].contents ?? ''),
-                  onChanged: (String value) {
-                    if(value ==''){
-                      provider.timeSheet.rows[rowIndex].contents = null;
-                    }
-                    provider.timeSheet.rows[rowIndex].contents =
-                        value;
-                  },
-                ),
-              ),
-
+                          Container(
+                            margin: const EdgeInsets.only(bottom: 1),
+                            color: (provider.timeSheet.rows[rowIndex].date
+                                            .weekday >
+                                        5 ||
+                                    provider.timeSheet.rows[rowIndex].leave !=
+                                        null)
+                                ? Theme.of(context)
+                                    .primaryColor
+                                    .withOpacity(0.2)
+                                : null,
+                            child: TextField(
+                              maxLines: null,
+                              textAlign: TextAlign.center,
+                              decoration: const InputDecoration(
+                                  border: InputBorder.none),
+                              controller: TextEditingController(
+                                  text: provider
+                                          .timeSheet.rows[rowIndex].contents ??
+                                      ''),
+                              onChanged: (String value) {
+                                if (value == '') {
+                                  provider.timeSheet.rows[rowIndex].contents =
+                                      null;
+                                }
+                                provider.timeSheet.rows[rowIndex].contents =
+                                    value;
+                              },
+                            ),
+                          ),
                         ])),
           );
         },

@@ -98,9 +98,9 @@ class _ManageTabState extends State<ManageTab> {
                                           Text(
                                               "General Coming: ${listsheet[index].rows.map((e) => e.generalComing).toList().sum}"),
                                           Text(
-                                              "OverTime: ${listsheet[index].rows.map((e) => e.overTime).toList().sum}"),
+                                              "OverTime: ${listsheet[index].rows.map((e) => e.overTime).toList().sum}", style: listsheet[index].rows.map((e) => e.overTime).toList().sum > 0?TextStyle(color: Colors.blue):null,),
                                           Text(
-                                              "Leave: ${listsheet[index].rows.map((e) => e.leave?.timeoff ?? 0).toList().sum}")
+                                              "Leave: ${listsheet[index].rows.map((e) => e.leave?.timeoff ?? 0).toList().sum}", style: listsheet[index].rows.map((e) => e.leave?.timeoff ?? 0).toList().sum == 0?null:TextStyle(color: Colors.red),)
                                         ],
                                       ),
                                     ),
@@ -150,7 +150,7 @@ class _ManageTabState extends State<ManageTab> {
                               splashColor: Colors.blue.withAlpha(30),
                               onTap: () {
                                 sl<ListTimeSheetsProvider>()
-                                    .getAllTimeSheets(listUser[index].id);
+                                    .getAllTimeSheetsApproved(listUser[index].id);
                                 print(listUser[index].id);
                                 Navigator.pushNamed(context, Routes.manageView,
                                     arguments: 'employee');

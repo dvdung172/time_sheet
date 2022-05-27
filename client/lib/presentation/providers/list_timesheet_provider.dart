@@ -20,7 +20,15 @@ class ListTimeSheetsProvider extends ChangeNotifier {
       loading = false;
       timeSheets= value;
       notifyListeners();
+  }
+  void getAllTimeSheetsApproved(int userId) async {
 
+    loading = true;
+    notifyListeners();
+    final List<TimeSheet> value = await timeSheetRepository.getAllTimeSheet(userId);
+    loading = false;
+    timeSheets = value.where((element) => element.approval==true).toList();
+    notifyListeners();
   }
 
   List<TimeSheet> get4Month(DateTime userCreatedDate){

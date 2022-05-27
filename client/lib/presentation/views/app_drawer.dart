@@ -88,7 +88,6 @@ class AppDrawer extends StatelessWidget {
 
   Widget _buildBody(BuildContext context) {
     var provider = Provider.of<TabIndex>(context);
-    var ListSheetsProvider = Provider.of<ListTimeSheetsProvider>(context);
 
     return Column(
       children: [

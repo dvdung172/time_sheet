@@ -10,7 +10,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:provider/provider.dart';
-
+import 'package:collection/collection.dart';
 class ManageView extends StatefulWidget {
   const ManageView({Key? key}) : super(key: key);
 
@@ -19,12 +19,13 @@ class ManageView extends StatefulWidget {
 }
 
 class _ManageViewState extends State<ManageView> {
+  late DateTime _date = DateTime.now();
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)?.settings.arguments as String;
     return Scaffold(
         appBar: AppBar(
-          title: Text('TimeSheet'),
+          title: args == "approval"?Text('Not Approved'):Text('Approved'),
           backgroundColor: Theme.of(context).primaryColor,
         ),
         body: args == "approval"
@@ -70,6 +71,50 @@ class _ManageViewState extends State<ManageView> {
                   )
                 ],
               )
-            : ViewSheets());
+            :  Column(
+          children: [
+            Center(
+              child: TextButton(
+                  onPressed: () {
+                    DatePicker.showPicker(
+                      context,
+                      pickerModel: CustomMonthPicker(
+                          minTime: DateTime(2020, 1, 1),
+                          maxTime: DateTime.now(),
+                          currentTime: _date),
+                      showTitleActions: true,
+                      onConfirm: (date) {
+                        setState(() {
+                          _date = date;
+                        });
+                      },
+                    );
+                  },
+                  child: Text(
+                    DateFormat(DateFormat.YEAR_MONTH).format(_date),
+                    style: CustomTheme.mainTheme.textTheme.headline2,
+                  )),
+            ),
+            Consumer<ListTimeSheetsProvider>(builder: (context, provider, child) {
+              if (provider.loading) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              final TimeSheet? timeSheet = provider.timeSheets.firstWhereOrNull(
+                      (p) =>
+                  DateFormat(DateFormat.YEAR_MONTH)
+                      .format(p.sheetsDate)
+                      .compareTo(
+                      DateFormat(DateFormat.YEAR_MONTH).format(_date)) ==
+                      0);
+              if (timeSheet == null) {
+                return const Center(
+                  child: Text('No Time Sheet Available'),
+                );
+              } else {
+                return TableView(timeSheet: timeSheet);
+              }
+            })
+          ],
+        ));
   }
 }
