@@ -46,6 +46,11 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(_tabTitleList[provider.currentIndex]),
         backgroundColor: Theme.of(context).primaryColor,
+        actions: provider.currentIndex==1?[
+          IconButton(onPressed: (){
+            print(sl<ListTimeSheetsProvider>().timeSheets[0].toJson());
+          }, icon: const Icon(Icons.save_outlined)),
+        ]:null,
       ),
       drawer: AppDrawer(scaffoldKey: _scaffoldKey),
       body: _tabList[provider.currentIndex],

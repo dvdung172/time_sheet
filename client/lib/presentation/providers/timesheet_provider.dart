@@ -1,9 +1,7 @@
-import 'dart:convert';
 
 import 'package:client/data/models/timesheet.dart';
 import 'package:client/data/repositories/mocks/timesheet_repository_mock.dart';
 import 'package:flutter/material.dart';
-import 'package:easy_localization/easy_localization.dart';
 class TimeSheetProvider extends ChangeNotifier {
 
   final TimeSheetRepositoryMock timeSheetRepository;
@@ -50,6 +48,6 @@ class TimeSheetProvider extends ChangeNotifier {
     _timesheet= value;
     print(value);
     notifyListeners();
-
   }
+
 }

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_expandable_table/flutter_expandable_table.dart';
 
 class TableView extends StatefulWidget {
-  TableView({Key? key, required this.timeSheet, this.canChanged})
+  const TableView({Key? key, required this.timeSheet, this.canChanged})
       : super(key: key);
   final bool? canChanged;
   final TimeSheet timeSheet;
@@ -22,7 +22,6 @@ class _TableViewState extends State<TableView> {
     'Task Content'
   ];
 
-  late List<String?> dropdownValue = List.filled(widget.timeSheet.rows.length, null) ;
   @override
   Widget build(BuildContext context) {
     cusTomeCell({
@@ -33,7 +32,6 @@ class _TableViewState extends State<TableView> {
         onLongPress: widget.canChanged == true
             ? () {
                 longPress(context, index);
-                print(widget.timeSheet.rows[index].leave?.reason);
               }
             : null,
         child: Container(
@@ -94,7 +92,8 @@ class _TableViewState extends State<TableView> {
                               : '${widget.timeSheet.rows[rowIndex].leave?.reason}: ${widget.timeSheet.rows[rowIndex].leave?.timeoff}'),
                       cusTomeCell(
                         index: rowIndex,
-                        text: "${widget.timeSheet.rows[rowIndex].contents}",
+                        text:
+                            "${widget.timeSheet.rows[rowIndex].contents ?? ''}",
                       ),
                     ])),
       ),
@@ -102,39 +101,46 @@ class _TableViewState extends State<TableView> {
   }
 
   void longPress(BuildContext context, int index) {
-    dropdownValue[index] = widget.timeSheet.rows[index].leave?.reason;
-    //List<TextEditingController> _controllers = new List();
+    String? dropdownValue = widget.timeSheet.rows[index].leave?.reason;
+    TextEditingController _gcController = TextEditingController(
+        text: widget.timeSheet.rows[index].generalComing.toString());
+    TextEditingController _otController = TextEditingController(
+        text: widget.timeSheet.rows[index].overTime.toString());
+    TextEditingController _leaveController = TextEditingController(
+        text: widget.timeSheet.rows[index].leave?.timeoff.toString());
+    TextEditingController _contentController = TextEditingController(
+        text: widget.timeSheet.rows[index].contents.toString());
     showDialog(
         context: context,
         builder: (context) => AlertDialog(
-              title: Text(
-                  '${DateFormat('EEEE, dd/MM').format(widget.timeSheet.rows[index].date)}'),
+              title: Text(DateFormat('EEEE, dd/MM')
+                  .format(widget.timeSheet.rows[index].date)),
               content: StatefulBuilder(
-                builder:(BuildContext context, StateSetter setState){
+                builder: (BuildContext context, StateSetter setState) {
                   return SingleChildScrollView(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        TextField( keyboardType: TextInputType.number,
-                          decoration: InputDecoration(labelText: 'General Coming'),
-                          controller: TextEditingController(
-                              text: widget.timeSheet.rows[index].generalComing
-                                  .toString()),
+                        TextField(
+                          keyboardType: TextInputType.number,
+                          decoration: const InputDecoration(
+                              labelText: 'General Coming'),
+                          controller: _gcController,
                         ),
-                        TextField( keyboardType: TextInputType.number,
-                          decoration: InputDecoration(labelText: 'Over Time'),
-                          controller: TextEditingController(
-                              text:
-                              widget.timeSheet.rows[index].overTime.toString()),
+                        TextField(
+                          keyboardType: TextInputType.number,
+                          decoration:
+                              const InputDecoration(labelText: 'Over Time'),
+                          controller: _otController,
                         ),
                         DropdownButton<String>(
-                          value: dropdownValue[index],
+                          value: dropdownValue,
                           hint: const Text('-Select reason-'),
                           disabledHint: null,
                           elevation: 16,
                           onChanged: (String? newValue) {
                             setState(() {
-                              dropdownValue[index] = newValue!;
+                              dropdownValue = newValue!;
                             });
                           },
                           items: <String>[
@@ -150,25 +156,23 @@ class _TableViewState extends State<TableView> {
                             );
                           }).toList(),
                         ),
-                        TextField( keyboardType: TextInputType.number,
-                          decoration: InputDecoration(labelText: 'Time Off'),
-                          controller: TextEditingController(
-                              text: widget.timeSheet.rows[index].leave?.timeoff
-                                  .toString()),
+                        TextFormField(
+                          keyboardType: TextInputType.number,
+                          decoration:
+                              const InputDecoration(labelText: 'Time Off'),
+                          controller: _leaveController,
                         ),
-                        TextField(
+                        TextFormField(
                           maxLines: null,
                           keyboardType: TextInputType.multiline,
-                          decoration: InputDecoration(labelText: 'Task Contents'),
-                          controller: TextEditingController(
-                              text:
-                              widget.timeSheet.rows[index].contents.toString()),
+                          decoration:
+                              const InputDecoration(labelText: 'Task Contents'),
+                          controller: _contentController,
                         ),
                       ],
                     ),
                   );
                 },
-
               ),
               actions: <Widget>[
                 TextButton(
@@ -177,6 +181,31 @@ class _TableViewState extends State<TableView> {
                 ),
                 TextButton(
                   onPressed: () {
+                    setState(() {
+                      widget.timeSheet.rows[index] = SheetsRow(
+                          date: widget.timeSheet.rows[index].date,
+                          generalComing: double.parse(_gcController.text == ''
+                              ? '0'
+                              : _gcController.text),
+                          overTime: double.parse(_otController.text == ''
+                              ? '0'
+                              : _otController.text),
+                          contents: _contentController.text == ""
+                              ? null
+                              : _contentController.text,
+                          leave: dropdownValue == null
+                              ? null
+                              : Leave(
+                                  reason: dropdownValue!,
+                                  timeoff:
+                                      double.parse(_leaveController.text)));
+                    });
+                    //
+                    // _gcController.dispose();
+                    // _contentController.dispose();
+                    // _leaveController.dispose();
+                    // _otController.dispose();
+
                     Navigator.pop(context, null);
                   },
                   child: const Text('OK'),
@@ -185,4 +214,3 @@ class _TableViewState extends State<TableView> {
             ));
   }
 }
-

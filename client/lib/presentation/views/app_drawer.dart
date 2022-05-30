@@ -2,14 +2,11 @@
 import 'package:client/core/routes.dart';
 import 'package:client/core/utility.dart';
 import 'package:client/data/models/user.dart';
-import 'package:client/presentation/providers/list_timesheet_provider.dart';
 import 'package:client/presentation/providers/tab_index.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart';
+
 
 
 class AppDrawer extends StatelessWidget {
@@ -94,6 +91,7 @@ class AppDrawer extends StatelessWidget {
         ListTile(
           title: Text(tr('tabs.home.title')),
           leading: const Icon(Icons.home),
+          selectedColor: Theme.of(context).primaryColor ,
           selected: provider.currentIndex == 0,
           onTap: () {
             Navigator.pop(context);
@@ -103,6 +101,7 @@ class AppDrawer extends StatelessWidget {
         ListTile(
           title: Text(tr('tabs.views.title')),
           leading: const Icon(Icons.book_outlined),
+          selectedColor: Theme.of(context).primaryColor ,
           selected: provider.currentIndex == 1,
           onTap: () {
             Navigator.pop(context);
@@ -112,6 +111,7 @@ class AppDrawer extends StatelessWidget {
         ListTile(
           title: Text(tr('tabs.manage.title')),
           leading: const Icon(Icons.people_alt),
+          selectedColor: Theme.of(context).primaryColor ,
           selected: provider.currentIndex == 2,
           onTap: () {
             Navigator.pop(context);
@@ -121,6 +121,7 @@ class AppDrawer extends StatelessWidget {
         ListTile(
           title: Text(tr('tabs.settings.title')),
           leading: const Icon(Icons.settings),
+          selectedColor: Theme.of(context).primaryColor ,
           selected: provider.currentIndex == 3,
           onTap: () {
             Navigator.pop(context);
@@ -133,7 +134,7 @@ class AppDrawer extends StatelessWidget {
             tr('common.logout'),
             style: TextStyle(color: Theme.of(context).errorColor),
           ),
-          leading: const Icon(Icons.logout),
+          leading: Icon(Icons.logout,color: Theme.of(context).errorColor),
           onTap: () async {
             await showDialog<String>(
               context: scaffoldKey.currentContext!,
@@ -141,58 +142,11 @@ class AppDrawer extends StatelessWidget {
             );
           },
         ),
-        if (kDebugMode || dotenv.env['ENABLE_DEV_FEATURES'] == 'true')
-          _buildDeveloperMenu(context),
+
       ],
     );
   }
 
-  Widget _buildDeveloperMenu(BuildContext context) {
-    return Column(
-      children: [
-        const Divider(),
-        const Padding(
-          padding: EdgeInsets.symmetric(vertical: 10),
-          child: Text(
-            'Testing area (dev only)',
-            style: TextStyle(color: Colors.red, fontSize: 16),
-          ),
-        ),
-        ListTile(
-          title: const Text(
-            'Charts',
-            style: TextStyle(color: Colors.red),
-          ),
-          leading: const Icon(
-            Icons.add_chart_outlined,
-            color: Colors.red,
-          ),
-          onTap: () {
-            // Navigator.pop(context);
-            // Navigator.of(context).pushNamed(Routes.testChart);
-          },
-        ),
-        ListTile(
-          title: const Text(
-            'Open map',
-            style: TextStyle(color: Colors.red),
-          ),
-          leading: const Icon(
-            Icons.open_in_browser,
-            color: Colors.red,
-          ),
-          onTap: () async {
-            // const _url = 'https://www.aliexpress.com/';
-            const _url =
-                'https://www.google.com/maps/search/?api=1&query=52.32,4.917';
-            await canLaunchUrl(Uri.parse(_url))
-                ? await launchUrl(Uri.parse(_url))
-                : throw Exception('Could not launch $_url');
-          },
-        ),
-      ],
-    );
-  }
 
   Widget _buildConfirmLogoutDialog(BuildContext context) => AlertDialog(
         title: Text(tr('drawer.confirm_logout_dialog.title')),
@@ -206,7 +160,8 @@ class AppDrawer extends StatelessWidget {
               style: Theme.of(context)
                   .textTheme
                   .button!
-                  .copyWith(fontWeight: FontWeight.bold),
+                  .copyWith(color: Colors.black,
+                fontWeight: FontWeight.w400,),
             ),
           ),
           TextButton(
@@ -220,6 +175,7 @@ class AppDrawer extends StatelessWidget {
               // then go back to login screen
               await Navigator.of(scaffoldKey.currentContext!)
                   .pushReplacementNamed(Routes.login);
+
             },
             child: Text(
               tr('common.ok'),
@@ -233,6 +189,8 @@ class AppDrawer extends StatelessWidget {
       );
 
   Future<void> logout() async {
-    throw UnimplementedError('app_drawer.logout');
+    //throw UnimplementedError('app_drawer.logout');
+
+    print('logout');
   }
 }

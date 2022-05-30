@@ -29,6 +29,12 @@
       "title": "Home"
     }
   },
+  "drawer":{
+  "confirm_logout_dialog": {
+    "title": "Đăng xuất",
+    "confirm_content": "Bạn có chắc muốn đăng xuất?"
+  }
+},
   "tabs": {
     "home": {
       "title": "Dash Board"

@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 extension StringEx on String {
   /// Validate email
   bool isEmail() => RegExp(
-          r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$")
+      r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
       .hasMatch(this);
 
   /// Get first letters from name
-  /// Ex: Bill Gates => BG, Jonh Doe => JD
+  /// Ex: Bill Gates => BG, John Doe => JD
   String getLetterFromName() {
     if (length == 0) {
       return '';

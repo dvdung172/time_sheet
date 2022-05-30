@@ -15,6 +15,10 @@ class Leave {
       rethrow;
     }
   }
+  Map<String, dynamic> toJson() => {
+    "reason": reason,
+    "timeoff": timeoff,
+  };
 }
 
 class SheetsRow {
@@ -45,6 +49,13 @@ class SheetsRow {
       rethrow;
     }
   }
+  Map<String, dynamic> toJson() => {
+    "date": date,
+    "generalComing": generalComing,
+    "overTime": overTime,
+    "contents": contents,
+    "leave": leave?.toJson(),
+  };
 }
 
 class TimeSheet {
@@ -83,6 +94,6 @@ class TimeSheet {
         "userId": userId,
         "sheetsDate": sheetsDate,
         "approval": approval,
-        "rows": List<dynamic>.from(rows.map((x) => x)),
+        "rows": List<dynamic>.from(rows.map((x) => x.toJson())),
       };
 }

@@ -3,7 +3,6 @@ import 'package:client/core/theme.dart';
 import 'package:client/data/models/timesheet.dart';
 import 'package:client/presentation/providers/list_timesheet_provider.dart';
 import 'package:client/presentation/providers/timesheet_provider.dart';
-import 'package:client/presentation/views/tabs/viewsheets_tab.dart';
 import 'package:client/presentation/widgets/Table_view.dart';
 import 'package:client/presentation/widgets/custom_month_picker.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -40,33 +39,31 @@ class _ManageViewState extends State<ManageView> {
                     }
                   }),
                   BottomAppBar(
-                    child: Container(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: <Widget>[
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width / 2 - 10,
-                            child: TextButton(
-                              child: const Text('APPROVE'),
-                              onPressed: () {
-                                /* ... */
-                              },
-                            ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: <Widget>[
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width / 2 - 10,
+                          child: TextButton(
+                            child: const Text('APPROVE'),
+                            onPressed: () {
+                              /* ... */
+                            },
                           ),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width / 2 - 10,
-                            child: TextButton(
-                              child: const Text(
-                                'DECLINE',
-                                style: TextStyle(color: Colors.red),
-                              ),
-                              onPressed: () {
-                                /* ... */
-                              },
+                        ),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width / 2 - 10,
+                          child: TextButton(
+                            child: const Text(
+                              'DECLINE',
+                              style: TextStyle(color: Colors.red),
                             ),
+                            onPressed: () {
+                              /* ... */
+                            },
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   )
                 ],
