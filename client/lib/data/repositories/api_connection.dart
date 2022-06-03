@@ -37,6 +37,8 @@ class ApiConnection {
 
   final ApiConfig apiConfig;
 
+
+
   Future<Response> execute(ApiRequest request) async {
     Future<Response> future;
     if (await (Connectivity().checkConnectivity()) != ConnectivityResult.none) {
@@ -76,8 +78,7 @@ class ApiConnection {
   }
 
   Future<Response> _parseResponse(Response response) async {
-    logger.d(
-        '${response.request?.method} ${response.request?.url}, response status: ${response.statusCode}');
+    logger.d('${response.request?.method} ${response.request?.url}, response status: ${response.statusCode}');
     if (response.statusCode != HttpStatus.ok) {
       logger.e('APIs error with status ${response.statusCode}', response.body);
       throw ApiException(

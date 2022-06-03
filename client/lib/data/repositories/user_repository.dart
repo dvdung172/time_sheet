@@ -25,6 +25,17 @@ class UserRepository {
 
     return User.fromJson(json.decode(response.body));
   }
+
+  // Future<void> saveCredential(String username, String password) {
+  //   SharedPreferecens.save('username', username);
+  //   SharedPreferecens.save('password', password);
+  // }
+  //
+  // Future<void> readCredential() {
+  //   SharedPreferecens.save('username', username);
+  //   SharedPreferecens.save('password', password);
+  // }
+
   Future<List<User>> getAllUser() async {
     var response = await connection.execute(ApiRequest(
       endPoint: Endpoints.timeSheetApiUrl,

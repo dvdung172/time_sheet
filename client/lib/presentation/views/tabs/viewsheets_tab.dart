@@ -63,7 +63,7 @@ class _ViewSheets extends State<ViewSheets> {
               child: Text('No Time Sheet Available'),
             );
           } else {
-            return TableView(timeSheet: timeSheet, canChanged: true);
+            return TableView(timeSheet: timeSheet, canChanged: timeSheet.approval == true?false:true);
           }
         }),
       ],

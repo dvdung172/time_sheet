@@ -1,7 +1,7 @@
 import 'package:client/core/constants.dart';
 import 'package:client/core/routes.dart';
 import 'package:client/core/theme.dart';
-import 'package:client/core/utility.dart';
+import 'package:client/data/repositories/odoo_repositories/odoo_connect.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
@@ -21,7 +21,6 @@ class _LoginScreenState extends State<LoginScreen> {
   final FocusNode _passwordNode = FocusNode();
   final FocusNode _viewNode = FocusNode();
 
-  final _scaffoldKey = GlobalKey<ScaffoldState>();
   bool _obscureText = true;
   bool _emailCheck = true;
   bool _passwordCheck = true;
@@ -95,9 +94,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     const Text("Don't have an account?"),
                     TextButton(
                         onPressed: () {},
-                        child: const Text(
+                        child: Text(
                           "Sign Up",
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                          style: TextStyle(fontWeight: FontWeight.bold,color: CustomTheme.mainTheme.primaryColor),
                         ))
                   ],
                 ),
@@ -200,13 +199,32 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
       color: CustomColor.logoBlue,
       onPressed: () async {
-        if (_emailEditingController.text.isEmail() == true &&
-            _emailEditingController.text.isNotEmpty == true) {
-          await Navigator.of(context)
-              .pushNamedAndRemoveUntil(Routes.home, (Route route) => false);
-        } else {
-          print('login failed');
+        if(_emailEditingController.text.isEmpty){
+          setState(() {
+            _emailCheck = false;
+          });
         }
+        if(_passwordEditingController.text.isEmpty){
+          setState(() {
+            _passwordCheck = false;
+          });
+        }
+        if(_emailCheck==true&&_passwordCheck==true){
+          var res = await OdooConnect().authentication(_emailEditingController.text, _passwordEditingController.text);
+          if(res !=null){
+            print('Installed modules: \n' + res.userId.toString());
+            Navigator.of(context).pushNamedAndRemoveUntil(Routes.home, (Route route) => false);
+          }
+          else{
+            ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text("Failed to login",
+                  textAlign: TextAlign.center, style: TextStyle(fontSize: 16.0, fontWeight:
+                  FontWeight.bold),), duration: Duration(seconds: 2), backgroundColor: Colors.red,)
+            );
+            print('failed to login');
+          }
+        }
+
       },
       child: Text(
         tr('common.login'),
@@ -248,21 +266,17 @@ class _LoginScreenState extends State<LoginScreen> {
         labelStyle: CustomTheme.mainTheme.textTheme.headline6,
       ),
       cursorColor: CustomColor.hintColor,
-      onChanged: (value) {
-        if (_emailEditingController.text.isEmail() == true) {
-          setState(() {
-            _emailCheck = true;
-          });
-        }
+      onTap: (){
+        setState(() {
+        });
       },
       onFieldSubmitted: (term) {
-        if (_emailEditingController.text.isEmail() == true) {
-          _fieldFocusChange(context, _emailNode, _passwordNode);
-        } else {
+        if(_emailEditingController.text.isNotEmpty){
           setState(() {
-            _emailCheck = false;
+              _emailCheck = true;
           });
         }
+          _fieldFocusChange(context, _emailNode, _passwordNode);
       },
     );
   }
@@ -312,17 +326,15 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         ),
         cursorColor: CustomColor.hintColor,
+        onTap: ()=> setState(() {
+        }),
         onFieldSubmitted: (term) {
-          if (_passwordEditingController.text.isNotEmpty) {
+          if(_passwordEditingController.text.isNotEmpty){
             setState(() {
               _passwordCheck = true;
             });
-            _fieldFocusChange(context, _passwordNode, _viewNode);
-          } else {
-            setState(() {
-              _passwordCheck = false;
-            });
           }
+            _fieldFocusChange(context, _passwordNode, _viewNode);
         });
   }
 

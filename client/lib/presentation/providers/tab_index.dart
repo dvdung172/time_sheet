@@ -15,5 +15,8 @@ class TabIndex extends ChangeNotifier {
     _date = index;
     notifyListeners();
   }
-
+  clear(){
+    _currentIndex = 0;
+    notifyListeners();
+  }
 }

@@ -29,7 +29,7 @@ class _TableViewState extends State<TableView> {
       required String text,
     }) {
       return InkWell(
-        onLongPress: widget.canChanged == true
+        onTap: widget.canChanged == true
             ? () {
                 longPress(context, index);
               }
@@ -68,53 +68,57 @@ class _TableViewState extends State<TableView> {
                     ))))),
         rows: List.generate(
             widget.timeSheet.rows.length,
-            (rowIndex) => ExpandableTableRow(
+            (rowIndex) {
+              var row = widget.timeSheet.rows[rowIndex];
+              return ExpandableTableRow(
                     height: 60,
                     firstCell: cusTomeCell(
                         index: rowIndex,
                         text: DateFormat('EE, dd/MM')
-                            .format(widget.timeSheet.rows[rowIndex].date)),
+                            .format(row.date)),
                     children: <Widget>[
                       cusTomeCell(
                         index: rowIndex,
-                        text: widget.timeSheet.rows[rowIndex].generalComing
+                        text: row.generalComing
                             .toString(),
                       ),
                       cusTomeCell(
                         index: rowIndex,
                         text:
-                            widget.timeSheet.rows[rowIndex].overTime.toString(),
+                        row.overTime.toString(),
                       ),
                       cusTomeCell(
                           index: rowIndex,
-                          text: widget.timeSheet.rows[rowIndex].leave == null
+                          text: row.leave == null
                               ? '-'
-                              : '${widget.timeSheet.rows[rowIndex].leave?.reason}: ${widget.timeSheet.rows[rowIndex].leave?.timeoff}'),
+                              : '${row.leave?.reason}: ${row.leave?.timeoff}'),
                       cusTomeCell(
                         index: rowIndex,
                         text:
-                            "${widget.timeSheet.rows[rowIndex].contents ?? ''}",
+                            "${row.contents ?? ''}",
                       ),
-                    ])),
+                    ]);
+            }),
       ),
     );
   }
 
   void longPress(BuildContext context, int index) {
-    String? dropdownValue = widget.timeSheet.rows[index].leave?.reason;
+    var row = widget.timeSheet.rows[index];
+    String? dropdownValue = row.leave?.reason;
     TextEditingController _gcController = TextEditingController(
-        text: widget.timeSheet.rows[index].generalComing.toString());
+        text: row.generalComing.toString());
     TextEditingController _otController = TextEditingController(
-        text: widget.timeSheet.rows[index].overTime.toString());
+        text: row.overTime.toString());
     TextEditingController _leaveController = TextEditingController(
-        text: widget.timeSheet.rows[index].leave?.timeoff.toString());
+        text: row.leave?.timeoff.toString());
     TextEditingController _contentController = TextEditingController(
-        text: widget.timeSheet.rows[index].contents.toString());
+        text: row.contents.toString());
     showDialog(
         context: context,
         builder: (context) => AlertDialog(
               title: Text(DateFormat('EEEE, dd/MM')
-                  .format(widget.timeSheet.rows[index].date)),
+                  .format(row.date)),
               content: StatefulBuilder(
                 builder: (BuildContext context, StateSetter setState) {
                   return SingleChildScrollView(
@@ -182,8 +186,12 @@ class _TableViewState extends State<TableView> {
                 TextButton(
                   onPressed: () {
                     setState(() {
+                      if(_leaveController.text == "")
+                        {
+                          _leaveController.text = '0';
+                        }
                       widget.timeSheet.rows[index] = SheetsRow(
-                          date: widget.timeSheet.rows[index].date,
+                          date: row.date,
                           generalComing: double.parse(_gcController.text == ''
                               ? '0'
                               : _gcController.text),
@@ -193,7 +201,7 @@ class _TableViewState extends State<TableView> {
                           contents: _contentController.text == ""
                               ? null
                               : _contentController.text,
-                          leave: dropdownValue == null
+                          leave: dropdownValue == null|| _leaveController.text=='0'
                               ? null
                               : Leave(
                                   reason: dropdownValue!,

@@ -15,13 +15,14 @@ class DashBoardTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var listTimeSheetProvider = Provider.of<ListTimeSheetsProvider>(context);
-    var tabIndexProvider = Provider.of<TabIndex>(context,listen: false);
+    var tabIndexProvider = Provider.of<TabIndex>(context, listen: false);
 
-    List<charts.Series<TimeSheet, String>> SheetData = [
+    List<charts.Series<TimeSheet, String>> sheetData = [
       charts.Series<TimeSheet, String>(
         id: "General Coming",
         data: listTimeSheetProvider.get4Month(DateTime.now()),
-        domainFn: (TimeSheet series, _) => DateFormat(DateFormat.YEAR_MONTH).format(series.sheetsDate),
+        domainFn: (TimeSheet series, _) =>
+            DateFormat(DateFormat.YEAR_MONTH).format(series.sheetsDate),
         measureFn: (TimeSheet series, _) =>
             series.rows.map((e) => e.generalComing).toList().sum,
         seriesColor: charts.ColorUtil.fromDartColor(Colors.green),
@@ -29,7 +30,8 @@ class DashBoardTab extends StatelessWidget {
       charts.Series<TimeSheet, String>(
         id: "Over Time",
         data: listTimeSheetProvider.get4Month(DateTime.now()),
-        domainFn: (TimeSheet series, _) => DateFormat(DateFormat.YEAR_MONTH).format(series.sheetsDate),
+        domainFn: (TimeSheet series, _) =>
+            DateFormat(DateFormat.YEAR_MONTH).format(series.sheetsDate),
         measureFn: (TimeSheet series, _) =>
             series.rows.map((e) => e.overTime).toList().sum,
         seriesColor: charts.ColorUtil.fromDartColor(Colors.blue),
@@ -37,7 +39,8 @@ class DashBoardTab extends StatelessWidget {
       charts.Series<TimeSheet, String>(
         id: "Leave",
         data: listTimeSheetProvider.get4Month(DateTime.now()),
-        domainFn: (TimeSheet series, _) => DateFormat(DateFormat.YEAR_MONTH).format(series.sheetsDate),
+        domainFn: (TimeSheet series, _) =>
+            DateFormat(DateFormat.YEAR_MONTH).format(series.sheetsDate),
         measureFn: (TimeSheet series, _) => series.rows
             .map((e) => e.leave?.timeoff)
             .toList()
@@ -50,7 +53,7 @@ class DashBoardTab extends StatelessWidget {
     return SizedBox(
         height: 500,
         child: charts.BarChart(
-          SheetData,
+          sheetData,
           animate: false,
           barGroupingType: charts.BarGroupingType.grouped,
           behaviors: [
@@ -61,12 +64,12 @@ class DashBoardTab extends StatelessWidget {
                     charts.OutsideJustification.startDrawArea),
           ],
           selectionModels: [
-            SelectionModelConfig(
-                changedListener: (SelectionModel model) {
-                  tabIndexProvider.currentIndex = 1;
-                  tabIndexProvider.date =  DateFormat(DateFormat.YEAR_MONTH).parse(model.selectedSeries[0].domainFn(model.selectedDatum[0].index));
-                }
-            )
+            SelectionModelConfig(changedListener: (SelectionModel model) {
+              tabIndexProvider.currentIndex = 1;
+              tabIndexProvider.date = DateFormat(DateFormat.YEAR_MONTH).parse(
+                  model.selectedSeries[0]
+                      .domainFn(model.selectedDatum[0].index));
+            })
           ],
         ));
   }

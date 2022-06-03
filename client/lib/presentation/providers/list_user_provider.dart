@@ -1,13 +1,10 @@
-import 'package:client/data/models/timesheet.dart';
 import 'package:client/data/models/user.dart';
-import 'package:client/data/repositories/mocks/user_repository_mock.dart';
-import 'package:easy_localization/easy_localization.dart';
+import 'package:client/data/repositories/user_repository.dart';
 import 'package:flutter/material.dart';
-import 'package:collection/collection.dart';
 
 class ListUserProvider extends ChangeNotifier {
 
-  final UserRepositoryMock userRepository;
+  final UserRepository userRepository;
   bool loading = false;
   List<User> users = [];
 

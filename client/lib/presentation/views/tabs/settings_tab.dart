@@ -1,6 +1,4 @@
-import 'package:client/presentation/providers/list_timesheet_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import '../../widgets/Table_view.dart';
 const Color primaryColor = Color(0xFF1e2f36); //corner
@@ -17,10 +15,10 @@ class _SettingsTabState extends State<SettingsTab> {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: [
-        Text(Provider.of<ListTimeSheetsProvider>(context).timeSheets[0].sheetsDate.toString()),
-        TableView(timeSheet: Provider.of<ListTimeSheetsProvider>(context).timeSheets[0],),
-      ],
+      // children: [
+      //   Text(Provider.of<ListTimeSheetsProvider>(context).timeSheets[0].sheetsDate.toString()),
+      //   TableView(timeSheet: Provider.of<ListTimeSheetsProvider>(context).timeSheets[0],),
+      // ],
     );
   }
 }

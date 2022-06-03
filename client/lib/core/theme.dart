@@ -38,7 +38,7 @@ class CustomTheme {
         color: CustomColor.white,
         fontFamily: 'Roboto',
         fontWeight: FontWeight.w500,
-        fontSize: 14,
+        fontSize: 16,
         letterSpacing: 2,
       ),
     ),

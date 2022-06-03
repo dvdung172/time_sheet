@@ -1,12 +1,12 @@
 import 'package:client/data/models/timesheet.dart';
-import 'package:client/data/repositories/mocks/timesheet_repository_mock.dart';
+import 'package:client/data/repositories/timesheet_repository.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:collection/collection.dart';
 
 class ListTimeSheetsProvider extends ChangeNotifier {
 
-  final TimeSheetRepositoryMock timeSheetRepository;
+  final TimeSheetRepository timeSheetRepository;
   bool loading = false;
   List<TimeSheet> timeSheets = [];
 

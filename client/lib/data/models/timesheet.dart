@@ -1,6 +1,6 @@
 class Leave {
-  late String reason;
-  late double timeoff;
+  late String? reason;
+  late double? timeoff;
 
   Leave({required this.reason, required this.timeoff});
 

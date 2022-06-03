@@ -1,4 +1,3 @@
-
 import 'package:client/core/routes.dart';
 import 'package:client/core/utility.dart';
 import 'package:client/data/models/user.dart';
@@ -7,7 +6,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-
+import '../../core/di.dart';
 
 class AppDrawer extends StatelessWidget {
   const AppDrawer({Key? key, required this.scaffoldKey}) : super(key: key);
@@ -91,7 +90,7 @@ class AppDrawer extends StatelessWidget {
         ListTile(
           title: Text(tr('tabs.home.title')),
           leading: const Icon(Icons.home),
-          selectedColor: Theme.of(context).primaryColor ,
+          selectedColor: Theme.of(context).primaryColor,
           selected: provider.currentIndex == 0,
           onTap: () {
             Navigator.pop(context);
@@ -101,7 +100,7 @@ class AppDrawer extends StatelessWidget {
         ListTile(
           title: Text(tr('tabs.views.title')),
           leading: const Icon(Icons.book_outlined),
-          selectedColor: Theme.of(context).primaryColor ,
+          selectedColor: Theme.of(context).primaryColor,
           selected: provider.currentIndex == 1,
           onTap: () {
             Navigator.pop(context);
@@ -111,7 +110,7 @@ class AppDrawer extends StatelessWidget {
         ListTile(
           title: Text(tr('tabs.manage.title')),
           leading: const Icon(Icons.people_alt),
-          selectedColor: Theme.of(context).primaryColor ,
+          selectedColor: Theme.of(context).primaryColor,
           selected: provider.currentIndex == 2,
           onTap: () {
             Navigator.pop(context);
@@ -121,7 +120,7 @@ class AppDrawer extends StatelessWidget {
         ListTile(
           title: Text(tr('tabs.settings.title')),
           leading: const Icon(Icons.settings),
-          selectedColor: Theme.of(context).primaryColor ,
+          selectedColor: Theme.of(context).primaryColor,
           selected: provider.currentIndex == 3,
           onTap: () {
             Navigator.pop(context);
@@ -134,7 +133,7 @@ class AppDrawer extends StatelessWidget {
             tr('common.logout'),
             style: TextStyle(color: Theme.of(context).errorColor),
           ),
-          leading: Icon(Icons.logout,color: Theme.of(context).errorColor),
+          leading: Icon(Icons.logout, color: Theme.of(context).errorColor),
           onTap: () async {
             await showDialog<String>(
               context: scaffoldKey.currentContext!,
@@ -142,55 +141,52 @@ class AppDrawer extends StatelessWidget {
             );
           },
         ),
-
       ],
     );
   }
 
-
-  Widget _buildConfirmLogoutDialog(BuildContext context) => AlertDialog(
-        title: Text(tr('drawer.confirm_logout_dialog.title')),
-        content: Text(tr('drawer.confirm_logout_dialog.confirm_content')),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () =>
-                Navigator.pop(scaffoldKey.currentContext!, 'Cancel'),
-            child: Text(
-              tr('common.cancel'),
-              style: Theme.of(context)
-                  .textTheme
-                  .button!
-                  .copyWith(color: Colors.black,
-                fontWeight: FontWeight.w400,),
-            ),
+  Widget _buildConfirmLogoutDialog(BuildContext context) {
+    var provider =  sl<TabIndex>();
+    return AlertDialog(
+      title: Text(tr('drawer.confirm_logout_dialog.title')),
+      content: Text(tr('drawer.confirm_logout_dialog.confirm_content')),
+      actions: <Widget>[
+        TextButton(
+          onPressed: () => Navigator.pop(scaffoldKey.currentContext!, 'Cancel'),
+          child: Text(
+            tr('common.cancel'),
+            style: Theme.of(context).textTheme.button!.copyWith(
+                  color: Colors.black,
+                  fontWeight: FontWeight.w400,
+                ),
           ),
-          TextButton(
-            onPressed: () async {
-              // close dialog and drawer
-              Navigator.pop(context, 'OK'); // close alert
-              Navigator.of(scaffoldKey.currentContext!).pop();
+        ),
+        TextButton(
+          onPressed: () async {
+            // close dialog and drawer
+            Navigator.pop(context, 'OK'); // close alert
+            Navigator.of(scaffoldKey.currentContext!).pop();
 
-              await logout();
-
-              // then go back to login screen
-              await Navigator.of(scaffoldKey.currentContext!)
-                  .pushReplacementNamed(Routes.login);
-
-            },
-            child: Text(
-              tr('common.ok'),
-              style: Theme.of(context).textTheme.button!.copyWith(
-                    color: Colors.red.shade300,
-                    fontWeight: FontWeight.w400,
-                  ),
-            ),
+            await logout();
+            // then go back to login screen
+            provider.clear();
+            await Navigator.of(scaffoldKey.currentContext!)
+                .pushReplacementNamed(Routes.login);
+          },
+          child: Text(
+            tr('common.ok'),
+            style: Theme.of(context).textTheme.button!.copyWith(
+                  color: Colors.red.shade300,
+                  fontWeight: FontWeight.w400,
+                ),
           ),
-        ],
-      );
+        ),
+      ],
+    );
+  }
 
   Future<void> logout() async {
     //throw UnimplementedError('app_drawer.logout');
-
     print('logout');
   }
 }
