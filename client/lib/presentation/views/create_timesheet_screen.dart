@@ -1,4 +1,5 @@
 import 'package:client/core/app_style.dart';
+import 'package:client/core/di.dart';
 import 'package:client/presentation/providers/timesheet_provider.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -38,23 +39,9 @@ class _NewTimeSheet extends State<NewTimeSheet> {
         actions: [
           IconButton(
               onPressed: () async {
-                // var client = OdooConnect().client;
-                // await client.authenticate('odoo', 'admin', 'admin') ;
-                // var res = await client.callKw({
-                //   'model': 'account.analytic.line',
-                //   'method': 'search_read',
-                //   'args': [],
-                //   'kwargs': {
-                //     'context': {'bin_size': true},
-                //     'domain': [['user_id','=',1]],
-                //     'fields': [],
-                //   },
-                // });
-                var res = await OdooConnect().callUser();
-                print('\nUser info: \n' + res.toString());
-                //print(sl<TimeSheetProvider>().timeSheet.toJson());
+                print(sl<TimeSheetProvider>().timeSheet.toJson());
               },
-              icon: const Icon(Icons.save_outlined))
+              icon: const Icon(Icons.send))
         ],
         backgroundColor: Theme.of(context).primaryColor,
       ),
@@ -62,7 +49,7 @@ class _NewTimeSheet extends State<NewTimeSheet> {
         builder: (context, provider, child) {
           return ExpandableTable(
             headerHeight: 50,
-            firstColumnWidth: 100,
+            firstColumnWidth: 80,
             header: ExpandableTableHeader(
                 firstCell: Container(
                     margin: const EdgeInsets.all(1),
@@ -94,7 +81,7 @@ class _NewTimeSheet extends State<NewTimeSheet> {
                     margin: const EdgeInsets.only(bottom: 1),
                     color: rowColor,
                     child: Center(
-                      child: Text(DateFormat('EE, dd/MM').format(row.date)),
+                      child: Text(DateFormat('EE, dd').format(row.date)),
                     ),
                   ),
                   children: <Widget>[

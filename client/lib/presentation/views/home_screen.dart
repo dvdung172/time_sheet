@@ -1,4 +1,9 @@
+import 'dart:convert';
+
 import 'package:client/core/di.dart';
+import 'package:client/data/models/app_session.dart';
+import 'package:client/data/models/user.dart';
+import 'package:client/data/repositories/odoo_repositories/odoo_connect.dart';
 import 'package:client/presentation/providers/list_timesheet_provider.dart';
 import 'package:client/presentation/providers/tab_index.dart';
 import 'package:client/presentation/providers/timesheet_provider.dart';
@@ -39,7 +44,7 @@ class HomeScreen extends StatelessWidget {
     final provider = Provider.of<TabIndex>(context);
     Future.delayed(Duration.zero, () {
       //your code goes here
-      sl<ListTimeSheetsProvider>().getAllTimeSheets(1);
+      sl<ListTimeSheetsProvider>().getAllTimeSheets(AppSession.session!.userId);
     });
     return Scaffold(
       key: _scaffoldKey,
@@ -47,8 +52,14 @@ class HomeScreen extends StatelessWidget {
         title: Text(_tabTitleList[provider.currentIndex]),
         backgroundColor: Theme.of(context).primaryColor,
         actions: provider.currentIndex==1?[
-          IconButton(onPressed: (){
-            print(sl<ListTimeSheetsProvider>().timeSheets[0].toJson());
+          IconButton(onPressed: () async {
+            var res = await OdooConnect().getAllTimeSheet(AppSession.session!.userId);
+            // List<User> res = await OdooConnect().callListUser();
+            // Map<String, dynamic> data = Map<String, dynamic>.from(json.decode(res));
+            // print(data['name']);
+            print('\nUser info: \n' + res[1].toString());
+            // print(sl<ListTimeSheetsProvider>().timeSheets[0].toJson());
+
           }, icon: const Icon(Icons.save_outlined)),
         ]:null,
       ),

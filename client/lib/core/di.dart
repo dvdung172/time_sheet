@@ -1,13 +1,12 @@
 import 'package:client/data/repositories/api_connection.dart';
 import 'package:client/data/repositories/mocks/api_connection_mock.dart';
 import 'package:client/data/repositories/mocks/timesheet_repository_mock.dart';
-import 'package:client/data/repositories/mocks/user_repository_mock.dart';
-import 'package:client/data/repositories/odoo_repositories/odoo_connect.dart';
+import 'package:client/data/repositories/odoo_repositories/user_repository.dart';
 import 'package:client/data/repositories/timesheet_repository.dart';
-import 'package:client/data/repositories/user_repository.dart';
 import 'package:client/presentation/providers/list_user_provider.dart';
 import 'package:client/presentation/providers/tab_index.dart';
 import 'package:client/presentation/providers/list_timesheet_provider.dart';
+import 'package:client/presentation/providers/user_provider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 
@@ -30,7 +29,7 @@ class DI {
       () => TimeSheetRepositoryMock(connection: sl()),
     );
     sl.registerLazySingleton<UserRepository>(
-          () => UserRepositoryMock(connection: sl()),
+          () => UserRepository(),
     );
 
     // Providers
@@ -45,6 +44,9 @@ class DI {
     );
     sl.registerLazySingleton<ListUserProvider>(
           () => ListUserProvider(sl()),
+    );
+    sl.registerLazySingleton<UserProvider>(
+          () => UserProvider(sl()),
     );
   }
 }

@@ -16,7 +16,7 @@ class TableView extends StatefulWidget {
 class _TableViewState extends State<TableView> {
   final List _headers = [
     'Date',
-    'General Coming',
+    'General\nComing',
     'Over Time',
     'Leave',
     'Task Content'
@@ -48,7 +48,7 @@ class _TableViewState extends State<TableView> {
     return Expanded(
       child: ExpandableTable(
         headerHeight: 50,
-        firstColumnWidth: 100,
+        firstColumnWidth: 80,
         header: ExpandableTableHeader(
             firstCell: Container(
                 margin: const EdgeInsets.all(1),
@@ -66,39 +66,32 @@ class _TableViewState extends State<TableView> {
                       _headers[index + 1],
                       style: const TextStyle(fontWeight: FontWeight.bold),
                     ))))),
-        rows: List.generate(
-            widget.timeSheet.rows.length,
-            (rowIndex) {
-              var row = widget.timeSheet.rows[rowIndex];
-              return ExpandableTableRow(
-                    height: 60,
-                    firstCell: cusTomeCell(
-                        index: rowIndex,
-                        text: DateFormat('EE, dd/MM')
-                            .format(row.date)),
-                    children: <Widget>[
-                      cusTomeCell(
-                        index: rowIndex,
-                        text: row.generalComing
-                            .toString(),
-                      ),
-                      cusTomeCell(
-                        index: rowIndex,
-                        text:
-                        row.overTime.toString(),
-                      ),
-                      cusTomeCell(
-                          index: rowIndex,
-                          text: row.leave == null
-                              ? '-'
-                              : '${row.leave?.reason}: ${row.leave?.timeoff}'),
-                      cusTomeCell(
-                        index: rowIndex,
-                        text:
-                            "${row.contents ?? ''}",
-                      ),
-                    ]);
-            }),
+        rows: List.generate(widget.timeSheet.rows.length, (rowIndex) {
+          var row = widget.timeSheet.rows[rowIndex];
+          return ExpandableTableRow(
+              height: 60,
+              firstCell: cusTomeCell(
+                  index: rowIndex, text: DateFormat('EE, dd').format(row.date)),
+              children: <Widget>[
+                cusTomeCell(
+                  index: rowIndex,
+                  text: row.generalComing.toString(),
+                ),
+                cusTomeCell(
+                  index: rowIndex,
+                  text: row.overTime.toString(),
+                ),
+                cusTomeCell(
+                    index: rowIndex,
+                    text: row.leave == null
+                        ? '-'
+                        : '${row.leave?.reason}: ${row.leave?.timeoff}'),
+                cusTomeCell(
+                  index: rowIndex,
+                  text: "${row.contents ?? ''}",
+                ),
+              ]);
+        }),
       ),
     );
   }
@@ -106,19 +99,18 @@ class _TableViewState extends State<TableView> {
   void longPress(BuildContext context, int index) {
     var row = widget.timeSheet.rows[index];
     String? dropdownValue = row.leave?.reason;
-    TextEditingController _gcController = TextEditingController(
-        text: row.generalComing.toString());
-    TextEditingController _otController = TextEditingController(
-        text: row.overTime.toString());
-    TextEditingController _leaveController = TextEditingController(
-        text: row.leave?.timeoff.toString());
-    TextEditingController _contentController = TextEditingController(
-        text: row.contents.toString());
+    TextEditingController _gcController =
+        TextEditingController(text: row.generalComing.toString());
+    TextEditingController _otController =
+        TextEditingController(text: row.overTime.toString());
+    TextEditingController _leaveController =
+        TextEditingController(text: row.leave?.timeoff.toString());
+    TextEditingController _contentController =
+        TextEditingController(text: row.contents.toString());
     showDialog(
         context: context,
         builder: (context) => AlertDialog(
-              title: Text(DateFormat('EEEE, dd/MM')
-                  .format(row.date)),
+              title: Text(DateFormat('EEEE, dd/MM').format(row.date)),
               content: StatefulBuilder(
                 builder: (BuildContext context, StateSetter setState) {
                   return SingleChildScrollView(
@@ -186,10 +178,9 @@ class _TableViewState extends State<TableView> {
                 TextButton(
                   onPressed: () {
                     setState(() {
-                      if(_leaveController.text == "")
-                        {
-                          _leaveController.text = '0';
-                        }
+                      if (_leaveController.text == "") {
+                        _leaveController.text = '0';
+                      }
                       widget.timeSheet.rows[index] = SheetsRow(
                           date: row.date,
                           generalComing: double.parse(_gcController.text == ''
@@ -201,7 +192,8 @@ class _TableViewState extends State<TableView> {
                           contents: _contentController.text == ""
                               ? null
                               : _contentController.text,
-                          leave: dropdownValue == null|| _leaveController.text=='0'
+                          leave: dropdownValue == null ||
+                                  _leaveController.text == '0'
                               ? null
                               : Leave(
                                   reason: dropdownValue!,

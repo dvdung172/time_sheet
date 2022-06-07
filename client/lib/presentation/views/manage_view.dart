@@ -23,6 +23,7 @@ class _ManageViewState extends State<ManageView> {
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)?.settings.arguments as String;
     return Scaffold(
+      backgroundColor: args == "approval"? null : const Color(0xFFD5D3D3) ,
         appBar: AppBar(
           title: args == "approval"?Text('Not Approved'):Text('Approved'),
           backgroundColor: Theme.of(context).primaryColor,

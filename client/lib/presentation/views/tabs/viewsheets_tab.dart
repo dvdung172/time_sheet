@@ -22,7 +22,6 @@ class ViewSheets extends StatefulWidget {
 class _ViewSheets extends State<ViewSheets> {
   late DateTime _date = Provider.of<TabIndex>(context).date;
 
-
   @override
   Widget build(BuildContext context) {
     return Column(

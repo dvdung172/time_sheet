@@ -12,6 +12,7 @@ class AppDrawer extends StatelessWidget {
   const AppDrawer({Key? key, required this.scaffoldKey}) : super(key: key);
   final GlobalKey scaffoldKey;
 
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -42,6 +43,7 @@ class AppDrawer extends StatelessWidget {
       email: 'demo@mail.com',
       position: 'Empolyee',
       avatar: 'https://i.pravatar.cc/100',
+      last_update: 'dasdsd'
     );
 
     return Container(

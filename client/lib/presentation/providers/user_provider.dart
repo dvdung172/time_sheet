@@ -1,22 +1,22 @@
 import 'package:client/data/models/user.dart';
 import 'package:client/data/repositories/odoo_repositories/user_repository.dart';
-// import 'package:client/data/repositories/user_repository.dart';
 import 'package:flutter/material.dart';
 
-class ListUserProvider extends ChangeNotifier {
+class UserProvider extends ChangeNotifier {
 
   final UserRepository userRepository;
   bool loading = false;
-  List<User> users = [];
+  late User users ;
 
-  ListUserProvider(this.userRepository);
+  UserProvider(this.userRepository);
 
-  void getAllUser() async {
+  void callUser(int id) async {
     loading = true;
     notifyListeners();
-    final value = await userRepository.callListUser();
+    final value = await userRepository.callUser(id);
     loading = false;
     users= value;
+    print(users.toString());
     notifyListeners();
   }
 

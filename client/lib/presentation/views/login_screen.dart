@@ -1,7 +1,9 @@
 import 'package:client/core/constants.dart';
+import 'package:client/core/di.dart';
 import 'package:client/core/routes.dart';
 import 'package:client/core/theme.dart';
 import 'package:client/data/repositories/odoo_repositories/odoo_connect.dart';
+import 'package:client/presentation/providers/user_provider.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
@@ -26,7 +28,6 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _passwordCheck = true;
 
   late bool isChecked = false;
-
 
   @override
   void initState() {
@@ -96,7 +97,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         onPressed: () {},
                         child: Text(
                           "Sign Up",
-                          style: TextStyle(fontWeight: FontWeight.bold,color: CustomTheme.mainTheme.primaryColor),
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: CustomTheme.mainTheme.primaryColor),
                         ))
                   ],
                 ),
@@ -199,32 +202,38 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
       color: CustomColor.logoBlue,
       onPressed: () async {
-        if(_emailEditingController.text.isEmpty){
+        if (_emailEditingController.text.isEmpty) {
           setState(() {
             _emailCheck = false;
           });
         }
-        if(_passwordEditingController.text.isEmpty){
+        if (_passwordEditingController.text.isEmpty) {
           setState(() {
             _passwordCheck = false;
           });
         }
-        if(_emailCheck==true&&_passwordCheck==true){
-          var res = await OdooConnect().authentication(_emailEditingController.text, _passwordEditingController.text);
-          if(res !=null){
-            print('Installed modules: \n' + res.userId.toString());
-            Navigator.of(context).pushNamedAndRemoveUntil(Routes.home, (Route route) => false);
-          }
-          else{
-            ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text("Failed to login",
-                  textAlign: TextAlign.center, style: TextStyle(fontSize: 16.0, fontWeight:
-                  FontWeight.bold),), duration: Duration(seconds: 2), backgroundColor: Colors.red,)
-            );
+        if (_emailCheck == true && _passwordCheck == true) {
+          var res = await OdooConnect().authentication(
+              _emailEditingController.text, _passwordEditingController.text);
+          if (res != null) {
+            print('Installed modules: \n' + res.toString());
+
+            sl<UserProvider>().callUser(res);
+            Navigator.of(context)
+                .pushNamedAndRemoveUntil(Routes.home, (Route route) => false);
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+              content: Text(
+                "Failed to login",
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+              ),
+              duration: Duration(seconds: 2),
+              backgroundColor: Colors.red,
+            ));
             print('failed to login');
           }
         }
-
       },
       child: Text(
         tr('common.login'),
@@ -266,17 +275,16 @@ class _LoginScreenState extends State<LoginScreen> {
         labelStyle: CustomTheme.mainTheme.textTheme.headline6,
       ),
       cursorColor: CustomColor.hintColor,
-      onTap: (){
-        setState(() {
-        });
+      onTap: () {
+        setState(() {});
       },
       onFieldSubmitted: (term) {
-        if(_emailEditingController.text.isNotEmpty){
+        if (_emailEditingController.text.isNotEmpty) {
           setState(() {
-              _emailCheck = true;
+            _emailCheck = true;
           });
         }
-          _fieldFocusChange(context, _emailNode, _passwordNode);
+        _fieldFocusChange(context, _emailNode, _passwordNode);
       },
     );
   }
@@ -326,15 +334,14 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         ),
         cursorColor: CustomColor.hintColor,
-        onTap: ()=> setState(() {
-        }),
+        onTap: () => setState(() {}),
         onFieldSubmitted: (term) {
-          if(_passwordEditingController.text.isNotEmpty){
+          if (_passwordEditingController.text.isNotEmpty) {
             setState(() {
               _passwordCheck = true;
             });
           }
-            _fieldFocusChange(context, _passwordNode, _viewNode);
+          _fieldFocusChange(context, _passwordNode, _viewNode);
         });
   }
 
