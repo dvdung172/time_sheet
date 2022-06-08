@@ -36,12 +36,12 @@ void main() async {
     // Read our user's fields
     // final uid = session.userId;
     var res = await client.callKw({
-      'model': 'res.users',
+      'model': 'account.analytic.line',
       'method': 'search_read',
       'args': [],
       'kwargs': {
         'context': {'bin_size': true},
-        'domain': [ ['id', '=', 1],],
+        'domain': [['date', '=','2022-05-31']],
         'fields': [],
       },
     });
@@ -64,12 +64,15 @@ void main() async {
     // print(partner_id);
     // // Update partner by id
     // res = await client.callKw({
-    //   'model': 'res.partner',
-    //   'method': 'write',
+    //   'model': 'account.analytic.line',
+    //   'method': 'create',
     //   'args': [
-    //     partner_id,
     //     {
-    //       'is_company': true,
+    //       'unit_amount': 9.0,
+    //       'date': '2022-06-08',
+    //       'project_id': 4,
+    //       'employee_id': 2,
+    //       'name':'vsdvsdv'
     //     },
     //   ],
     //   'kwargs': {},

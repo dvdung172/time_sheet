@@ -27,37 +27,4 @@ class UserRepository{
       exit(-1);
     }
   }
-  Future<List<User>> callListUser() async {
-    try {
-      var res = await client.callKw({
-        'model': 'hr.employee',
-        'method': 'search_read',
-        'args': [],
-        'kwargs': {
-          'context': {'bin_size': true},
-          'domain': [],
-          'fields': [
-            'name',
-            'image_small',
-            'active',
-            'id',
-            'work_email',
-            'job_id',
-            'department_id',
-            'work_phone',
-            '__last_update'
-          ],
-        },
-      });
-      final List<User> user = await res
-          .map<User>((item) => User.fromRPC(item))
-          .toList();
-      return user;
-    } on OdooException catch (e) {
-      print('/////');
-      print(e);
-      client.close();
-      exit(-1);
-    }
-  }
 }

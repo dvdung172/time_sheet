@@ -7,6 +7,7 @@ class CustomColor {
   static const Color textFieldBackground = Color(0x1E000000);
   static const Color hintColor = Color(0x99000000);
   static const Color statusBarColor = Color(0x1e000000);
+  static const Color errorColor = Color(0x1e9e2222);
 }
 
 class CustomTheme {

@@ -2,6 +2,7 @@ import 'package:client/core/routes.dart';
 import 'package:client/core/utility.dart';
 import 'package:client/data/models/user.dart';
 import 'package:client/presentation/providers/tab_index.dart';
+import 'package:client/presentation/providers/user_provider.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -36,16 +37,17 @@ class AppDrawer extends StatelessWidget {
       color: Theme.of(context).textTheme.subtitle2!.color!.withOpacity(0.5),
       fontSize: 14,
     );
-    // TODO
-    const currentUser = User(
-      id: 1,
-      name: 'Demo User',
-      email: 'demo@mail.com',
-      position: 'Empolyee',
-      avatar: 'https://i.pravatar.cc/100',
-      last_update: 'dasdsd'
-    );
-
+    // TODOs
+     var currentUser = sl<UserProvider>().users;
+    print(currentUser.toString());
+    // const currentUser = User(
+    //   id: 1,
+    //   name: 'Demo User',
+    //   email: 'demo@mail.com',
+    //   position: 'Empolyee',
+    //   avatar: 'https://i.pravatar.cc/100',
+    //   last_update: 'dasdsd'
+    // );
     return Container(
       color: Theme.of(context).primaryColor,
       padding: EdgeInsets.zero,

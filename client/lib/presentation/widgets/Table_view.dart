@@ -1,3 +1,4 @@
+import 'package:client/core/theme.dart';
 import 'package:client/data/models/timesheet.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -28,6 +29,13 @@ class _TableViewState extends State<TableView> {
       required int index,
       required String text,
     }) {
+      var row = widget.timeSheet.rows[index];
+      var isWeekend = row.date.weekday > 5;
+      var rowColor = null;
+      if(isWeekend){
+        rowColor = Theme.of(context).primaryColor.withOpacity(0.2);
+      }else if(row.leave !=null){
+        rowColor = CustomColor.errorColor;}
       return InkWell(
         onTap: widget.canChanged == true
             ? () {
@@ -36,9 +44,7 @@ class _TableViewState extends State<TableView> {
             : null,
         child: Container(
             margin: const EdgeInsets.only(bottom: 0.5),
-            color: widget.timeSheet.rows[index].date.weekday > 5
-                ? Theme.of(context).primaryColor.withOpacity(0.2)
-                : null,
+            color: rowColor,
             child: Center(
               child: Text(text),
             )),

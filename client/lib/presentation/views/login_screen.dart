@@ -206,10 +206,18 @@ class _LoginScreenState extends State<LoginScreen> {
           setState(() {
             _emailCheck = false;
           });
+        }else{
+          setState(() {
+            _emailCheck = true;
+          });
         }
         if (_passwordEditingController.text.isEmpty) {
           setState(() {
             _passwordCheck = false;
+          });
+        }else{
+          setState(() {
+            _passwordCheck = true;
           });
         }
         if (_emailCheck == true && _passwordCheck == true) {

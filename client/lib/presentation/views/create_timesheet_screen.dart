@@ -1,12 +1,13 @@
 import 'package:client/core/app_style.dart';
 import 'package:client/core/di.dart';
+import 'package:client/core/theme.dart';
 import 'package:client/presentation/providers/timesheet_provider.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_expandable_table/flutter_expandable_table.dart';
 import 'package:provider/provider.dart';
+import 'package:easy_localization/easy_localization.dart';
 
-import 'package:client/data/repositories/odoo_repositories/odoo_connect.dart';
 
 class NewTimeSheet extends StatefulWidget {
   const NewTimeSheet({Key? key}) : super(key: key);
@@ -35,7 +36,7 @@ class _NewTimeSheet extends State<NewTimeSheet> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('New Time Sheet'),
+        title: Text(tr('screens.create.title')),
         actions: [
           IconButton(
               onPressed: () async {
@@ -47,136 +48,152 @@ class _NewTimeSheet extends State<NewTimeSheet> {
       ),
       body: Consumer<TimeSheetProvider>(
         builder: (context, provider, child) {
-          return ExpandableTable(
-            headerHeight: 50,
-            firstColumnWidth: 80,
-            header: ExpandableTableHeader(
-                firstCell: Container(
-                    margin: const EdgeInsets.all(1),
-                    child: Center(
-                        child: Text(
-                      _headers[0],
-                      style: AppStyles.tableHeaderStyle,
-                    ))),
-                children: List.generate(
-                    _headers.length - 1,
-                    (index) => Container(
-                        margin: const EdgeInsets.all(1),
-                        child: Center(
-                            child: Text(
-                          _headers[index + 1],
-                          style: AppStyles.tableHeaderStyle,
-                        ))))),
-            rows: List.generate(
-                DateUtils.getDaysInMonth(provider.timeSheet.sheetsDate.year,
-                    provider.timeSheet.sheetsDate.month), (rowIndex) {
-              var row = provider.timeSheet.rows[rowIndex];
-              var isWeekend = row.date.weekday > 5;
-              var rowColor = isWeekend
-                  ? Theme.of(context).primaryColor.withOpacity(0.2)
-                  : null;
-              return ExpandableTableRow(
-                  height: 60,
-                  firstCell: Container(
-                    margin: const EdgeInsets.only(bottom: 1),
-                    color: rowColor,
-                    child: Center(
-                      child: Text(DateFormat('EE, dd').format(row.date)),
-                    ),
-                  ),
-                  children: <Widget>[
-                    //General Coming
-                    Container(
-                      margin: const EdgeInsets.only(bottom: 1),
-                      color: (row.date.weekday > 5 || row.leave != null)
-                          ? Theme.of(context).primaryColor.withOpacity(0.2)
-                          : null,
-                      child: TextField(
-                        keyboardType: TextInputType.number,
-                        textAlign: TextAlign.center,
-                        decoration:
-                            const InputDecoration(border: InputBorder.none),
-                        controller: TextEditingController(
-                            text: row.generalComing <= 0
-                                ? '0.0'
-                                : row.generalComing.toString()),
-                        onChanged: (String value) {
-                          if (value == '') {
-                            value = '0';
-                          }
-                          row.generalComing = double.parse(value);
-                          print(row.generalComing);
-                        },
-                      ),
-                    ),
-                    //Overtime
-                    Container(
-                      margin: const EdgeInsets.only(bottom: 1),
-                      color: rowColor,
-                      child: TextField(
-                        enabled: row.leave == null ? true : false,
-                        keyboardType: TextInputType.number,
-                        textAlign: TextAlign.center,
-                        decoration:
-                            const InputDecoration(border: InputBorder.none),
-                        controller: TextEditingController(
-                            text: provider.timeSheet.rows[rowIndex].overTime
-                                .toString()),
-                        onChanged: (String value) {
-                          if (value == '') {
-                            value = '0';
-                          }
-                          row.overTime = double.parse(value);
-                        },
-                      ),
-                    ),
-                    //Leave
-                    Container(
-                      margin: const EdgeInsets.only(bottom: 1),
-                      color: rowColor,
-                      child: FlatButton(
-                        onPressed: () {
-                          showDialog(
-                                  context: context,
-                                  builder: (_) => const LeaveDialog())
-                              .then((value) {
-                            if (value != null) {
-                              provider.setLeave(
-                                  rowIndex, value[0], double.parse(value[1]));
-                              row.overTime = 0;
-                              row.generalComing -= double.parse(value[1]);
-                            }
-                          });
-                        },
-                        child: Center(
-                          child: Text(provider.timeSheet.rows[rowIndex].leave ==
-                                  null
-                              ? '-'
-                              : '${row.leave!.reason}: ${row.leave!.timeoff}'),
+          return Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                    "Time Sheet ${DateFormat(DateFormat.YEAR_NUM_MONTH).format(provider.timeSheet.sheetsDate)}",
+                    style: CustomTheme.mainTheme.textTheme.headline2),
+              ),
+              Expanded(
+                child: ExpandableTable(
+                  headerHeight: 50,
+                  firstColumnWidth: 80,
+                  header: ExpandableTableHeader(
+                      firstCell: Container(
+                          margin: const EdgeInsets.all(1),
+                          child: Center(
+                              child: Text(
+                            _headers[0],
+                            style: AppStyles.tableHeaderStyle,
+                          ))),
+                      children: List.generate(
+                          _headers.length - 1,
+                          (index) => Container(
+                              margin: const EdgeInsets.all(1),
+                              child: Center(
+                                  child: Text(
+                                _headers[index + 1],
+                                style: AppStyles.tableHeaderStyle,
+                              ))))),
+                  rows: List.generate(
+                      DateUtils.getDaysInMonth(
+                          provider.timeSheet.sheetsDate.year,
+                          provider.timeSheet.sheetsDate.month), (rowIndex) {
+                    var row = provider.timeSheet.rows[rowIndex];
+                    var isWeekend = row.date.weekday > 5;
+                    var rowColor = null;
+                    if(isWeekend){
+                      rowColor = Theme.of(context).primaryColor.withOpacity(0.2);
+                    }else if(row.leave !=null){
+                      rowColor = CustomColor.errorColor;}
+                    return ExpandableTableRow(
+                        height: 60,
+                        firstCell: Container(
+                          margin: const EdgeInsets.only(bottom: 1),
+                          color: rowColor,
+                          child: Center(
+                            child: Text(DateFormat('EE, dd').format(row.date)),
+                          ),
                         ),
-                      ),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.only(bottom: 1),
-                      color: rowColor,
-                      child: TextField(
-                        maxLines: null,
-                        textAlign: TextAlign.center,
-                        decoration:
-                            const InputDecoration(border: InputBorder.none),
-                        controller: TextEditingController(
-                            text: provider.timeSheet.rows[rowIndex].contents ??
-                                ''),
-                        onChanged: (String value) {
-                          if (value == '') {
-                            row.contents = null;
-                          }
-                          row.contents = value;
-                        },
-                      ),
-                    ),
-                  ]);
-            }),
+                        children: <Widget>[
+                          //General Coming
+                          Container(
+                            margin: const EdgeInsets.only(bottom: 1),
+                            color: rowColor,
+                            child: TextField(
+                              keyboardType: TextInputType.number,
+                              textAlign: TextAlign.center,
+                              decoration: const InputDecoration(
+                                  border: InputBorder.none),
+                              controller: TextEditingController(
+                                  text: row.generalComing <= 0
+                                      ? '0.0'
+                                      : row.generalComing.toString()),
+                              onChanged: (String value) {
+                                if (value == '') {
+                                  value = '0';
+                                }
+                                row.generalComing = double.parse(value);
+                                print(row.generalComing);
+                              },
+                            ),
+                          ),
+                          //Overtime
+                          Container(
+                            margin: const EdgeInsets.only(bottom: 1),
+                            color: rowColor,
+                            child: TextField(
+                              enabled: row.leave == null ? true : false,
+                              keyboardType: TextInputType.number,
+                              textAlign: TextAlign.center,
+                              decoration: const InputDecoration(
+                                  border: InputBorder.none),
+                              controller: TextEditingController(
+                                  text: provider
+                                      .timeSheet.rows[rowIndex].overTime
+                                      .toString()),
+                              onChanged: (String value) {
+                                if (value == '') {
+                                  value = '0';
+                                }
+                                row.overTime = double.parse(value);
+                              },
+                            ),
+                          ),
+                          //Leave
+                          Container(
+                            margin: const EdgeInsets.only(bottom: 1),
+                            color: rowColor,
+                            child: FlatButton(
+                              onPressed: () {
+                                showDialog(
+                                        context: context,
+                                        builder: (_) => const LeaveDialog())
+                                    .then((value) {
+                                  if (value != null) {
+                                    provider.setLeave(rowIndex, value[0],
+                                        double.parse(value[1]));
+                                    row.overTime = 0;
+                                    row.generalComing -= double.parse(value[1]);
+                                  }
+                                });
+                              },
+                              child: Center(
+                                child: Text(provider
+                                            .timeSheet.rows[rowIndex].leave ==
+                                        null
+                                    ? '-'
+                                    : '${row.leave!.reason}: ${row.leave!.timeoff}'),
+                              ),
+                            ),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.only(bottom: 1),
+                            color: rowColor,
+                            child: TextField(
+                              maxLines: null,
+                              textAlign: TextAlign.center,
+                              decoration: const InputDecoration(
+                                  border: InputBorder.none),
+                              controller: TextEditingController(
+                                  text: provider
+                                          .timeSheet.rows[rowIndex].contents ??
+                                      ''),
+                              onChanged: (String value) {
+                                if (value == '') {
+                                  row.contents = null;
+                                }
+                                row.contents = value;
+                              },
+                            ),
+                          ),
+                        ]);
+                  }),
+                ),
+              ),
+            ],
           );
         },
       ),

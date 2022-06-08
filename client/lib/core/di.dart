@@ -1,9 +1,10 @@
 import 'package:client/data/repositories/api_connection.dart';
 import 'package:client/data/repositories/mocks/api_connection_mock.dart';
 import 'package:client/data/repositories/mocks/timesheet_repository_mock.dart';
+import 'package:client/data/repositories/odoo_repositories/employee_repository.dart';
 import 'package:client/data/repositories/odoo_repositories/user_repository.dart';
 import 'package:client/data/repositories/timesheet_repository.dart';
-import 'package:client/presentation/providers/list_user_provider.dart';
+import 'package:client/presentation/providers/list_employee_provider.dart';
 import 'package:client/presentation/providers/tab_index.dart';
 import 'package:client/presentation/providers/list_timesheet_provider.dart';
 import 'package:client/presentation/providers/user_provider.dart';
@@ -31,6 +32,9 @@ class DI {
     sl.registerLazySingleton<UserRepository>(
           () => UserRepository(),
     );
+    sl.registerLazySingleton<EmployeeRepository>(
+          () => EmployeeRepository(),
+    );
 
     // Providers
     sl.registerLazySingleton<TabIndex>(
@@ -42,8 +46,8 @@ class DI {
     sl.registerLazySingleton<ListTimeSheetsProvider>(
       () => ListTimeSheetsProvider(sl()),
     );
-    sl.registerLazySingleton<ListUserProvider>(
-          () => ListUserProvider(sl()),
+    sl.registerLazySingleton<ListEmployeeProvider>(
+          () => ListEmployeeProvider(sl()),
     );
     sl.registerLazySingleton<UserProvider>(
           () => UserProvider(sl()),

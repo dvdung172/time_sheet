@@ -1,4 +1,4 @@
-import 'package:client/presentation/providers/list_user_provider.dart';
+import 'package:client/presentation/providers/list_employee_provider.dart';
 import 'package:client/presentation/providers/tab_index.dart';
 import 'package:client/presentation/providers/list_timesheet_provider.dart';
 import 'package:client/presentation/providers/timesheet_provider.dart';
@@ -31,7 +31,7 @@ final Map<String, WidgetBuilder> routes = <String, WidgetBuilder>{
           ChangeNotifierProvider.value(value: sl<TabIndex>()),
           ChangeNotifierProvider.value(value: sl<ListTimeSheetsProvider>()),
           ChangeNotifierProvider.value(value: sl<TimeSheetProvider>()),
-          ChangeNotifierProvider.value(value: sl<ListUserProvider>()),
+          ChangeNotifierProvider.value(value: sl<ListEmployeeProvider>()),
         ],
       ),
   Routes.newTimeSheet: (BuildContext context) => MultiProvider(
@@ -46,7 +46,7 @@ final Map<String, WidgetBuilder> routes = <String, WidgetBuilder>{
           ChangeNotifierProvider.value(value: sl<TabIndex>()),
           ChangeNotifierProvider.value(value: sl<ListTimeSheetsProvider>()),
           ChangeNotifierProvider.value(value: sl<TimeSheetProvider>()),
-          ChangeNotifierProvider.value(value: sl<ListUserProvider>()),
+          ChangeNotifierProvider.value(value: sl<ListEmployeeProvider>()),
         ],
       ),
 };

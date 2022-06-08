@@ -22,7 +22,7 @@ class DashBoardTab extends StatelessWidget {
         id: "General Coming",
         data: listTimeSheetProvider.get4Month(DateTime.now()),
         domainFn: (TimeSheet series, _) =>
-            DateFormat(DateFormat.YEAR_MONTH).format(series.sheetsDate),
+            DateFormat(DateFormat.YEAR_NUM_MONTH).format(series.sheetsDate),
         measureFn: (TimeSheet series, _) =>
             series.rows.map((e) => e.generalComing).toList().sum,
         seriesColor: charts.ColorUtil.fromDartColor(Colors.green),
@@ -31,7 +31,7 @@ class DashBoardTab extends StatelessWidget {
         id: "Over Time",
         data: listTimeSheetProvider.get4Month(DateTime.now()),
         domainFn: (TimeSheet series, _) =>
-            DateFormat(DateFormat.YEAR_MONTH).format(series.sheetsDate),
+            DateFormat(DateFormat.YEAR_NUM_MONTH).format(series.sheetsDate),
         measureFn: (TimeSheet series, _) =>
             series.rows.map((e) => e.overTime).toList().sum,
         seriesColor: charts.ColorUtil.fromDartColor(Colors.blue),
@@ -40,7 +40,7 @@ class DashBoardTab extends StatelessWidget {
         id: "Leave",
         data: listTimeSheetProvider.get4Month(DateTime.now()),
         domainFn: (TimeSheet series, _) =>
-            DateFormat(DateFormat.YEAR_MONTH).format(series.sheetsDate),
+            DateFormat(DateFormat.YEAR_NUM_MONTH).format(series.sheetsDate),
         measureFn: (TimeSheet series, _) => series.rows
             .map((e) => e.leave?.timeoff)
             .toList()
