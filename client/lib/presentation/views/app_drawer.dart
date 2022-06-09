@@ -1,6 +1,5 @@
 import 'package:hsc_timesheet/core/routes.dart';
 import 'package:hsc_timesheet/core/utility.dart';
-import 'package:hsc_timesheet/data/models/user.dart';
 import 'package:hsc_timesheet/presentation/providers/tab_index.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -38,15 +37,7 @@ class AppDrawer extends StatelessWidget {
     );
     // TODOs
     var currentUser = sl<UserProvider>().currentUser!;
-    print(currentUser.toString());
-    // const currentUser = User(
-    //   id: 1,
-    //   name: 'Demo User',
-    //   email: 'demo@mail.com',
-    //   position: 'Empolyee',
-    //   avatar: 'https://i.pravatar.cc/100',
-    //   last_update: 'dasdsd'
-    // );
+
     return Container(
       color: Theme.of(context).primaryColor,
       padding: EdgeInsets.zero,
@@ -68,13 +59,20 @@ class AppDrawer extends StatelessWidget {
                   )
                 ],
               ),
-              child: CircleAvatar(
-                radius: 32,
-                foregroundImage: NetworkImage(currentUser.avatar),
-                // NetworkImage(currentUser.avatar),
-                backgroundColor: Colors.grey,
-                child: Text(currentUser.name.getLetterFromName()),
-              ),
+              child: (currentUser.avatar != null)
+                  ? CircleAvatar(
+                      radius: 32,
+                      foregroundImage: NetworkImage(currentUser.avatar!),
+                      backgroundColor: Colors.grey,
+                      child: Text(currentUser.name.getLetterFromName()),
+                    )
+                  : CircleAvatar(
+                      radius: 32,
+                      foregroundImage:
+                          const AssetImage('assets/images/user-thumbnail.png'),
+                      backgroundColor: Colors.grey,
+                      child: Text(currentUser.name.getLetterFromName()),
+                    ),
             ),
             const SizedBox(height: 10),
             Text(currentUser.name, style: usernameStyle),

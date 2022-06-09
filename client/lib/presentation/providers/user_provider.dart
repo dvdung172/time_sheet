@@ -11,10 +11,10 @@ class UserProvider extends ChangeNotifier with BaseProvider {
 
   UserProvider(this.userRepository);
 
-  void callUser(int id) async {
+  Future<void> getUserById(int id) async {
     loading = true;
     notifyListeners();
-    final response = await userRepository.callUser(id);
+    final response = await userRepository.getUserById(id);
     loading = false;
     if (response.status == 0) {
       currentUser = response.data;

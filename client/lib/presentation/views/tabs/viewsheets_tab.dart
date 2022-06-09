@@ -27,25 +27,26 @@ class _ViewSheets extends State<ViewSheets> {
     return Column(
       children: [
         TextButton(
-            onPressed: () {
-              DatePicker.showPicker(
-                context,
-                pickerModel: CustomMonthPicker(
-                    minTime: DateTime(2020, 1, 1),
-                    maxTime: DateTime.now(),
-                    currentTime: _date),
-                showTitleActions: true,
-                onConfirm: (date) {
-                  setState(() {
-                    _date = date;
-                  });
-                },
-              );
-            },
-            child: Text(
-              DateFormat(DateFormat.YEAR_MONTH).format(_date),
-              style: CustomTheme.mainTheme.textTheme.headline2,
-            )),
+          onPressed: () {
+            DatePicker.showPicker(
+              context,
+              pickerModel: CustomMonthPicker(
+                  minTime: DateTime(2020, 1, 1),
+                  maxTime: DateTime.now(),
+                  currentTime: _date),
+              showTitleActions: true,
+              onConfirm: (date) {
+                setState(() {
+                  _date = date;
+                });
+              },
+            );
+          },
+          child: Text(
+            DateFormat(DateFormat.YEAR_MONTH).format(_date),
+            style: CustomTheme.mainTheme.textTheme.headline2,
+          ),
+        ),
         Consumer<ListTimeSheetsProvider>(builder: (context, provider, child) {
           if (provider.loading) {
             return const Center(child: CircularProgressIndicator());
