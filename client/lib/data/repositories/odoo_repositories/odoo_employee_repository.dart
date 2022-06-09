@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:hsc_timesheet/core/base/base_response.dart';
+import 'package:hsc_timesheet/core/logger.dart';
 import 'package:hsc_timesheet/data/models/employee.dart';
 import 'package:hsc_timesheet/data/repositories/index.dart';
 import 'package:odoo_rpc/odoo_rpc.dart';
@@ -7,6 +8,11 @@ import 'package:odoo_rpc/odoo_rpc.dart';
 import 'odoo_connect.dart';
 
 class OdooEmployeeRepository extends EmployeeRepository with OdooConnect {
+
+  final OdooClient client;
+
+  OdooEmployeeRepository(this.client);
+
   @override
   Future<BaseResponse<List<Employee>>> getEmployeeList() async {
     try {
@@ -31,10 +37,13 @@ class OdooEmployeeRepository extends EmployeeRepository with OdooConnect {
           ],
         },
       });
-      final List<Employee> userList =
-          await res.map<Employee>((item) => Employee.fromJson(item)).toList();
 
-      return BaseResponse.success(userList);
+      logger.d('response from odoo: $res');
+
+      final List<Employee> employeeList =
+          await res.map<Employee>((item) => Employee.fromJson(item)).toList();
+      logger.d('employer list got from odoo: $employeeList');
+      return BaseResponse.success(employeeList);
     } on OdooException catch (e) {
       await handleError(e);
       return BaseResponse.fail([e.message]);

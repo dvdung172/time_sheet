@@ -7,21 +7,21 @@ part of 'employee.dart';
 // **************************************************************************
 
 Employee _$EmployeeFromJson(Map<String, dynamic> json) => Employee(
-      position: json['department_id'] as String,
+      departmentId: json['department_id'],
       id: json['id'] as int,
       name: json['name'] as String,
-      email: json['work_email'] as String,
+      workEmail: json['work_email'],
       avatar: json['image_small'] as String,
       lastUpdate: json['__last_update'] as String,
-      workPhone: json['work_phone'] as String,
+      workPhoneOdoo: json['work_phone'],
     );
 
 Map<String, dynamic> _$EmployeeToJson(Employee instance) => <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
-      'work_email': instance.email,
-      'department_id': instance.position,
+      'work_email': instance.workEmail,
+      'department_id': instance.departmentId,
       'image_small': instance.avatar,
       '__last_update': instance.lastUpdate,
-      'work_phone': instance.workPhone,
+      'work_phone': instance.workPhoneOdoo,
     };

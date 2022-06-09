@@ -221,7 +221,9 @@ class _LoginScreenState extends State<LoginScreen> {
               _emailEditingController.text, _passwordEditingController.text);
           if (loginResponse.status == 0) {
             logger.d('Logged in user: $loginResponse');
+
             await sl<UserProvider>().getUserById(loginResponse.data!.userId);
+
             Navigator.of(context)
                 .pushNamedAndRemoveUntil(Routes.home, (Route route) => false);
           } else {

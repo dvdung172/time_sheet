@@ -5,23 +5,32 @@ part 'employee.g.dart';
 @JsonSerializable()
 class Employee {
   const Employee({
-    required this.position,
+    required this.departmentId,
     required this.id,
     required this.name,
-    required this.email,
+    required this.workEmail,
     required this.avatar,
     required this.lastUpdate,
-    required this.workPhone,
+    required this.workPhoneOdoo,
   });
 
   final int id;
   final String name;
 
   @JsonKey(name: 'work_email')
-  final String email;
+  final dynamic workEmail;
+  String get email => workEmail is String ? workEmail : '';
 
   @JsonKey(name: 'department_id')
-  final String position;
+  final dynamic departmentId;
+
+  String get position {
+    if (departmentId is List<Object> && departmentId.length > 1) {
+      return departmentId[1].toString();
+    }
+
+    return '';
+  }
 
   @JsonKey(name: 'image_small')
   final String avatar;
@@ -30,7 +39,8 @@ class Employee {
   final String lastUpdate;
 
   @JsonKey(name: 'work_phone')
-  final String workPhone;
+  final dynamic workPhoneOdoo;
+  String get workPhone => workPhoneOdoo is String ? workPhoneOdoo : '';
 
   factory Employee.fromJson(Map<String, dynamic> json) =>
       _$EmployeeFromJson(json);

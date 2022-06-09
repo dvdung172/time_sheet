@@ -41,7 +41,7 @@ class DashBoardTab extends StatelessWidget {
         id: "Leave",
         data: timesheetData,
         domainFn: (TimeSheet series, _) =>
-            DateFormat(DateFormat.YEAR_MONTH).format(series.sheetsDate),
+            DateFormat(DateFormat.YEAR_NUM_MONTH).format(series.sheetsDate),
         measureFn: (TimeSheet series, _) =>
             series.rows.map((e) => e.leave?.timeoff ?? 0).sum,
         seriesColor: charts.ColorUtil.fromDartColor(Colors.red),

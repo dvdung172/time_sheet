@@ -10,6 +10,10 @@ import 'package:odoo_rpc/odoo_rpc.dart';
 import 'odoo_connect.dart';
 
 class OdooTimeSheetRepository extends TimeSheetRepository with OdooConnect {
+  final OdooClient client;
+
+  OdooTimeSheetRepository(this.client);
+
   @override
   Future<BaseResponse<List<TimeSheet>>> getAllTimeSheet(int userId) async {
     try {
@@ -33,8 +37,7 @@ class OdooTimeSheetRepository extends TimeSheetRepository with OdooConnect {
         },
       });
 
-      final List<TimeSheet> timeSheets = await json
-          .decode(data)
+      final List<TimeSheet> timeSheets = await data
           .map<TimeSheet>((item) => TimeSheet.fromJson(item))
           .toList();
 

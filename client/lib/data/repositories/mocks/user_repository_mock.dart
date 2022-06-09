@@ -8,12 +8,12 @@ import 'package:flutter/services.dart';
 class UserRepositoryMock extends UserRepository {
   UserRepositoryMock({required ApiConnection connection});
 
-  @override
-  Future<User> getUserById(int timeSheetId) async {
-    await Future<void>.delayed(const Duration(milliseconds: 300));
-    final data = await rootBundle.loadString('assets/mocks/user.json');
-    return User.fromJson(json.decode(data));
-  }
+  // @override
+  // Future<User> getUserById(int timeSheetId) async {
+  //   await Future<void>.delayed(const Duration(milliseconds: 300));
+  //   final data = await rootBundle.loadString('assets/mocks/user.json');
+  //   return User.fromJson(json.decode(data));
+  // }
 
   @override
   Future<List<User>> getAllUser() async {

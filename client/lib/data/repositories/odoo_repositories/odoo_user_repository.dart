@@ -8,6 +8,10 @@ import 'package:odoo_rpc/odoo_rpc.dart';
 import 'odoo_connect.dart';
 
 class OdooUserRepository extends UserRepository with OdooConnect {
+  OdooUserRepository(this.client);
+
+  final OdooClient client;
+
   @override
   Future<BaseResponse<OdooSession>> authenticate(
       String email, String password) async {
@@ -40,8 +44,6 @@ class OdooUserRepository extends UserRepository with OdooConnect {
             'id',
             'name',
             'email',
-            'work_email',
-            'department_id',
             'image_small',
             '__last_update',
           ],

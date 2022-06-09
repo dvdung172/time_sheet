@@ -10,6 +10,7 @@ class ListTimeSheetsProvider extends ChangeNotifier with BaseProvider {
   bool loading = false;
   String? error;
   List<TimeSheet> timeSheets = [];
+  List<TimeSheet> unapprovedTimeSheets = [];
 
   ListTimeSheetsProvider(this.timeSheetRepository);
 
@@ -61,21 +62,18 @@ class ListTimeSheetsProvider extends ChangeNotifier with BaseProvider {
     return list;
   }
 
-  Future<List<TimeSheet>> getTimeSheetUnapproved() async {
+  Future<void> getTimeSheetUnapproved() async {
     loading = true;
     notifyListeners();
     var response = await timeSheetRepository.getTimeSheetUnApproved();
     loading = false;
     if (response.status == 0) {
       error = null;
-      notifyListeners();
-
-      return response.data ?? [];
+      unapprovedTimeSheets = response.data ?? [];
     } else {
       error = response.errors![0].message;
-      notifyListeners();
-
-      return [];
+      unapprovedTimeSheets = [];
     }
+    notifyListeners();
   }
 }

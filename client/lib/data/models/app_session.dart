@@ -1,3 +1,5 @@
+import 'package:hsc_timesheet/core/constants.dart';
+import 'package:http/http.dart';
 import 'package:odoo_rpc/odoo_rpc.dart';
 
 class AppSession {

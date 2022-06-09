@@ -31,9 +31,9 @@ final Map<String, WidgetBuilder> routes = <String, WidgetBuilder>{
         child: HomeScreen(),
         providers: [
           ChangeNotifierProvider.value(value: sl<TabIndex>()),
-          ChangeNotifierProvider.value(value: sl<ListTimeSheetsProvider>()),
+          ChangeNotifierProvider.value(value: sl<ListTimeSheetsProvider>()..getTimeSheetUnapproved()),
           ChangeNotifierProvider.value(value: sl<TimeSheetProvider>()),
-          ChangeNotifierProvider.value(value: sl<ListEmployeeProvider>()),
+          ChangeNotifierProvider.value(value: sl<ListEmployeeProvider>()..getAllEmployee()),
         ],
       ),
   Routes.newTimeSheet: (BuildContext context) => MultiProvider(

@@ -10,12 +10,13 @@ class ListEmployeeProvider extends ChangeNotifier {
 
   ListEmployeeProvider(this.employeeRepository);
 
-  void getAllEmployee() async {
+  Future<void> getAllEmployee() async {
     loading = true;
     notifyListeners();
     final response = await employeeRepository.getEmployeeList();
     loading = false;
-
+    // print('===============');
+    // print(response.data);
     if (response.status == 0) {
       users = response.data ?? [];
       error = null;
