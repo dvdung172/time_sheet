@@ -1,13 +1,12 @@
-import 'package:client/core/app_style.dart';
-import 'package:client/core/di.dart';
-import 'package:client/core/theme.dart';
-import 'package:client/presentation/providers/timesheet_provider.dart';
+import 'package:hsc_timesheet/core/app_style.dart';
+import 'package:hsc_timesheet/core/di.dart';
+import 'package:hsc_timesheet/core/theme.dart';
+import 'package:hsc_timesheet/presentation/providers/timesheet_provider.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_expandable_table/flutter_expandable_table.dart';
 import 'package:provider/provider.dart';
 import 'package:easy_localization/easy_localization.dart';
-
 
 class NewTimeSheet extends StatefulWidget {
   const NewTimeSheet({Key? key}) : super(key: key);
@@ -84,10 +83,12 @@ class _NewTimeSheet extends State<NewTimeSheet> {
                     var row = provider.timeSheet.rows[rowIndex];
                     var isWeekend = row.date.weekday > 5;
                     var rowColor = null;
-                    if(isWeekend){
-                      rowColor = Theme.of(context).primaryColor.withOpacity(0.2);
-                    }else if(row.leave !=null){
-                      rowColor = CustomColor.errorColor;}
+                    if (isWeekend) {
+                      rowColor =
+                          Theme.of(context).primaryColor.withOpacity(0.2);
+                    } else if (row.leave != null) {
+                      rowColor = CustomColor.errorColor;
+                    }
                     return ExpandableTableRow(
                         height: 60,
                         firstCell: Container(

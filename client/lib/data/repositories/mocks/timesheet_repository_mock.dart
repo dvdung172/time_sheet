@@ -1,24 +1,23 @@
 import 'dart:convert';
 
-import 'package:client/data/models/timesheet.dart';
-import 'package:client/data/repositories/api_connection.dart';
-import 'package:client/data/repositories/timesheet_repository.dart';
+import 'package:hsc_timesheet/core/base/base_response.dart';
+import 'package:hsc_timesheet/data/models/timesheet.dart';
+import 'package:hsc_timesheet/data/repositories/server/api_connection.dart';
+import 'package:hsc_timesheet/data/repositories/timesheet_repository.dart';
 import 'package:flutter/services.dart';
 
 class TimeSheetRepositoryMock extends TimeSheetRepository {
-  TimeSheetRepositoryMock({required ApiConnection connection})
-      : super(connection);
+  TimeSheetRepositoryMock({required ApiConnection connection});
 
   @override
-  Future<TimeSheet> getTimeSheetById(int timeSheetId) async {
+  Future<BaseResponse<TimeSheet>> getTimeSheetById(int timeSheetId) async {
     await Future<void>.delayed(const Duration(milliseconds: 300));
     final data = await rootBundle.loadString('assets/mocks/one_sheet.json');
-    print('ok');
-    return TimeSheet.fromJson(json.decode(data));
-    
+    return BaseResponse.success(TimeSheet.fromJson(json.decode(data)));
   }
+
   @override
-  Future<List<TimeSheet>> getAllTimeSheet(int user) async {
+  Future<BaseResponse<List<TimeSheet>>> getAllTimeSheet(int user) async {
     final data = await rootBundle.loadString('assets/mocks/all_sheets.json');
 
     // logger.d('Response: $data');
@@ -27,10 +26,12 @@ class TimeSheetRepositoryMock extends TimeSheetRepository {
         .decode(data)
         .map<TimeSheet>((item) => TimeSheet.fromJson(item))
         .toList();
-    return timeSheets.where((e) => e.userId == user).toList();
+    return BaseResponse.success(
+        timeSheets.where((e) => e.userId == user).toList());
   }
+
   @override
-  Future<List<TimeSheet>> getTimeSheetUnApproved() async {
+  Future<BaseResponse<List<TimeSheet>>> getTimeSheetUnApproved() async {
     await Future<void>.delayed(const Duration(milliseconds: 300));
     final data = await rootBundle.loadString('assets/mocks/all_sheets.json');
 
@@ -38,6 +39,7 @@ class TimeSheetRepositoryMock extends TimeSheetRepository {
         .decode(data)
         .map<TimeSheet>((item) => TimeSheet.fromJson(item))
         .toList();
-    return timeSheets.where((e) => e.approval == false).toList();
+    return BaseResponse.success(
+        timeSheets.where((e) => e.approval == false).toList());
   }
 }

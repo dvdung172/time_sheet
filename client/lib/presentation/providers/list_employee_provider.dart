@@ -1,15 +1,11 @@
-import 'package:client/data/models/employee.dart';
-import 'package:client/data/models/user.dart';
-import 'package:client/data/repositories/odoo_repositories/employee_repository.dart';
-import 'package:client/data/repositories/odoo_repositories/user_repository.dart';
-// import 'package:client/data/repositories/user_repository.dart';
-
+import 'package:hsc_timesheet/data/models/employee.dart';
 import 'package:flutter/material.dart';
+import 'package:hsc_timesheet/data/repositories/index.dart';
 
 class ListEmployeeProvider extends ChangeNotifier {
-
   final EmployeeRepository employeeRepository;
   bool loading = false;
+  String? error;
   List<Employee> users = [];
 
   ListEmployeeProvider(this.employeeRepository);
@@ -17,11 +13,17 @@ class ListEmployeeProvider extends ChangeNotifier {
   void getAllUser() async {
     loading = true;
     notifyListeners();
-    final value = await employeeRepository.callListEmployee();
+    final response = await employeeRepository.callListEmployee();
     loading = false;
-    users= value;
+
+    if (response.status == 0) {
+      users = response.data ?? [];
+      error = null;
+    } else {
+      users = [];
+      error = response.errors![0].message;
+    }
+
     notifyListeners();
   }
-
-
 }

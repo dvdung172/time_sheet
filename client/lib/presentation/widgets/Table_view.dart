@@ -1,5 +1,5 @@
-import 'package:client/core/theme.dart';
-import 'package:client/data/models/timesheet.dart';
+import 'package:hsc_timesheet/core/theme.dart';
+import 'package:hsc_timesheet/data/models/timesheet.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_expandable_table/flutter_expandable_table.dart';
@@ -32,10 +32,11 @@ class _TableViewState extends State<TableView> {
       var row = widget.timeSheet.rows[index];
       var isWeekend = row.date.weekday > 5;
       var rowColor = null;
-      if(isWeekend){
+      if (isWeekend) {
         rowColor = Theme.of(context).primaryColor.withOpacity(0.2);
-      }else if(row.leave !=null){
-        rowColor = CustomColor.errorColor;}
+      } else if (row.leave != null) {
+        rowColor = CustomColor.errorColor;
+      }
       return InkWell(
         onTap: widget.canChanged == true
             ? () {

@@ -2,14 +2,14 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:client/core/constants.dart';
-import 'package:client/core/exceptions/api_exception.dart';
-import 'package:client/core/exceptions/remote_exception.dart';
-import 'package:client/core/logger.dart';
-import 'package:client/data/repositories/api_connection.dart';
+import 'package:hsc_timesheet/core/constants.dart';
+import 'package:hsc_timesheet/core/exceptions/api_exception.dart';
+import 'package:hsc_timesheet/core/exceptions/remote_exception.dart';
+import 'package:hsc_timesheet/core/logger.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/services.dart';
+import 'package:hsc_timesheet/data/repositories/server/api_connection.dart';
 import 'package:http/http.dart';
 
 class ApiConnectionMock extends ApiConnection {

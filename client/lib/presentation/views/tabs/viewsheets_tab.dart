@@ -1,9 +1,9 @@
-import 'package:client/core/theme.dart';
-import 'package:client/data/models/timesheet.dart';
-import 'package:client/presentation/providers/list_timesheet_provider.dart';
-import 'package:client/presentation/providers/tab_index.dart';
-import 'package:client/presentation/widgets/Table_view.dart';
-import 'package:client/presentation/widgets/custom_month_picker.dart';
+import 'package:hsc_timesheet/core/theme.dart';
+import 'package:hsc_timesheet/data/models/timesheet.dart';
+import 'package:hsc_timesheet/presentation/providers/list_timesheet_provider.dart';
+import 'package:hsc_timesheet/presentation/providers/tab_index.dart';
+import 'package:hsc_timesheet/presentation/widgets/table_view.dart';
+import 'package:hsc_timesheet/presentation/widgets/custom_month_picker.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
@@ -62,7 +62,9 @@ class _ViewSheets extends State<ViewSheets> {
               child: Text('No Time Sheet Available'),
             );
           } else {
-            return TableView(timeSheet: timeSheet, canChanged: timeSheet.approval == true?false:true);
+            return TableView(
+                timeSheet: timeSheet,
+                canChanged: timeSheet.approval == true ? false : true);
           }
         }),
       ],

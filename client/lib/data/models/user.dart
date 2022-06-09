@@ -1,51 +1,36 @@
+import 'package:json_annotation/json_annotation.dart';
+
+part 'user.g.dart';
+
+@JsonSerializable()
 class User {
-  const User( {
+  const User({
     required this.position,
     required this.id,
     required this.name,
     required this.email,
     required this.avatar,
-    required this.last_update,
+    required this.lastUpdate,
   });
 
   final int id;
+
   final String name;
+
+  @JsonKey(name: 'work_email')
   final String email;
+
+  @JsonKey(name: 'department_id')
   final String position;
+
+  @JsonKey(name: 'image_small')
   final String avatar;
-  final String last_update;
 
-  factory User.fromJson(Map<String, dynamic> json) {
-    try {
-      return User(
-          email: json['work_email'].toString(),
-          avatar: json['image_small'].toString(),
-          name: json['name'].toString(),
-          id:json['id'],
-          position: json['department_id'].toString(),
-          last_update: json['__last_update'].toString());
-    } catch (e) {
-      print(e);
-      rethrow;
-    }
-  }
-  factory User.fromRPC(res) {
-    try {
-      return User(
-          email: res['email'].toString(),
-          avatar: res['image_small'].toString(),
-          name: res['name'].toString(),
-          id: int .parse(res['id'].toString()),
-          position: res['department_id'].toString(),
-          last_update: res['__last_update'].toString());
+  @JsonKey(name: '__last_update')
+  final String lastUpdate;
 
-    } catch (e) {
-      print(';;;;;;;;');
-      print(e);
-      rethrow;
-    }
-  }
-
+  factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
+  Map<String, dynamic> toJson() => _$UserToJson(this);
 
   @override
   String toString() =>

@@ -1,11 +1,13 @@
-import 'package:client/core/constants.dart';
-import 'package:client/core/di.dart';
-import 'package:client/core/routes.dart';
-import 'package:client/core/theme.dart';
-import 'package:client/data/repositories/odoo_repositories/odoo_connect.dart';
-import 'package:client/presentation/providers/user_provider.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:hsc_timesheet/core/app_style.dart';
+import 'package:hsc_timesheet/core/constants.dart';
+import 'package:hsc_timesheet/core/logger.dart';
+import 'package:hsc_timesheet/core/routes.dart';
+import 'package:hsc_timesheet/core/theme.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:hsc_timesheet/presentation/providers/index.dart';
+import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -15,9 +17,10 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final TextEditingController _emailEditingController = TextEditingController();
+  final TextEditingController _emailEditingController =
+      TextEditingController(text: dotenv.env['USERNAME'] ?? '');
   final TextEditingController _passwordEditingController =
-      TextEditingController();
+      TextEditingController(text: dotenv.env['PASSWORD'] ?? '');
 
   final FocusNode _emailNode = FocusNode();
   final FocusNode _passwordNode = FocusNode();
@@ -81,7 +84,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         });
                       },
                     ),
-                    const Text('Remember me'),
+                    Text(tr('screens.login.remember_me')),
                   ],
                 ),
                 SizedBox(
@@ -92,19 +95,19 @@ class _LoginScreenState extends State<LoginScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text("Don't have an account?"),
+                    Text(tr('screens.login.dont_have_account')),
                     TextButton(
                         onPressed: () {},
                         child: Text(
-                          "Sign Up",
+                          tr('screens.login.signup'),
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               color: CustomTheme.mainTheme.primaryColor),
                         ))
                   ],
                 ),
-                const SizedBox(
-                  child: Text('Or sign in with...'),
+                SizedBox(
+                  child: Text(tr('screens.login.signin_with')),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -122,9 +125,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                 borderRadius: BorderRadius.circular(40.0)),
                           ),
                         ),
-                        child: Image.network(
-                            'https://pngimg.com/uploads/google/small/google_PNG19635.png',
-                            fit: BoxFit.cover),
+                        child: Image.asset(
+                          'assets/images/login_google.png',
+                          fit: BoxFit.cover,
+                        ),
                         onPressed: () {},
                       ),
                     ),
@@ -141,9 +145,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                 borderRadius: BorderRadius.circular(40.0)),
                           ),
                         ),
-                        child: Image.network(
-                            'https://pngimg.com/uploads/facebook_logos/facebook_logos_PNG19753.png',
-                            fit: BoxFit.cover),
+                        child: Image.asset(
+                          'assets/images/login_facebook.png',
+                          fit: BoxFit.cover,
+                        ),
                         onPressed: () {},
                       ),
                     ),
@@ -179,7 +184,7 @@ class _LoginScreenState extends State<LoginScreen> {
             padding: EdgeInsets.only(top: 20),
           ),
           Text(
-            "Sign In",
+            tr('screens.login.signin'),
             style: CustomTheme.mainTheme.textTheme.headline2,
           ),
           const Padding(
@@ -194,52 +199,42 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Widget _buildLoginButton() {
-    return FlatButton(
+    final authProvider = Provider.of<AuthProvider>(context);
+
+    return ElevatedButton(
       focusNode: _viewNode,
       key: const Key("login"),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(5.0),
-      ),
-      color: CustomColor.logoBlue,
+      style: AppStyles.buttonStyle,
       onPressed: () async {
-        if (_emailEditingController.text.isEmpty) {
-          setState(() {
-            _emailCheck = false;
-          });
-        }else{
-          setState(() {
-            _emailCheck = true;
-          });
-        }
-        if (_passwordEditingController.text.isEmpty) {
-          setState(() {
-            _passwordCheck = false;
-          });
-        }else{
-          setState(() {
-            _passwordCheck = true;
-          });
-        }
-        if (_emailCheck == true && _passwordCheck == true) {
-          var res = await OdooConnect().authentication(
-              _emailEditingController.text, _passwordEditingController.text);
-          if (res != null) {
-            print('Installed modules: \n' + res.toString());
+        logger.d('Validating before login');
+        var emailValid = _emailEditingController.text.isNotEmpty;
+        var passwordValid = _passwordEditingController.text.isNotEmpty;
+        setState(() {
+          _emailCheck = emailValid;
+          _passwordCheck = passwordValid;
+        });
 
-            sl<UserProvider>().callUser(res);
+        if (emailValid && passwordValid) {
+          logger.d('Logging in');
+          var loggedInSession = await authProvider.login(
+              _emailEditingController.text, _passwordEditingController.text);
+          if (loggedInSession != null) {
+            logger.d('Logged in user: $loggedInSession');
+
+            // sl<UserProvider>().callUser(res);
             Navigator.of(context)
                 .pushNamedAndRemoveUntil(Routes.home, (Route route) => false);
           } else {
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               content: Text(
-                "Failed to login",
+                tr('messages.login_failed'),
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+                style: AppStyles.messageStyle,
               ),
-              duration: Duration(seconds: 2),
+              duration: const Duration(seconds: 2),
               backgroundColor: Colors.red,
             ));
-            print('failed to login');
+            logger.e('failed to login');
           }
         }
       },
@@ -256,7 +251,9 @@ class _LoginScreenState extends State<LoginScreen> {
       controller: _emailEditingController,
       keyboardType: TextInputType.emailAddress,
       decoration: InputDecoration(
-        errorText: _emailCheck == false ? 'invalid email' : null,
+        errorText: _emailCheck == false
+            ? tr('messages.invalid_item', args: ['email'])
+            : null,
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(4.0),
           borderSide: const BorderSide(
@@ -279,7 +276,7 @@ class _LoginScreenState extends State<LoginScreen> {
         hoverColor: CustomColor.hintColor,
         fillColor: CustomColor.textFieldBackground,
         filled: true,
-        labelText: "Email*",
+        labelText: tr('screens.login.email'),
         labelStyle: CustomTheme.mainTheme.textTheme.headline6,
       ),
       cursorColor: CustomColor.hintColor,
@@ -304,7 +301,9 @@ class _LoginScreenState extends State<LoginScreen> {
         obscureText: _obscureText,
         keyboardType: TextInputType.visiblePassword,
         decoration: InputDecoration(
-          errorText: _passwordCheck == false ? 'invalid password' : null,
+          errorText: _passwordCheck == false
+              ? tr('messages.invalid_item', args: ['password'])
+              : null,
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(4.0),
             borderSide: const BorderSide(
@@ -327,7 +326,7 @@ class _LoginScreenState extends State<LoginScreen> {
           hoverColor: CustomColor.hintColor,
           fillColor: CustomColor.textFieldBackground,
           filled: true,
-          labelText: "Password*",
+          labelText: tr('screens.login.password'),
           labelStyle: CustomTheme.mainTheme.textTheme.headline5,
           suffixIcon: IconButton(
             icon: _obscureText == true

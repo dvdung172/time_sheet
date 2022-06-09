@@ -1,57 +1,18 @@
-import 'dart:convert';
-import 'dart:io';
-
-import 'package:client/core/constants.dart';
-import 'package:client/core/logger.dart';
-import 'package:client/data/models/timesheet.dart';
-import 'package:client/data/models/user.dart';
-import 'package:client/data/repositories/api_connection.dart';
-
+import 'package:hsc_timesheet/core/base/base_response.dart';
+import 'package:hsc_timesheet/data/models/user.dart';
+import 'package:odoo_rpc/odoo_rpc.dart';
 
 class UserRepository {
-  final ApiConnection connection;
-
-  UserRepository(this.connection);
-
-  Future<User> getUserById(int timeSheetId) async {
-    var response = await connection.execute(ApiRequest(
-      endPoint: '${Endpoints.timeSheetApiUrl}/$timeSheetId',
-      method: ApiMethod.get,
-      headers: {
-        HttpHeaders.contentTypeHeader: 'application/json',
-        HttpHeaders.acceptHeader: 'application/json',
-      },
-    ));
-
-    return User.fromJson(json.decode(response.body));
+  Future<BaseResponse<OdooSession>> authenticate(
+      String email, String password) async {
+    throw UnimplementedError('UserRepository.authentication');
   }
 
-  // Future<void> saveCredential(String username, String password) {
-  //   SharedPreferecens.save('username', username);
-  //   SharedPreferecens.save('password', password);
-  // }
-  //
-  // Future<void> readCredential() {
-  //   SharedPreferecens.save('username', username);
-  //   SharedPreferecens.save('password', password);
-  // }
+  Future<BaseResponse<User>> callUser(int id) async {
+    throw UnimplementedError('UserRepository.callUser');
+  }
 
-  Future<List<User>> getAllUser() async {
-    var response = await connection.execute(ApiRequest(
-      endPoint: Endpoints.timeSheetApiUrl,
-      method: ApiMethod.get,
-      headers: {
-        HttpHeaders.contentTypeHeader: 'application/json',
-        HttpHeaders.acceptHeader: 'application/json',
-      },
-    ));
-
-    logger.d('Response: ${response.body}');
-
-    final productList = await json
-        .decode(response.body)
-        .map<TimeSheet>((item) => TimeSheet.fromJson(item))
-        .toList();
-    return productList;
+  Future<BaseResponse<List<User>>> callListUser() async {
+    throw UnimplementedError('UserRepository.callListUser');
   }
 }

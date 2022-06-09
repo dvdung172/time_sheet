@@ -18,12 +18,21 @@
     "try_again": "Try again",
     "offline": "You're offline, please connect and try again",
     "server_error": "An error occurred, please try again later",
-    "can_not_connect_server": "Can't connect to the server"
+    "can_not_connect_server": "Can't connect to the server",
+    "login_failed": "Failed to login",
+    "invalid_item": "invalid {}"
   },
   "screens": {
     "login": {
       "login_with_fb": "Đăng nhập bằng Facebook",
-      "login_with_gg": "Đăng nhập bằng Google"
+      "login_with_gg": "Đăng nhập bằng Google",
+      "remember_me": "Ghi nhớ",
+      "dont_have_account": "Chưa có tài khoản?",
+      "signin": "Đăng nhập",
+      "signup": "Đăng ký",
+      "signin_with": "Hoặc đăng nhập với ...",
+      "email": "Email*",
+      "password": "Mật khẩu*"
     },
     "home": {
       "title": "Home"
