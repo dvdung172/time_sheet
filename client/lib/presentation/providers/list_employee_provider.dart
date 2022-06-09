@@ -10,10 +10,10 @@ class ListEmployeeProvider extends ChangeNotifier {
 
   ListEmployeeProvider(this.employeeRepository);
 
-  void getAllUser() async {
+  void getAllEmployee() async {
     loading = true;
     notifyListeners();
-    final response = await employeeRepository.callListEmployee();
+    final response = await employeeRepository.getEmployeeList();
     loading = false;
 
     if (response.status == 0) {

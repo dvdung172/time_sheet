@@ -1,6 +1,7 @@
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hsc_timesheet/core/app_style.dart';
 import 'package:hsc_timesheet/core/constants.dart';
+import 'package:hsc_timesheet/core/di.dart';
 import 'package:hsc_timesheet/core/logger.dart';
 import 'package:hsc_timesheet/core/routes.dart';
 import 'package:hsc_timesheet/core/theme.dart';
@@ -216,18 +217,17 @@ class _LoginScreenState extends State<LoginScreen> {
 
         if (emailValid && passwordValid) {
           logger.d('Logging in');
-          var loggedInSession = await authProvider.login(
+          var loginResponse = await authProvider.login(
               _emailEditingController.text, _passwordEditingController.text);
-          if (loggedInSession != null) {
-            logger.d('Logged in user: $loggedInSession');
-
-            // sl<UserProvider>().callUser(res);
+          if (loginResponse.status == 0) {
+            logger.d('Logged in user: $loginResponse');
+            await sl<UserProvider>().getUserById(loginResponse.data!.userId);
             Navigator.of(context)
                 .pushNamedAndRemoveUntil(Routes.home, (Route route) => false);
           } else {
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               content: Text(
-                tr('messages.login_failed'),
+                '${tr('messages.login_failed')}\r\n${loginResponse.errors![0].message}',
                 textAlign: TextAlign.center,
                 style: AppStyles.messageStyle,
               ),

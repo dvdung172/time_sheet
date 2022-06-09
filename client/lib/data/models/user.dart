@@ -17,14 +17,14 @@ class User {
 
   final String name;
 
-  @JsonKey(name: 'work_email')
+  @JsonKey(name: 'email')
   final String email;
 
   @JsonKey(name: 'department_id')
-  final String position;
+  final String? position;
 
   @JsonKey(name: 'image_small')
-  final String avatar;
+  final String? avatar;
 
   @JsonKey(name: '__last_update')
   final String lastUpdate;

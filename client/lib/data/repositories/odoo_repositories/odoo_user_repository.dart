@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:hsc_timesheet/core/base/base_response.dart';
+import 'package:hsc_timesheet/core/logger.dart';
 import 'package:hsc_timesheet/data/models/user.dart';
 import 'package:hsc_timesheet/data/repositories/user_repository.dart';
 import 'package:odoo_rpc/odoo_rpc.dart';
@@ -24,7 +25,7 @@ class OdooUserRepository extends UserRepository with OdooConnect {
   }
 
   @override
-  Future<BaseResponse<User>> callUser(int id) async {
+  Future<BaseResponse<User>> getUserById(int id) async {
     try {
       var res = await client.callKw({
         'model': 'res.users',
@@ -35,9 +36,19 @@ class OdooUserRepository extends UserRepository with OdooConnect {
           'domain': [
             ['id', '=', id],
           ],
-          'fields': ['id', 'name', 'email', '__last_update', ''],
+          'fields': [
+            'id',
+            'name',
+            'email',
+            'work_email',
+            'department_id',
+            'image_small',
+            '__last_update',
+          ],
         },
       });
+      logger.d('data from Odoo: $res');
+
       var user = User.fromJson(res[0]);
 
       return BaseResponse.success(user);
@@ -51,7 +62,7 @@ class OdooUserRepository extends UserRepository with OdooConnect {
   }
 
   @override
-  Future<BaseResponse<List<User>>> callListUser() async {
+  Future<BaseResponse<List<User>>> getUserList() async {
     try {
       var res = await client.callKw({
         'model': 'hr.employee',

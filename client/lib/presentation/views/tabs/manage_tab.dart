@@ -28,7 +28,8 @@ class _ManageTabState extends State<ManageTab> {
     Future.delayed(Duration.zero, () {
       //your code goes here
 
-      Provider.of<ListEmployeeProvider>(context, listen: false).getAllUser();
+      Provider.of<ListEmployeeProvider>(context, listen: false)
+          .getAllEmployee();
 
       Provider.of<ListTimeSheetsProvider>(context, listen: false)
           .getTimeSheetUnapproved()

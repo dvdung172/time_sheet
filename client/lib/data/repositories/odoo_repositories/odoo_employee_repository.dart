@@ -8,7 +8,7 @@ import 'odoo_connect.dart';
 
 class OdooEmployeeRepository extends EmployeeRepository with OdooConnect {
   @override
-  Future<BaseResponse<List<Employee>>> callListEmployee() async {
+  Future<BaseResponse<List<Employee>>> getEmployeeList() async {
     try {
       var res = await client.callKw({
         'model': 'hr.employee',

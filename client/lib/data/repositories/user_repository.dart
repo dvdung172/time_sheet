@@ -8,11 +8,11 @@ class UserRepository {
     throw UnimplementedError('UserRepository.authentication');
   }
 
-  Future<BaseResponse<User>> callUser(int id) async {
+  Future<BaseResponse<User>> getUserById(int id) async {
     throw UnimplementedError('UserRepository.callUser');
   }
 
-  Future<BaseResponse<List<User>>> callListUser() async {
+  Future<BaseResponse<List<User>>> getUserList() async {
     throw UnimplementedError('UserRepository.callListUser');
   }
 }
