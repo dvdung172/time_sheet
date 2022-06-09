@@ -13,14 +13,13 @@ class Constants {
 
 class Endpoints {
   // Base url
-  static final baseURL = dotenv.env['API_URL'];
+  static final baseURL = dotenv.env['API_URL'] ?? 'http://172.29.4.126:8069';
   static final apiURL = '$baseURL/api';
   static final imageURL = '$baseURL/img';
 
   // Auth
   static final String authApiURL = '$apiURL/auth';
   static final String logoutApiURL = '$apiURL/logout';
-
 
   //timessheet
   static final String timeSheetApiUrl = '$apiURL/timeSheet';

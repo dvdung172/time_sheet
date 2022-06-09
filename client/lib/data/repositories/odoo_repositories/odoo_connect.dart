@@ -1,48 +1,39 @@
-import 'dart:io';
-
-import 'package:client/data/models/app_session.dart';
+import 'package:hsc_timesheet/core/constants.dart';
+import 'package:hsc_timesheet/core/extensions.dart';
+import 'package:hsc_timesheet/core/logger.dart';
 import 'package:odoo_rpc/odoo_rpc.dart';
+import 'package:network_info_plus/network_info_plus.dart';
 
 class OdooConnect {
-  final client = AppSession.baseURL;
+  final client = OdooClient(Endpoints.baseURL);
 
-  Future<dynamic> authentication(String email, String password) async {
-    try {
-      var res = await client.authenticate('odoo', email, password);
-      AppSession.session = res;
-      return res.userId;
-    } on OdooException catch (e) {
-      print(e);
+  Future<void> handleError(Exception e, {String? additionalMessage}) async {
+    var networkInfo = await _getNetworkInfo();
+
+    logger.i('------------------------');
+    if (additionalMessage != null) {
+      logger.e(additionalMessage);
     }
+    logger.e(e);
+    logger.i('network: $networkInfo');
+    logger.e(
+        'stacktrace: ${StackTrace.current.getStackTrace(maxFrames: 8).join('. ')}');
+    logger.i('------------------------');
   }
 
-  Future<dynamic> getAllTimeSheet(int userId) async {
+  Future<String> _getNetworkInfo() async {
     try {
-      var res = await client.callKw({
-        'model': 'account.analytic.line',
-        'method': 'search_read',
-        'args': [],
-        'kwargs': {
-          'context': {'bin_size': true},
-          'domain': [
-            ['user_id', '=', userId],
-          ],
-          'fields': [
-            'user_id',
-            'account_id',
-            'name',
-            'unit_amount',
-            'date',
-            'display_name',
-          ],
-        },
-      });
-      return res;
-    } on OdooException catch (e) {
-      print(e);
-      client.close();
-      exit(-1);
+      final info = NetworkInfo();
+
+      var wifiIP = await info.getWifiIP(); // 192.168.1.100
+      // 2001:0db8:85a3:0000:0000:8a2e:0370:7334
+      var wifiIPv6 = await info.getWifiIPv6();
+      var wifiSubmask = await info.getWifiSubmask(); // 255.255.255.0
+      var wifiGateway = await info.getWifiGatewayIP(); // 192.168.1.1
+
+      return '{ip: $wifiIP, ipV6: $wifiIPv6, subnet: $wifiSubmask, gateway: $wifiGateway}';
+    } on Exception catch (e) {
+      return 'N/A (${e.toString()})';
     }
   }
-
 }

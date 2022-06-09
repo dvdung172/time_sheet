@@ -1,15 +1,16 @@
-import 'package:client/data/models/timesheet.dart';
-import 'package:client/data/repositories/mocks/timesheet_repository_mock.dart';
-import 'package:client/data/repositories/timesheet_repository.dart';
+import 'package:hsc_timesheet/data/models/timesheet.dart';
 import 'package:flutter/material.dart';
+import 'package:hsc_timesheet/data/repositories/index.dart';
+import 'package:hsc_timesheet/presentation/providers/base_provider.dart';
 
-class TimeSheetProvider extends ChangeNotifier {
+class TimeSheetProvider extends ChangeNotifier with BaseProvider {
   final TimeSheetRepository timeSheetRepository;
   TimeSheetProvider(this.timeSheetRepository);
 
   late DateTime date;
   late TimeSheet _timesheet;
   late bool loading = false;
+  String? error;
 
   TimeSheet get timeSheet => _timesheet;
 
@@ -51,10 +52,15 @@ class TimeSheetProvider extends ChangeNotifier {
   void getTimeSheetById(int userId) async {
     loading = true;
     notifyListeners();
-    final value = await timeSheetRepository.getTimeSheetById(1);
+    final response = await timeSheetRepository.getTimeSheetById(1);
     loading = false;
-    _timesheet = value;
-    print(value);
+    if (response.status == 0) {
+      _timesheet = response.data!;
+      error = null;
+    } else {
+      error = response.errors![0].message;
+    }
+
     notifyListeners();
   }
 }

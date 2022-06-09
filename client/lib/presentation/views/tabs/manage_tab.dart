@@ -1,12 +1,11 @@
-import 'package:client/core/di.dart';
-import 'package:client/core/routes.dart';
-import 'package:client/data/models/app_session.dart';
-import 'package:client/data/models/employee.dart';
-import 'package:client/data/models/timesheet.dart';
-import 'package:client/data/models/user.dart';
-import 'package:client/presentation/providers/list_timesheet_provider.dart';
-import 'package:client/presentation/providers/list_employee_provider.dart';
-import 'package:client/presentation/providers/timesheet_provider.dart';
+import 'package:hsc_timesheet/core/di.dart';
+import 'package:hsc_timesheet/core/logger.dart';
+import 'package:hsc_timesheet/core/routes.dart';
+import 'package:hsc_timesheet/data/models/employee.dart';
+import 'package:hsc_timesheet/data/models/timesheet.dart';
+import 'package:hsc_timesheet/presentation/providers/index.dart';
+// import 'package:hsc_timesheet/presentation/providers/list_timesheet_provider.dart';
+// import 'package:hsc_timesheet/presentation/providers/timesheet_provider.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -22,7 +21,7 @@ class ManageTab extends StatefulWidget {
 class _ManageTabState extends State<ManageTab> {
   bool visible = false;
   List<TimeSheet> listsheet = [];
-  List<Employee> listUser = [];
+  List<Employee>? listUser = [];
 
   @override
   void initState() {
@@ -97,7 +96,7 @@ class _ManageTabState extends State<ManageTab> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                          "Employee's Name: ${listUser.firstWhereOrNull((element) => element.id == listsheet[index].userId)?.name} "),
+                                          "Employee's Name: ${listUser?.firstWhereOrNull((element) => element.id == listsheet[index].userId)?.name} "),
                                       Text(
                                           "General Coming: ${rows.map((e) => e.generalComing).toList().sum}"),
                                       Text(
@@ -107,7 +106,8 @@ class _ManageTabState extends State<ManageTab> {
                                                     .toList()
                                                     .sum >
                                                 0
-                                            ? const TextStyle(color: Colors.blue)
+                                            ? const TextStyle(
+                                                color: Colors.blue)
                                             : null,
                                       ),
                                       Text(
@@ -119,7 +119,8 @@ class _ManageTabState extends State<ManageTab> {
                                                     .sum ==
                                                 0
                                             ? null
-                                            : const TextStyle(color: Colors.red),
+                                            : const TextStyle(
+                                                color: Colors.red),
                                       )
                                     ],
                                   ),
@@ -130,7 +131,9 @@ class _ManageTabState extends State<ManageTab> {
                                     MainAxisAlignment.spaceAround,
                                 children: <Widget>[
                                   SizedBox(
-                                    width: MediaQuery.of(context).size.width / 2 - 10,
+                                    width:
+                                        MediaQuery.of(context).size.width / 2 -
+                                            10,
                                     child: TextButton(
                                       child: const Text('APPROVE'),
                                       onPressed: () {
@@ -139,7 +142,9 @@ class _ManageTabState extends State<ManageTab> {
                                     ),
                                   ),
                                   SizedBox(
-                                    width: MediaQuery.of(context).size.width / 2 - 10,
+                                    width:
+                                        MediaQuery.of(context).size.width / 2 -
+                                            10,
                                     child: TextButton(
                                       child: const Text(
                                         'DECLINE',
@@ -157,34 +162,40 @@ class _ManageTabState extends State<ManageTab> {
                         );
                       }),
                   ListView.builder(
-                      itemCount: listUser.length,
+                      itemCount: listUser?.length ?? 0,
                       itemBuilder: (context, index) {
-                        var unique = listUser[index].last_update;
-                        unique = unique.replaceAll(RegExp(r'[^0-9]'), '');
+                        var idxUser = listUser?[index];
+                        if (idxUser == null) {
+                          return const SizedBox.shrink();
+                        }
+
+                        // var unique = idxUser.lastUpdate
+                        //     .replaceAll(RegExp(r'[^0-9]'), '');
                         return Card(
                             child: InkWell(
                           splashColor: Colors.blue.withAlpha(30),
                           onTap: () {
                             sl<ListTimeSheetsProvider>()
-                                .getAllTimeSheetsApproved(listUser[index].id);
-                            print(listUser[index].id);
+                                .getAllApprovedTimesheets(idxUser.id);
+                            logger.d('current userId: ${idxUser.id}');
                             Navigator.pushNamed(context, Routes.manageView,
                                 arguments: 'employee');
                           },
                           child: ListTile(
                             leading: SizedBox(
-                                height: 50,
-                                width: 50,
-                                child: Image.network(
-                                    'http://172.29.4.126:8069/web/image?model=hr.employee&id=12&field=image_medium&unique=05312022084057')),
+                              height: 50,
+                              width: 50,
+                              child: Image.network(
+                                  'http://172.29.4.126:8069/web/image?model=hr.employee&id=12&field=image_medium&unique=05312022084057'),
+                            ),
                             // leading: Image.network('https://i.pravatar.cc/100'),
-                            title: Text(listUser[index].name),
+                            title: Text(idxUser.name),
                             subtitle: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(listUser[index].position),
-                                Text(listUser[index].work_phone.toString()),
-                                Text(listUser[index].email.toString()),
+                                Text(idxUser.position),
+                                Text(idxUser.workPhone),
+                                Text(idxUser.id.toString()),
                               ],
                             ),
                             isThreeLine: true,

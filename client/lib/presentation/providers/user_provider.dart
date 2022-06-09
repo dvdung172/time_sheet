@@ -1,24 +1,29 @@
-import 'package:client/data/models/user.dart';
-import 'package:client/data/repositories/odoo_repositories/user_repository.dart';
+import 'package:hsc_timesheet/data/models/user.dart';
 import 'package:flutter/material.dart';
+import 'package:hsc_timesheet/data/repositories/user_repository.dart';
+import 'package:hsc_timesheet/presentation/providers/base_provider.dart';
 
-class UserProvider extends ChangeNotifier {
-
+class UserProvider extends ChangeNotifier with BaseProvider {
   final UserRepository userRepository;
   bool loading = false;
-  late User users ;
+  String? error;
+  late User? currentUser;
 
   UserProvider(this.userRepository);
 
   void callUser(int id) async {
     loading = true;
     notifyListeners();
-    final value = await userRepository.callUser(id);
+    final response = await userRepository.callUser(id);
     loading = false;
-    users= value;
-    print(users.toString());
+    if (response.status == 0) {
+      currentUser = response.data;
+      error = null;
+    } else {
+      currentUser = null;
+      error = response.errors![0].message;
+    }
+
     notifyListeners();
   }
-
-
 }

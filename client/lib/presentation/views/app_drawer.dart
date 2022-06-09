@@ -1,10 +1,10 @@
-import 'package:client/core/routes.dart';
-import 'package:client/core/utility.dart';
-import 'package:client/data/models/user.dart';
-import 'package:client/presentation/providers/tab_index.dart';
-import 'package:client/presentation/providers/user_provider.dart';
+import 'package:hsc_timesheet/core/routes.dart';
+import 'package:hsc_timesheet/core/utility.dart';
+import 'package:hsc_timesheet/data/models/user.dart';
+import 'package:hsc_timesheet/presentation/providers/tab_index.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:hsc_timesheet/presentation/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../../core/di.dart';
@@ -12,7 +12,6 @@ import '../../core/di.dart';
 class AppDrawer extends StatelessWidget {
   const AppDrawer({Key? key, required this.scaffoldKey}) : super(key: key);
   final GlobalKey scaffoldKey;
-
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +37,7 @@ class AppDrawer extends StatelessWidget {
       fontSize: 14,
     );
     // TODOs
-     var currentUser = sl<UserProvider>().users;
+    var currentUser = sl<UserProvider>().currentUser!;
     print(currentUser.toString());
     // const currentUser = User(
     //   id: 1,
@@ -150,7 +149,7 @@ class AppDrawer extends StatelessWidget {
   }
 
   Widget _buildConfirmLogoutDialog(BuildContext context) {
-    var provider =  sl<TabIndex>();
+    var provider = sl<TabIndex>();
     return AlertDialog(
       title: Text(tr('drawer.confirm_logout_dialog.title')),
       content: Text(tr('drawer.confirm_logout_dialog.confirm_content')),

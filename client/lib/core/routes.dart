@@ -1,11 +1,8 @@
-import 'package:client/presentation/providers/list_employee_provider.dart';
-import 'package:client/presentation/providers/tab_index.dart';
-import 'package:client/presentation/providers/list_timesheet_provider.dart';
-import 'package:client/presentation/providers/timesheet_provider.dart';
-import 'package:client/presentation/views/home_screen.dart';
-import 'package:client/presentation/views/login_screen.dart';
-import 'package:client/presentation/views/create_timesheet_screen.dart';
-import 'package:client/presentation/views/manage_view.dart';
+import 'package:hsc_timesheet/presentation/providers/index.dart';
+import 'package:hsc_timesheet/presentation/views/home_screen.dart';
+import 'package:hsc_timesheet/presentation/views/login_screen.dart';
+import 'package:hsc_timesheet/presentation/views/create_timesheet_screen.dart';
+import 'package:hsc_timesheet/presentation/views/manage_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -24,7 +21,12 @@ class Routes {
 }
 
 final Map<String, WidgetBuilder> routes = <String, WidgetBuilder>{
-  Routes.login: (BuildContext context) => const LoginScreen(),
+  Routes.login: (BuildContext context) => MultiProvider(
+        child: const LoginScreen(),
+        providers: [
+          ChangeNotifierProvider.value(value: sl<AuthProvider>()),
+        ],
+      ),
   Routes.home: (BuildContext context) => MultiProvider(
         child: HomeScreen(),
         providers: [

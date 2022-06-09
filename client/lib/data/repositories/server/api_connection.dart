@@ -2,10 +2,10 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:client/core/constants.dart';
-import 'package:client/core/exceptions/api_exception.dart';
-import 'package:client/core/exceptions/remote_exception.dart';
-import 'package:client/core/logger.dart';
+import 'package:hsc_timesheet/core/constants.dart';
+import 'package:hsc_timesheet/core/exceptions/api_exception.dart';
+import 'package:hsc_timesheet/core/exceptions/remote_exception.dart';
+import 'package:hsc_timesheet/core/logger.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:http/http.dart';
@@ -36,8 +36,6 @@ class ApiConnection {
   ApiConnection({required this.apiConfig});
 
   final ApiConfig apiConfig;
-
-
 
   Future<Response> execute(ApiRequest request) async {
     Future<Response> future;
@@ -78,7 +76,8 @@ class ApiConnection {
   }
 
   Future<Response> _parseResponse(Response response) async {
-    logger.d('${response.request?.method} ${response.request?.url}, response status: ${response.statusCode}');
+    logger.d(
+        '${response.request?.method} ${response.request?.url}, response status: ${response.statusCode}');
     if (response.statusCode != HttpStatus.ok) {
       logger.e('APIs error with status ${response.statusCode}', response.body);
       throw ApiException(

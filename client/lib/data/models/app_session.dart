@@ -1,6 +1,7 @@
 import 'package:odoo_rpc/odoo_rpc.dart';
 
 class AppSession {
-  static OdooSession? session;
-  static OdooClient baseURL = OdooClient('http://172.29.4.126:8069');
+  static OdooSession? currentUser;
+  // static OdooClient baseURL =
+  //     OdooClient(dotenv.env['API_URL'] ?? 'http://172.29.4.126:8069');
 }
