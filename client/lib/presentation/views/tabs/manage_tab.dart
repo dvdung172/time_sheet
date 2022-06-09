@@ -203,7 +203,7 @@ class _ManageTabState extends State<ManageTab> {
                               children: [
                                 Text(idxUser.position),
                                 Text(idxUser.workPhone),
-                                Text(idxUser.id.toString()),
+                                Text(idxUser.email),
                               ],
                             ),
                             isThreeLine: true,

@@ -1,5 +1,7 @@
 import 'package:hsc_timesheet/core/routes.dart';
 import 'package:hsc_timesheet/core/utility.dart';
+import 'package:hsc_timesheet/presentation/providers/list_employee_provider.dart';
+import 'package:hsc_timesheet/presentation/providers/list_timesheet_provider.dart';
 import 'package:hsc_timesheet/presentation/providers/tab_index.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -113,7 +115,12 @@ class AppDrawer extends StatelessWidget {
           leading: const Icon(Icons.people_alt),
           selectedColor: Theme.of(context).primaryColor,
           selected: provider.currentIndex == 2,
-          onTap: () {
+          onTap: () async {
+            await Provider.of<ListEmployeeProvider>(context, listen: false)
+                .getAllEmployee();
+
+            await Provider.of<ListTimeSheetsProvider>(context, listen: false)
+                .getTimeSheetUnapproved();
             Navigator.pop(context);
             provider.currentIndex = 2;
           },

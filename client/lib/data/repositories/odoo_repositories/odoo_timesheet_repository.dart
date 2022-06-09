@@ -28,11 +28,11 @@ class OdooTimeSheetRepository extends TimeSheetRepository with OdooConnect {
           ],
           'fields': [
             'user_id',
-            'account_id',
-            'name',
             'unit_amount',
+            'project_id',
+            'employee_id',
+            'task_id',
             'date',
-            'display_name',
           ],
         },
       });

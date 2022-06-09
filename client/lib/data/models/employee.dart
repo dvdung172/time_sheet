@@ -25,10 +25,9 @@ class Employee {
   final dynamic departmentId;
 
   String get position {
-    if (departmentId is List<Object> && departmentId.length > 1) {
+    if (departmentId is List<dynamic> && departmentId.length > 1) {
       return departmentId[1].toString();
     }
-
     return '';
   }
 

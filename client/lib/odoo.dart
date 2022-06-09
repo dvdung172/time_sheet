@@ -41,7 +41,7 @@ void main() async {
       'args': [],
       'kwargs': {
         'context': {'bin_size': true},
-        'domain': [['date', '=','2022-05-31']],
+        'domain': [['date', '=','2022-06-09'],['user_id', '=',16]],
         'fields': [],
       },
     });

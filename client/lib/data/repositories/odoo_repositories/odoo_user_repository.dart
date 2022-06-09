@@ -45,6 +45,7 @@ class OdooUserRepository extends UserRepository with OdooConnect {
             'name',
             'email',
             'image_small',
+            'employee_ids',
             '__last_update',
           ],
         },
