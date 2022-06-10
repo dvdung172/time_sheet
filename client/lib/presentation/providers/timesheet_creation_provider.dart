@@ -48,19 +48,4 @@ class TimeSheetProvider extends ChangeNotifier with BaseProvider {
     }
     notifyListeners();
   }
-
-  void getTimeSheetById(int userId) async {
-    loading = true;
-    notifyListeners();
-    final response = await timeSheetRepository.getTimeSheetById(1);
-    loading = false;
-    if (response.status == 0) {
-      _timesheet = response.data!;
-      error = null;
-    } else {
-      error = response.errors![0].message;
-    }
-
-    notifyListeners();
-  }
 }

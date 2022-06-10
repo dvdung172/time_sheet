@@ -5,7 +5,7 @@ part 'user.g.dart';
 @JsonSerializable()
 class User {
   const User({
-    required this.position,
+    required this.employeeIds,
     required this.id,
     required this.name,
     required this.email,
@@ -20,8 +20,8 @@ class User {
   @JsonKey(name: 'email')
   final String email;
 
-  @JsonKey(name: 'department_id')
-  final String? position;
+  @JsonKey(name: 'employee_ids')
+  final List<dynamic> employeeIds;
 
   @JsonKey(name: 'image_small')
   final String? avatar;
@@ -34,5 +34,5 @@ class User {
 
   @override
   String toString() =>
-      '$runtimeType {id: $id, username: $name, email: $email, position: $position, avatar: $avatar}';
+      '$runtimeType {id: $id, username: $name, email: $email, employee_ids: $employeeIds, avatar: $avatar}';
 }

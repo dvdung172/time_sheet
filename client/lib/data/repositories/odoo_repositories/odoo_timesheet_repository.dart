@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/services.dart';
 import 'package:hsc_timesheet/core/base/base_response.dart';
+import 'package:hsc_timesheet/core/logger.dart';
 import 'package:hsc_timesheet/data/models/timesheet.dart';
 import 'package:hsc_timesheet/data/repositories/index.dart';
 import 'package:odoo_rpc/odoo_rpc.dart';
@@ -25,6 +26,8 @@ class OdooTimeSheetRepository extends TimeSheetRepository with OdooConnect {
           'context': {'bin_size': true},
           'domain': [
             ['user_id', '=', userId],
+            // ["date", ">=", "2022-06-01"],
+            // ["date", "<=", "2022-06-30"],
           ],
           'fields': [
             'user_id',
@@ -33,10 +36,11 @@ class OdooTimeSheetRepository extends TimeSheetRepository with OdooConnect {
             'employee_id',
             'task_id',
             'date',
+            'display_name',
           ],
         },
       });
-
+      logger.d('getAllTimeSheet: $data');
       final List<TimeSheet> timeSheets = await data
           .map<TimeSheet>((item) => TimeSheet.fromJson(item))
           .toList();

@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:odoo_rpc/odoo_rpc.dart';
 
 // void sessionChanged(OdooSession sessionId) async {
@@ -37,15 +36,22 @@ void main() async {
     // final uid = session.userId;
     var res = await client.callKw({
       'model': 'account.analytic.line',
-      'method': 'search_read',
+      // 'method': 'read_group',
+      'method':'search_read',
       'args': [],
       'kwargs': {
         'context': {'bin_size': true},
-        'domain': [['date', '=','2022-06-09'],['user_id', '=',16]],
-        'fields': [],
+        'domain': [
+          // ['user_id', '=', userId],
+          // ["date", ">=", "2022-06-01"],
+          // ["date", "<=", "2022-06-30"],
+        ],
+        'fields': ["date", "employee_id", "user_id", "name", "project_id", "task_id", "unit_amount"],
+        // 'groupby':["date"]
       },
     });
-    print('\nUser info: \n' + res.toString());
+    // print('\nUser info: \n' + res.toString());
+    print('\nUser info: \n${DateTime.parse(res[0]['date']).isAtSameMomentAs(DateTime.parse('2022-07-05T00:00:00.000Z'))}');
     // compute avatar url if we got reply
     // if (res.length == 1) {
     //   var unique = res[0]['__last_update'] as String;

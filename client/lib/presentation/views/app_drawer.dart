@@ -78,7 +78,8 @@ class AppDrawer extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             Text(currentUser.name, style: usernameStyle),
-            Text(currentUser.email, style: userEmailStyle)
+            Text(currentUser.email, style: userEmailStyle),
+            // Text(currentUser.employeeIds[0].toString(), style: userEmailStyle)
           ],
         ),
       ),
