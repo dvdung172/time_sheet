@@ -89,7 +89,7 @@ class _ManageTabState extends State<ManageTab> {
                                 onTap: () async {
                                   Navigator.pushNamed(
                                       context, Routes.manageView,
-                                      arguments: [index, "'approval'"]);
+                                      arguments: [index, "approval"]);
                                 },
                                 child: ListTile(
                                   isThreeLine: true,
@@ -180,11 +180,17 @@ class _ManageTabState extends State<ManageTab> {
                         child: InkWell(
                           splashColor: Colors.blue.withAlpha(30),
                           onTap: () {
+
                             sl<ListTimeSheetsProvider>()
                                 .getAllApprovedTimesheets(idxUser.id);
+
                             logger.d('current userId: ${idxUser.id}');
-                            Navigator.pushNamed(context, Routes.manageView,
-                                arguments: 'employee');
+
+                            // Navigator.pushNamed(context, Routes.manageView,
+                            //     arguments: 'employee');
+                            Navigator.pushNamed(
+                                context, Routes.manageView,
+                                arguments: [index, "'employee'"]);
                           },
                           child: ListTile(
                             leading: SizedBox(

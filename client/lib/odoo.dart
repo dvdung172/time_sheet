@@ -34,24 +34,31 @@ void main() async {
     final session = await client.authenticate('odoo', 'admin', 'admin');
     // Read our user's fields
     // final uid = session.userId;
-    var res = await client.callKw({
-      'model': 'account.analytic.line',
-      // 'method': 'read_group',
-      'method':'search_read',
-      'args': [],
-      'kwargs': {
-        'context': {'bin_size': true},
-        'domain': [
-          // ['user_id', '=', userId],
-          // ["date", ">=", "2022-06-01"],
-          // ["date", "<=", "2022-06-30"],
-        ],
-        'fields': ["date", "employee_id", "user_id", "name", "project_id", "task_id", "unit_amount"],
-        // 'groupby':["date"]
-      },
-    });
+    // var res = await client.callKw({
+    //   'model': 'project.project',
+    //   'method': 'search_read',
+    //   'args': [],
+    //   'kwargs': {
+    //     'context': {'bin_size': true},
+    //     'domain': [
+    //       // ['user_id', '=', 1],
+    //       // ["date", ">=", "2022-06-01"],
+    //       // ["date", "<=", "2022-06-30"],
+    //     ],
+    //     'fields': [
+    //       // 'user_id',
+    //       // 'unit_amount',
+    //       // 'project_id',
+    //       // 'employee_id',
+    //       // 'task_id',
+    //       // 'date',
+    //       // 'display_name',
+    //     ],
+    //   },
+    // });
     // print('\nUser info: \n' + res.toString());
-    print('\nUser info: \n${DateTime.parse(res[0]['date']).isAtSameMomentAs(DateTime.parse('2022-07-05T00:00:00.000Z'))}');
+
+    // print('\nUser info: \n${DateTime.parse(res[0]['date']).isAtSameMomentAs(DateTime.parse('2022-07-05T00:00:00.000Z'))}');
     // compute avatar url if we got reply
     // if (res.length == 1) {
     //   var unique = res[0]['__last_update'] as String;
@@ -69,21 +76,22 @@ void main() async {
     // });
     // print(partner_id);
     // // Update partner by id
-    // res = await client.callKw({
-    //   'model': 'account.analytic.line',
-    //   'method': 'create',
-    //   'args': [
-    //     {
-    //       'unit_amount': 9.0,
-    //       'date': '2022-06-08',
-    //       'project_id': 4,
-    //       'employee_id': 2,
-    //       'name':'vsdvsdv'
-    //     },
-    //   ],
-    //   'kwargs': {},
-    // });
-    // print(res);
+    var res = await client.callKw({
+      'model': 'account.analytic.line',
+      'method': 'create',
+      'args': [
+        {
+          'unit_amount': 9.0,
+          'date': '2022-06-14',
+          'project_id': 'General coming',
+          'employee_id': 6,
+          'task_id':null,
+          'name':'hotro'
+        },
+      ],
+      'kwargs': {},
+    });
+    print(res.toString());
     //
     // // Get list of installed modules
     // res = await client.callRPC('/web/session/modules', 'call', {});

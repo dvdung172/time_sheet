@@ -8,6 +8,7 @@ class CustomColor {
   static const Color hintColor = Color(0x99000000);
   static const Color statusBarColor = Color(0x1e000000);
   static const Color errorColor = Color(0x1e9e2222);
+  static const Color alertColor = Color(0x1eb6a121);
 }
 
 class CustomTheme {

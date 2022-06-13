@@ -23,11 +23,11 @@ class _ManageViewState extends State<ManageView> {
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)?.settings.arguments as List<dynamic> ;
-    logger.d(args.toString());
+    logger.d(args[0].toString());
     return Scaffold(
         backgroundColor: args[1] == "approval" ? null : const Color(0xFFD5D3D3),
         appBar: AppBar(
-          title: args[1] == "approval" ? Text('Not Approved') : Text('Approved'),
+          title: args[1] == "approval" ? const Text('Not Approved') : const Text('Approved'),
           backgroundColor: Theme.of(context).primaryColor,
         ),
         body: args[1] == "approval"
@@ -38,7 +38,19 @@ class _ManageViewState extends State<ManageView> {
                     if (provider.loading) {
                       return const Center(child: CircularProgressIndicator());
                     } else {
-                      return TableView(timeSheet: provider.unapprovedTimeSheets[args[0]]);
+                      return Expanded(
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                  "Time Sheet ${DateFormat(DateFormat.YEAR_MONTH).format(provider.unapprovedTimeSheets[args[0]].sheetsDate)}",
+                                  style: CustomTheme.mainTheme.textTheme.headline2),
+                            ),
+                            TableView(timeSheet: provider.unapprovedTimeSheets[args[0]]),
+                          ],
+                        ),
+                      );
                     }
                   }),
                   BottomAppBar(
@@ -100,7 +112,7 @@ class _ManageViewState extends State<ManageView> {
                     if (provider.loading) {
                       return const Center(child: CircularProgressIndicator());
                     }
-                    final TimeSheet? timeSheet = provider.timeSheets
+                    final TimeSheet? timeSheet = provider.approvedTimeSheets
                         .firstWhereOrNull((p) =>
                             DateFormat(DateFormat.YEAR_MONTH)
                                 .format(p.sheetsDate)

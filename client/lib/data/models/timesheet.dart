@@ -53,6 +53,12 @@ class TimeSheet {
     required this.approval,
   });
 
+  SheetsRow addRow(SheetsRow newRow) {
+    rows.add(newRow);
+
+    return newRow;
+  }
+
   factory TimeSheet.fromJson(Map<String, dynamic> json) =>
       _$TimeSheetFromJson(json);
   Map<String, dynamic> toJson() => _$TimeSheetToJson(this);

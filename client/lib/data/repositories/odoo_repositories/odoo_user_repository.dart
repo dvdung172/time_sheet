@@ -99,4 +99,17 @@ class OdooUserRepository extends UserRepository with OdooConnect {
       return BaseResponse.fail([tr('message.server_error')]);
     }
   }
+  @override
+  Future<BaseResponse<void>> logout() async {
+    try {
+      var response = await client.destroySession();
+      return BaseResponse.success(response);
+    } on OdooException catch (e) {
+      await handleError(e);
+      return BaseResponse.fail([e.message]);
+    } on Exception catch (e) {
+      await handleError(e);
+      return BaseResponse.fail([tr('message.server_error')]);
+    }
+  }
 }

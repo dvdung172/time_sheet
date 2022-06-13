@@ -78,7 +78,10 @@ class _TableViewState extends State<TableView> {
           return ExpandableTableRow(
               height: 60,
               firstCell: cusTomeCell(
-                  index: rowIndex, text: DateFormat('EE, dd').format(row.date)),
+                index: rowIndex,
+                text: DateFormat('EE, dd')
+                    .format(widget.timeSheet.rows[rowIndex].date),
+              ),
               children: <Widget>[
                 cusTomeCell(
                   index: rowIndex,
@@ -95,7 +98,7 @@ class _TableViewState extends State<TableView> {
                         : '${row.leave?.reason}: ${row.leave?.timeoff}'),
                 cusTomeCell(
                   index: rowIndex,
-                  text: "${row.contents ?? ''}",
+                  text: row.contents ?? '',
                 ),
               ]);
         }),

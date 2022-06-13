@@ -15,4 +15,7 @@ class UserRepository {
   Future<BaseResponse<List<User>>> getUserList() async {
     throw UnimplementedError('UserRepository.callListUser');
   }
+  Future<BaseResponse<void>> logout() {
+    throw UnimplementedError('AuthProvider.logout');
+  }
 }

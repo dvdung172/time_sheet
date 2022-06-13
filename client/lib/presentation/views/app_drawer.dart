@@ -1,5 +1,6 @@
 import 'package:hsc_timesheet/core/routes.dart';
 import 'package:hsc_timesheet/core/utility.dart';
+import 'package:hsc_timesheet/presentation/providers/auth_provider.dart';
 import 'package:hsc_timesheet/presentation/providers/list_employee_provider.dart';
 import 'package:hsc_timesheet/presentation/providers/list_timesheet_provider.dart';
 import 'package:hsc_timesheet/presentation/providers/tab_index.dart';
@@ -195,7 +196,6 @@ class AppDrawer extends StatelessWidget {
   }
 
   Future<void> logout() async {
-    //throw UnimplementedError('app_drawer.logout');
-    print('logout');
+    sl<AuthProvider>().logout();
   }
 }

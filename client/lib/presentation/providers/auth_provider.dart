@@ -22,10 +22,14 @@ class AuthProvider extends ChangeNotifier with BaseProvider {
     return response;
   }
 
-  Future<void> logout() {
+  Future<void> logout() async {
+    var response = await userRepository.logout();
+    if (response.status == 0) {
+      print(response.toString());
+    }
     throw UnimplementedError('AuthProvider.logout');
-
     // currentUser = null;
     // AppSession.currentUser = null;
+
   }
 }
