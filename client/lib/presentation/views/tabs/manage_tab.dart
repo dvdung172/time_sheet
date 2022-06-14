@@ -5,7 +5,7 @@ import 'package:hsc_timesheet/data/models/employee.dart';
 import 'package:hsc_timesheet/data/models/timesheet.dart';
 import 'package:hsc_timesheet/presentation/providers/index.dart';
 // import 'package:hsc_timesheet/presentation/providers/list_timesheet_provider.dart';
-// import 'package:hsc_timesheet/presentation/providers/timesheet_provider.dart';
+// import 'package:hsc_timesheet/presentation/providers/timesheet_creation_provider.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -79,7 +79,6 @@ class _ManageTabState extends State<ManageTab> {
                             timesheetProvider.unapprovedTimeSheets[index].rows;
                         var unapprovedTimesheetRow =
                             timesheetProvider.unapprovedTimeSheets[index];
-
                         return SizedBox(
                           height: 175,
                           child: Card(
@@ -88,11 +87,9 @@ class _ManageTabState extends State<ManageTab> {
                               InkWell(
                                 splashColor: Colors.teal.withAlpha(30),
                                 onTap: () async {
-                                  sl<TimeSheetProvider>().getTimeSheetById(
-                                      unapprovedTimesheetRow.id!);
                                   Navigator.pushNamed(
                                       context, Routes.manageView,
-                                      arguments: 'approval');
+                                      arguments: [index, "approval"]);
                                 },
                                 child: ListTile(
                                   isThreeLine: true,
@@ -104,7 +101,7 @@ class _ManageTabState extends State<ManageTab> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                          "Employee's Name: ${listUser?.firstWhereOrNull((element) => element.id == unapprovedTimesheetRow.userId)?.name}"),
+                                          "Employee's Name: ${listUser?.firstWhereOrNull((element) => element.id == unapprovedTimesheetRow.employeeId)?.name}"),
                                       Text(
                                           "General Coming: ${rows.map((e) => e.generalComing).toList().sum}"),
                                       Text(
@@ -183,11 +180,17 @@ class _ManageTabState extends State<ManageTab> {
                         child: InkWell(
                           splashColor: Colors.blue.withAlpha(30),
                           onTap: () {
+
                             sl<ListTimeSheetsProvider>()
                                 .getAllApprovedTimesheets(idxUser.id);
+
                             logger.d('current userId: ${idxUser.id}');
-                            Navigator.pushNamed(context, Routes.manageView,
-                                arguments: 'employee');
+
+                            // Navigator.pushNamed(context, Routes.manageView,
+                            //     arguments: 'employee');
+                            Navigator.pushNamed(
+                                context, Routes.manageView,
+                                arguments: [index, "'employee'"]);
                           },
                           child: ListTile(
                             leading: SizedBox(

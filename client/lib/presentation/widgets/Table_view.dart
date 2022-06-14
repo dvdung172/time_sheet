@@ -34,7 +34,10 @@ class _TableViewState extends State<TableView> {
       var rowColor = null;
       if (isWeekend) {
         rowColor = Theme.of(context).primaryColor.withOpacity(0.2);
-      } else if (row.leave != null) {
+      } else if(row.generalComing==0&&row.overTime==0&&row.leave==null&&row.contents==''){
+        rowColor = CustomColor.alertColor;
+      }
+      else if (row.leave != null) {
         rowColor = CustomColor.errorColor;
       }
       return InkWell(
@@ -78,7 +81,10 @@ class _TableViewState extends State<TableView> {
           return ExpandableTableRow(
               height: 60,
               firstCell: cusTomeCell(
-                  index: rowIndex, text: DateFormat('EE, dd').format(row.date)),
+                index: rowIndex,
+                text: DateFormat('EE, dd')
+                    .format(widget.timeSheet.rows[rowIndex].date),
+              ),
               children: <Widget>[
                 cusTomeCell(
                   index: rowIndex,
@@ -95,7 +101,7 @@ class _TableViewState extends State<TableView> {
                         : '${row.leave?.reason}: ${row.leave?.timeoff}'),
                 cusTomeCell(
                   index: rowIndex,
-                  text: "${row.contents ?? ''}",
+                  text: row.contents,
                 ),
               ]);
         }),
@@ -167,7 +173,6 @@ class _TableViewState extends State<TableView> {
                         ),
                         TextFormField(
                           maxLines: null,
-                          keyboardType: TextInputType.multiline,
                           decoration:
                               const InputDecoration(labelText: 'Task Contents'),
                           controller: _contentController,
@@ -196,9 +201,7 @@ class _TableViewState extends State<TableView> {
                           overTime: double.parse(_otController.text == ''
                               ? '0'
                               : _otController.text),
-                          contents: _contentController.text == ""
-                              ? null
-                              : _contentController.text,
+                          contents: _contentController.text,
                           leave: dropdownValue == null ||
                                   _leaveController.text == '0'
                               ? null

@@ -27,6 +27,9 @@
       <excludeFolder url="file://$MODULE_DIR$/client/windows/flutter/ephemeral/.plugin_symlinks/url_launcher_windows/build" />
       <excludeFolder url="file://$MODULE_DIR$/client/windows/flutter/ephemeral/.plugin_symlinks/url_launcher_windows/.dart_tool" />
       <excludeFolder url="file://$MODULE_DIR$/client/windows/flutter/ephemeral/.plugin_symlinks/url_launcher_windows/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/client/windows/flutter/ephemeral/.plugin_symlinks/network_info_plus_windows/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/client/windows/flutter/ephemeral/.plugin_symlinks/network_info_plus_windows/build" />
+      <excludeFolder url="file://$MODULE_DIR$/client/windows/flutter/ephemeral/.plugin_symlinks/network_info_plus_windows/.pub" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:odoo_rpc/odoo_rpc.dart';
 
 // void sessionChanged(OdooSession sessionId) async {
@@ -35,17 +34,28 @@ void main() async {
     final session = await client.authenticate('odoo', 'admin', 'admin');
     // Read our user's fields
     // final uid = session.userId;
-    var res = await client.callKw({
-      'model': 'account.analytic.line',
-      'method': 'search_read',
-      'args': [],
-      'kwargs': {
-        'context': {'bin_size': true},
-        'domain': [['date', '=','2022-06-09'],['user_id', '=',16]],
-        'fields': [],
-      },
-    });
-    print('\nUser info: \n' + res.toString());
+    // var res = await client.callKw({
+    //   'model': 'project.project',
+    //   'method': 'search_read',
+    //   'args': [],
+    //   'kwargs': {
+    //     'context': {'bin_size': true},
+    //     'domain': [
+    //       ['name','=','General coming']
+    //       // ['project_id','=','General coming']
+    //       // ['user_id', '=', 1],
+    //       // ["date", ">=", "2022-06-01"],
+    //       // ["date", "<=", "2022-06-30"],
+    //     ],
+    //     'fields': [
+    //        // "name",
+    //       'id'
+    //     ],
+    //   },
+    // });
+    // print('\nUser info: \n' + res.toString());
+
+    // print('\nUser info: \n${DateTime.parse(res[0]['date']).isAtSameMomentAs(DateTime.parse('2022-07-05T00:00:00.000Z'))}');
     // compute avatar url if we got reply
     // if (res.length == 1) {
     //   var unique = res[0]['__last_update'] as String;
@@ -63,21 +73,32 @@ void main() async {
     // });
     // print(partner_id);
     // // Update partner by id
-    // res = await client.callKw({
-    //   'model': 'account.analytic.line',
-    //   'method': 'create',
-    //   'args': [
-    //     {
-    //       'unit_amount': 9.0,
-    //       'date': '2022-06-08',
-    //       'project_id': 4,
-    //       'employee_id': 2,
-    //       'name':'vsdvsdv'
-    //     },
-    //   ],
-    //   'kwargs': {},
-    // });
-    // print(res);
+    var res = await client.callKw({
+      'model': 'account.analytic.line',
+      'method': 'create',
+      'args': [
+        {
+          'unit_amount': 9.0,
+          'date': '2022-06-17',
+          'project_id': 8,
+          'employee_id': 7,
+          'task_id': null,
+          'user_id': null,
+          'name': 'hotro'
+        },
+        {
+          'unit_amount': 9.0,
+          'date': '2022-06-17',
+          'project_id': 6,
+          'employee_id': 9,
+          'task_id': null,
+          'user_id': null,
+          'name': 'hotro'
+        }
+      ],
+      'kwargs': {},
+    });
+    print(res.toString());
     //
     // // Get list of installed modules
     // res = await client.callRPC('/web/session/modules', 'call', {});

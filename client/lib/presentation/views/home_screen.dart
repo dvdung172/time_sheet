@@ -3,7 +3,7 @@ import 'package:hsc_timesheet/core/routes.dart';
 import 'package:hsc_timesheet/data/models/app_session.dart';
 import 'package:hsc_timesheet/presentation/providers/list_timesheet_provider.dart';
 import 'package:hsc_timesheet/presentation/providers/tab_index.dart';
-import 'package:hsc_timesheet/presentation/providers/timesheet_provider.dart';
+import 'package:hsc_timesheet/presentation/providers/timesheet_creation_provider.dart';
 import 'package:hsc_timesheet/presentation/views/tabs/dashboard_tab.dart';
 import 'package:hsc_timesheet/presentation/views/tabs/manage_tab.dart';
 import 'package:hsc_timesheet/presentation/views/tabs/settings_tab.dart';
@@ -45,9 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-
-    final timesheetProvider = sl<ListTimeSheetsProvider>();
-    timesheetProvider.getAllTimeSheets(AppSession.currentUser!.userId);
+    // sl<ListTimeSheetsProvider>().getAllTimeSheets(AppSession.currentUser!.userId);
   }
 
   @override
@@ -62,15 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
         actions: tabIndexProvider.currentIndex == 1
             ? [
                 IconButton(
-                    onPressed: () async {
-                      // var res = await OdooConnect()
-                      //     .getAllTimeSheet(AppSession.session!.userId);
-                      // List<User> res = await OdooConnect().callListUser();
-                      // Map<String, dynamic> data = Map<String, dynamic>.from(json.decode(res));
-                      // print(data['name']);
-                      // print('\nUser info: \n' + res[1].toString());
-                      // print(sl<ListTimeSheetsProvider>().timeSheets[0].toJson());
-                    },
+                    onPressed: () async {},
                     icon: const Icon(Icons.save_outlined)),
               ]
             : null,

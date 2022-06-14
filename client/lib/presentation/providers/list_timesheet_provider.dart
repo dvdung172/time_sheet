@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+import 'package:hsc_timesheet/core/logger.dart';
 import 'package:hsc_timesheet/data/models/timesheet.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -11,16 +13,22 @@ class ListTimeSheetsProvider extends ChangeNotifier with BaseProvider {
   String? error;
   List<TimeSheet> timeSheets = [];
   List<TimeSheet> unapprovedTimeSheets = [];
+  List<TimeSheet> approvedTimeSheets = [];
 
   ListTimeSheetsProvider(this.timeSheetRepository);
 
-  void getAllTimeSheets(int userId) async {
+  Future<void> getAllTimeSheets(int userId) async {
     loading = true;
     notifyListeners();
     var response = await timeSheetRepository.getAllTimeSheet(userId);
     loading = false;
     if (response.status == 0) {
-      timeSheets = response.data ?? [];
+      timeSheets=response.data??[];
+      if(timeSheets.isNotEmpty){
+        for(int i = 0; i<timeSheets.length;i++ ){
+          timeSheets[i] = fillTimeSheet(timeSheets[i]);
+        }
+      }
       error = null;
     } else {
       timeSheets = [];
@@ -30,20 +38,25 @@ class ListTimeSheetsProvider extends ChangeNotifier with BaseProvider {
     notifyListeners();
   }
 
-  void getAllApprovedTimesheets(int userId) async {
+  Future<void> getAllApprovedTimesheets(int userId) async {
     loading = true;
     notifyListeners();
     var response = await timeSheetRepository.getAllTimeSheet(userId);
     loading = false;
 
     if (response.status == 0) {
-      timeSheets = (response.data ?? [])
+      approvedTimeSheets = (response.data ?? [])
           .where((element) => element.approval == true)
           .toList();
       error = null;
+      if(approvedTimeSheets.isNotEmpty){
+        for(int i = 0; i<approvedTimeSheets.length;i++ ){
+          approvedTimeSheets[i] = fillTimeSheet(approvedTimeSheets[i]);
+        }
+      }
     } else {
       error = response.errors![0].message;
-      timeSheets = [];
+      approvedTimeSheets = [];
     }
     notifyListeners();
   }
@@ -70,10 +83,30 @@ class ListTimeSheetsProvider extends ChangeNotifier with BaseProvider {
     if (response.status == 0) {
       error = null;
       unapprovedTimeSheets = response.data ?? [];
+      if(unapprovedTimeSheets.isNotEmpty){
+        for(int i = 0; i<unapprovedTimeSheets.length;i++ ){
+          unapprovedTimeSheets[i] = fillTimeSheet(unapprovedTimeSheets[i]);
+        }
+      }
     } else {
       error = response.errors![0].message;
       unapprovedTimeSheets = [];
     }
     notifyListeners();
+  }
+
+  TimeSheet fillTimeSheet(TimeSheet timeSheet) {
+    DateTime _date = timeSheet.sheetsDate;
+    int count = DateUtils.getDaysInMonth(_date.year, _date.month);
+    List<SheetsRow> list = List.generate(count, (index) => SheetsRow(date:  DateTime(_date.year, _date.month, index+1), generalComing: 0, overTime: 0, leave: null, contents: ''));
+      for (int i = 0; i < count; i++) {
+        for (var item in timeSheet.rows) {
+          if(item.date.day == (i+1)){
+            list[i] = item;
+          }
+      }
+    }
+      timeSheet = TimeSheet(sheetsDate: _date, employeeId: timeSheet.employeeId, rows: list, approval: timeSheet.approval);
+      return timeSheet;
   }
 }
