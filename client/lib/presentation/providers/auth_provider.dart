@@ -16,7 +16,7 @@ class AuthProvider extends ChangeNotifier with BaseProvider {
     var response = await userRepository.authenticate(email, password);
     if (response.status == 0) {
       currentUser = response.data;
-      AppSession.currentUser = response.data;
+      // AppSession.currentUser = response.data;
     }
 
     return response;

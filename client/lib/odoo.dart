@@ -41,18 +41,15 @@ void main() async {
     //   'kwargs': {
     //     'context': {'bin_size': true},
     //     'domain': [
+    //       ['name','=','General coming']
+    //       // ['project_id','=','General coming']
     //       // ['user_id', '=', 1],
     //       // ["date", ">=", "2022-06-01"],
     //       // ["date", "<=", "2022-06-30"],
     //     ],
     //     'fields': [
-    //       // 'user_id',
-    //       // 'unit_amount',
-    //       // 'project_id',
-    //       // 'employee_id',
-    //       // 'task_id',
-    //       // 'date',
-    //       // 'display_name',
+    //        // "name",
+    //       'id'
     //     ],
     //   },
     // });
@@ -82,12 +79,22 @@ void main() async {
       'args': [
         {
           'unit_amount': 9.0,
-          'date': '2022-06-14',
-          'project_id': 'General coming',
-          'employee_id': 6,
-          'task_id':null,
-          'name':'hotro'
+          'date': '2022-06-17',
+          'project_id': 8,
+          'employee_id': 7,
+          'task_id': null,
+          'user_id': null,
+          'name': 'hotro'
         },
+        {
+          'unit_amount': 9.0,
+          'date': '2022-06-17',
+          'project_id': 6,
+          'employee_id': 9,
+          'task_id': null,
+          'user_id': null,
+          'name': 'hotro'
+        }
       ],
       'kwargs': {},
     });

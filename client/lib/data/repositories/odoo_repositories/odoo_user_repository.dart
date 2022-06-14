@@ -68,22 +68,19 @@ class OdooUserRepository extends UserRepository with OdooConnect {
   Future<BaseResponse<List<User>>> getUserList() async {
     try {
       var res = await client.callKw({
-        'model': 'hr.employee',
+        'model': 'res.users',
         'method': 'search_read',
         'args': [],
         'kwargs': {
           'context': {'bin_size': true},
           'domain': [],
           'fields': [
-            'name',
-            'image_small',
-            'active',
             'id',
-            'work_email',
-            'job_id',
-            'department_id',
-            'work_phone',
-            '__last_update'
+            'name',
+            'email',
+            'image_small',
+            'employee_ids',
+            '__last_update',
           ],
         },
       });

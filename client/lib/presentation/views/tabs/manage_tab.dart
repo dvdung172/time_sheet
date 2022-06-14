@@ -101,7 +101,7 @@ class _ManageTabState extends State<ManageTab> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                          "Employee's Name: ${listUser?.firstWhereOrNull((element) => element.id == unapprovedTimesheetRow.userId)?.name}"),
+                                          "Employee's Name: ${listUser?.firstWhereOrNull((element) => element.id == unapprovedTimesheetRow.employeeId)?.name}"),
                                       Text(
                                           "General Coming: ${rows.map((e) => e.generalComing).toList().sum}"),
                                       Text(

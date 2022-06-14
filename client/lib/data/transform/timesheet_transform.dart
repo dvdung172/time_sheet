@@ -1,6 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:hsc_timesheet/core/logger.dart';
+import 'package:hsc_timesheet/data/repositories/odoo_repositories/odoo_timesheet_repository.dart';
 
 import '../models/index.dart';
 
@@ -31,7 +32,7 @@ class TimeSheetTransform {
     var fistDateOfMonth = DateTime(firstDate.year, firstDate.month, 1);
     TimeSheet timesheetRow = TimeSheet(
       sheetsDate: fistDateOfMonth,
-      userId: firstOdooRow.userId,
+      employeeId: firstOdooRow.userId,
       rows: [],
       approval: false, // TODO: need implement at server-side
     );
@@ -59,10 +60,17 @@ class TimeSheetTransform {
         }
 
         if (odooRow.displayName.isNotEmpty) {
-          if (contents.isNotEmpty) {
-            contents += '\r\n';
-          }
-          contents += odooRow.displayName;
+
+            if (contents.isNotEmpty) {
+              if(contents==odooRow.displayName){
+                contents = odooRow.displayName;
+              }else{
+                contents += '\r\n';
+                contents += odooRow.displayName;
+              }
+            }else{
+              contents += odooRow.displayName;
+            }
         }
       }
       SheetsRow newRow = SheetsRow(
@@ -81,23 +89,4 @@ class TimeSheetTransform {
     return timesheetRow;
   }
 
-  // List<OdooTimeSheetRow?> transformToOdoo(TimeSheet? timesheet) {
-  //   // 'unit_amount': 9.0,
-  //   // 'date': '2022-06-14',
-  //   // 'project_id': 3,
-  //   // 'employee_id': 6,
-  //   // 'task_id':null,
-  //   // 'name':'hotro'
-  //   List<OdooTimeSheetRow?> OdooRow;
-  //   if (timesheet!.rows.isEmpty) {
-  //     return null;
-  //   }
-  //   for( var row in timesheet.rows){
-  //     if(row.generalComing >0){
-  //       OdooRow.add(OdooTimeSheetRow(displayName: '', projectIdOdoo: '' , employeeIdOdoo:'' , taskIdOdoo:'' , date:'' , userIdOdoo: , unitAmount: ));
-  //     }
-  //   }
-  //
-  //   return null;
-  // }
 }

@@ -1,5 +1,6 @@
 import 'package:hsc_timesheet/core/app_style.dart';
 import 'package:hsc_timesheet/core/di.dart';
+import 'package:hsc_timesheet/core/logger.dart';
 import 'package:hsc_timesheet/core/theme.dart';
 import 'package:hsc_timesheet/presentation/providers/timesheet_creation_provider.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -39,7 +40,10 @@ class _NewTimeSheet extends State<NewTimeSheet> {
         actions: [
           IconButton(
               onPressed: () async {
-                print(sl<TimeSheetProvider>().timeSheet.toJson());
+                // print(sl<TimeSheetProvider>().timeSheet.toJson());
+                var t = await sl<TimeSheetProvider>().transformToOdoo(sl<TimeSheetProvider>().timeSheet);
+                logger.d('===================');
+                logger.d(t);
               },
               icon: const Icon(Icons.send))
         ],
@@ -126,7 +130,6 @@ class _NewTimeSheet extends State<NewTimeSheet> {
                             margin: const EdgeInsets.only(bottom: 1),
                             color: rowColor,
                             child: TextField(
-                              enabled: row.leave == null ? true : false,
                               keyboardType: TextInputType.number,
                               textAlign: TextAlign.center,
                               decoration: const InputDecoration(
@@ -157,7 +160,7 @@ class _NewTimeSheet extends State<NewTimeSheet> {
                                     provider.setLeave(rowIndex, value[0],
                                         double.parse(value[1]));
                                     row.overTime = 0;
-                                    row.generalComing -= double.parse(value[1]);
+                                    row.generalComing = 8- double.parse(value[1]);
                                   }
                                 });
                               },
@@ -180,11 +183,10 @@ class _NewTimeSheet extends State<NewTimeSheet> {
                                   border: InputBorder.none),
                               controller: TextEditingController(
                                   text: provider
-                                          .timeSheet.rows[rowIndex].contents ??
-                                      ''),
+                                          .timeSheet.rows[rowIndex].contents),
                               onChanged: (String value) {
                                 if (value == '') {
-                                  row.contents = null;
+                                  row.contents = '';
                                 }
                                 row.contents = value;
                               },
