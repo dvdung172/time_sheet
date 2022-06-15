@@ -103,7 +103,7 @@ class OdooTimeSheetRepository extends TimeSheetRepository with OdooConnect {
   }
 
   @override
-  Future<BaseResponse<List<OdooTimeSheetRow>>> createOdooTimeSheet(
+  Future<BaseResponse<int>> createOdooTimeSheet(
       OdooTimeSheetRow row) async {
     try {
       var data = await client.callKw({
@@ -124,11 +124,8 @@ class OdooTimeSheetRepository extends TimeSheetRepository with OdooConnect {
         'kwargs': {},
       });
       logger.d('getAllTimeSheetPosted: $data');
-      final odooTimesheetList = await data
-          .map<OdooTimeSheetRow>((item) => OdooTimeSheetRow.fromJson(item))
-          .toList();
 
-      return BaseResponse.success(odooTimesheetList);
+      return BaseResponse.success(data);
     } on OdooException catch (e) {
       await handleError(e);
       return BaseResponse.fail([e.message]);
@@ -143,6 +140,36 @@ class OdooTimeSheetRepository extends TimeSheetRepository with OdooConnect {
     try {
       var res = await client.callKw({
         'model': 'project.project',
+        'method': 'search_read',
+        'args': [],
+        'kwargs': {
+          'context': {'bin_size': true},
+          'domain': [
+            ['name', '=', name]
+          ],
+          'fields': [
+            'id',
+          ],
+        },
+      });
+      // logger.d('id from Odoo: ${res[0]['id']}');
+
+      var id = res[0]['id'];
+
+      return BaseResponse.success(id);
+    } on OdooException catch (e) {
+      handleError(e, additionalMessage: 'UserRepository.callUser($name) error');
+      return BaseResponse.fail([e.message]);
+    } on Exception catch (e) {
+      await handleError(e);
+      return BaseResponse.fail([tr('message.server_error')]);
+    }
+  }
+  @override
+  Future<BaseResponse<int>> getTaskId(String name) async {
+    try {
+      var res = await client.callKw({
+        'model': 'project.task',
         'method': 'search_read',
         'args': [],
         'kwargs': {

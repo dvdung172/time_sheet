@@ -2,6 +2,7 @@ import 'package:hsc_timesheet/core/app_style.dart';
 import 'package:hsc_timesheet/core/di.dart';
 import 'package:hsc_timesheet/core/logger.dart';
 import 'package:hsc_timesheet/core/theme.dart';
+import 'package:hsc_timesheet/data/models/odoo_timesheet_row.dart';
 import 'package:hsc_timesheet/presentation/providers/timesheet_creation_provider.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -37,13 +38,22 @@ class _NewTimeSheet extends State<NewTimeSheet> {
     return Scaffold(
       appBar: AppBar(
         title: Text(tr('screens.create.title')),
+        leading:
+          IconButton(
+              onPressed: () {
+                Navigator.of(context).pop(true);
+              },
+              icon: const Icon(Icons.arrow_back))
+        ,
         actions: [
           IconButton(
               onPressed: () async {
                 // print(sl<TimeSheetProvider>().timeSheet.toJson());
-                var t = await sl<TimeSheetProvider>().transformToOdoo(sl<TimeSheetProvider>().timeSheet);
-                logger.d('===================');
-                logger.d(t);
+                await sl<TimeSheetProvider>().postTimeSheet();
+                // logger.d('===================');
+                //   logger.d(t);
+                //   logger.d(t![1]);
+
               },
               icon: const Icon(Icons.send))
         ],
@@ -248,11 +258,11 @@ class _LeaveDialog extends State<LeaveDialog> {
                 });
               },
               items: <String>[
-                'Annual leave',
-                'Special holiday',
-                'Sick leave',
-                'Unpaid leave',
-                'Compensation leave'
+                'Annual Leave',
+                'Special Holiday',
+                'Sick Leave',
+                'Unpaid Leave',
+                'Compensation Leave'
               ].map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                   value: value,

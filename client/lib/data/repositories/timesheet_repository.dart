@@ -15,10 +15,16 @@ class TimeSheetRepository {
   Future<BaseResponse<List<TimeSheet>>> getTimeSheetUnApproved() async {
     throw UnimplementedError('TimeSheetRepository.getTimeSheetUnApproved');
   }
-  Future<BaseResponse<int>> getProjectId (String name) async {
+
+  Future<BaseResponse<int>> getProjectId(String name) async {
     throw UnimplementedError('TimeSheetRepository.getProjectId');
   }
-  Future<BaseResponse<List<OdooTimeSheetRow>>> createOdooTimeSheet(OdooTimeSheetRow row)async{
+
+  Future<BaseResponse<int>> getTaskId(String name) async {
+    throw UnimplementedError('TimeSheetRepository.getTaskId');
+  }
+
+  Future<BaseResponse<int>> createOdooTimeSheet(OdooTimeSheetRow row) async {
     throw UnimplementedError('TimeSheetRepository.getProjectId');
   }
 }

@@ -224,7 +224,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
             await sl<UserProvider>().getUserById(loginResponse.data!.userId);
 
-            await sl<ListTimeSheetsProvider>().getAllTimeSheets(loginResponse.data!.userId);
+
 
             Navigator.of(context)
                 .pushNamedAndRemoveUntil(Routes.home, (Route route) => false);

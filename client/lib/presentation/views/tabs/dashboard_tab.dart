@@ -1,4 +1,5 @@
 import 'package:charts_flutter/flutter.dart';
+import 'package:hsc_timesheet/core/logger.dart';
 import 'package:hsc_timesheet/data/models/timesheet.dart';
 import 'package:hsc_timesheet/presentation/providers/list_timesheet_provider.dart';
 import 'package:hsc_timesheet/presentation/providers/tab_index.dart';
@@ -63,10 +64,11 @@ class DashBoardTab extends StatelessWidget {
           selectionModels: [
             SelectionModelConfig(changedListener: (SelectionModel model) {
               tabIndexProvider.currentIndex = 1;
-              tabIndexProvider.date = DateFormat(DateFormat.YEAR_MONTH).parse(
+              tabIndexProvider.date = DateFormat(DateFormat.YEAR_NUM_MONTH).parse(
                   model.selectedSeries[0]
                       .domainFn(model.selectedDatum[0].index));
-            })
+
+            }),
           ],
         ));
   }

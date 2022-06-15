@@ -153,11 +153,11 @@ class _TableViewState extends State<TableView> {
                             });
                           },
                           items: <String>[
-                            'Annual leave',
-                            'Special holiday',
-                            'Sick leave',
-                            'Unpaid leave',
-                            'Compensation leave'
+                            'Annual Leave',
+                            'Special Holiday',
+                            'Sick Leave',
+                            'Unpaid Leave',
+                            'Compensation Leave'
                           ].map((String value) {
                             return DropdownMenuItem<String>(
                               value: value,

@@ -63,28 +63,32 @@ class TimeSheetProvider extends ChangeNotifier with BaseProvider {
   }
 
   Future<void> postTimeSheet() async {
+
     loading = true;
     notifyListeners();
 
-//     var odooRow = await transformToOdoo(timeSheet).then((value) => value);
-// logger.d(odooRow![0]!);
-//     var response = await timeSheetRepository.createOdooTimeSheet(odooRow[0]!);
-    // for (var row in odooRow!) {
-    //   var response = await timeSheetRepository.createOdooTimeSheet(row!);
-    //   if (response.status == 0) {
-    //     error = null;
-    //     logger.d('ok');
-    //   } else {
-    //     error = response.errors![0].message;
-    //     logger.d('not ok');
-    //   }
-    // }
+    await transformToOdoo(timeSheet).then((value) async {
+      var odooRow = value;
+      for (var row in odooRow!) {
+        var response = await timeSheetRepository.createOdooTimeSheet(row!);
+      if (response.status == 0) {
+        error = null;
+        logger.d('$response ok');
+      } else {
+        error = response.errors![0].message;
+        logger.d('not ok');
+      }
+      }
+    });
+    // transformToOdoo(timeSheet);
+    // var response = await timeSheetRepository.createOdooTimeSheet(odooRow![0]!);
+
 
     loading = false;
     notifyListeners();
   }
 
-  Future<List<OdooTimeSheetRow?>?> transformToOdoo(TimeSheet? timesheet) async {
+  Future<List?> transformToOdoo(TimeSheet? timesheet) async {
     int gcId = await timeSheetRepository
         .getProjectId('General coming')
         .then((value) => value.data!);
@@ -95,9 +99,7 @@ class TimeSheetProvider extends ChangeNotifier with BaseProvider {
     int leaveId = await timeSheetRepository
         .getProjectId('Leave')
         .then((value) => value.data!);
-    int taskId = await timeSheetRepository
-        .getProjectId('General coming')
-        .then((value) => value.data!);
+
 
     List<OdooTimeSheetRow?> odooRow = [];
     if (timesheet!.rows.isEmpty) {
@@ -130,13 +132,15 @@ class TimeSheetProvider extends ChangeNotifier with BaseProvider {
             displayName: row.contents,
             projectIdOdoo: leaveId,
             employeeIdOdoo: timesheet.employeeId,
-            taskIdOdoo: taskId,
+            taskIdOdoo: await timeSheetRepository
+            .getTaskId(row.leave!.reason!)
+            .then((value) => value.data!),
             date: row.date,
             userIdOdoo: null,
             unitAmount: row.leave!.timeoff!));
       }
     }
-    logger.d(odooRow[0]);
+    logger.d(odooRow[1]);
     return odooRow;
   }
 }

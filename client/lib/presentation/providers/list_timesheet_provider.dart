@@ -17,7 +17,7 @@ class ListTimeSheetsProvider extends ChangeNotifier with BaseProvider {
 
   ListTimeSheetsProvider(this.timeSheetRepository);
 
-  Future<void> getAllTimeSheets(int userId) async {
+  void getAllTimeSheets(int userId) async {
     loading = true;
     notifyListeners();
     var response = await timeSheetRepository.getAllTimeSheet(userId);

@@ -24,6 +24,8 @@ class OdooTimeSheetRow {
   int get projectId {
     if (projectIdOdoo is List<dynamic> && projectIdOdoo.isNotEmpty) {
       return projectIdOdoo[0] as int;
+    }else if(projectIdOdoo is int){
+      return projectIdOdoo;
     }
 
     return 0;
@@ -39,6 +41,8 @@ class OdooTimeSheetRow {
   int get employeeId {
     if (employeeIdOdoo is List<dynamic> && employeeIdOdoo.isNotEmpty) {
       return employeeIdOdoo[0] as int;
+    }else if(employeeIdOdoo is int){
+      return employeeIdOdoo;
     }
     return 0;
   }
@@ -53,6 +57,8 @@ class OdooTimeSheetRow {
   int get taskId {
     if (taskIdOdoo is List<dynamic> && taskIdOdoo.isNotEmpty) {
       return taskIdOdoo[0] as int;
+    }else if(taskIdOdoo is int){
+      return taskIdOdoo;
     }
     return 0;
   }
@@ -67,6 +73,8 @@ class OdooTimeSheetRow {
   int get userId {
     if (userIdOdoo is List<dynamic> && userIdOdoo.length > 0) {
       return userIdOdoo[0] as int;
+    }else if(userIdOdoo is int){
+      return userIdOdoo;
     }
     return 0;
   }

@@ -1,6 +1,7 @@
 import 'package:hsc_timesheet/core/di.dart';
 import 'package:hsc_timesheet/core/routes.dart';
 import 'package:hsc_timesheet/data/models/app_session.dart';
+import 'package:hsc_timesheet/presentation/providers/index.dart';
 import 'package:hsc_timesheet/presentation/providers/list_timesheet_provider.dart';
 import 'package:hsc_timesheet/presentation/providers/tab_index.dart';
 import 'package:hsc_timesheet/presentation/providers/timesheet_creation_provider.dart';
@@ -50,8 +51,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print('ok');
     final tabIndexProvider = Provider.of<TabIndex>(context);
 
+    sl<ListTimeSheetsProvider>().getAllTimeSheets(sl<UserProvider>().currentUser!.id);
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
