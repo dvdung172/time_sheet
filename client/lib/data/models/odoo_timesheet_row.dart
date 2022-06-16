@@ -6,7 +6,7 @@ part 'odoo_timesheet_row.g.dart';
 @JsonSerializable()
 class OdooTimeSheetRow {
   OdooTimeSheetRow({
-    required this.displayName,
+    required this.name,
     required this.projectIdOdoo,
     required this.employeeIdOdoo,
     required this.taskIdOdoo,
@@ -16,8 +16,8 @@ class OdooTimeSheetRow {
      this.id,
   });
 
-  @JsonKey(name: 'display_name')
-  final String displayName;
+  @JsonKey(name: 'name')
+  final String? name;
 
   @JsonKey(name: 'project_id')
   final dynamic projectIdOdoo;
@@ -94,5 +94,5 @@ class OdooTimeSheetRow {
 
   @override
   String toString() =>
-      '$runtimeType {id: $id, user_id: $userId, unit_amount: $unitAmount, date: $date, project_id: $projectId, display_name: $displayName, employee_id: $employeeId, task_id: $taskId}';
+      '$runtimeType {id: $id, user_id: $userId, unit_amount: $unitAmount, date: $date, project_id: $projectId, display_name: $name, employee_id: $employeeId, task_id: $taskId}';
 }

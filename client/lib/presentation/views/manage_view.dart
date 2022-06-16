@@ -2,7 +2,7 @@ import 'package:hsc_timesheet/core/logger.dart';
 import 'package:hsc_timesheet/core/theme.dart';
 import 'package:hsc_timesheet/data/models/timesheet.dart';
 import 'package:hsc_timesheet/presentation/providers/list_timesheet_provider.dart';
-import 'package:hsc_timesheet/presentation/providers/timesheet_creation_provider.dart';
+import 'package:hsc_timesheet/presentation/providers/timesheet_provider.dart';
 import 'package:hsc_timesheet/presentation/widgets/table_view.dart';
 import 'package:hsc_timesheet/presentation/widgets/custom_month_picker.dart';
 import 'package:easy_localization/easy_localization.dart';

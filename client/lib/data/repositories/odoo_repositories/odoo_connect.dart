@@ -1,7 +1,6 @@
 import 'package:hsc_timesheet/core/constants.dart';
 import 'package:hsc_timesheet/core/extensions.dart';
 import 'package:hsc_timesheet/core/logger.dart';
-import 'package:hsc_timesheet/data/models/app_session.dart';
 import 'package:odoo_rpc/odoo_rpc.dart';
 import 'package:network_info_plus/network_info_plus.dart';
 

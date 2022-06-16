@@ -59,18 +59,19 @@ class TimeSheetTransform {
           generalComing += odooRow.unitAmount;
         }
 
-        if (odooRow.displayName.isNotEmpty) {
-
+        if (odooRow.name != null) {
+          if (odooRow.name!.isNotEmpty) {
             if (contents.isNotEmpty) {
-              if(contents==odooRow.displayName){
-                contents = odooRow.displayName;
-              }else{
+              if (contents == odooRow.name) {
+                contents = odooRow.name!;
+              } else {
                 contents += '\r\n';
-                contents += odooRow.displayName;
+                contents += odooRow.name!;
               }
-            }else{
-              contents += odooRow.displayName;
+            } else {
+              contents += odooRow.name!;
             }
+          }
         }
       }
       SheetsRow newRow = SheetsRow(
@@ -81,12 +82,8 @@ class TimeSheetTransform {
         contents: contents,
       );
       timesheetRow.addRow(newRow);
-
-      // day section divider
-      logger.d('\n');
     });
 
     return timesheetRow;
   }
-
 }

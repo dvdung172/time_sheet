@@ -27,4 +27,7 @@ class TimeSheetRepository {
   Future<BaseResponse<int>> createOdooTimeSheet(OdooTimeSheetRow row) async {
     throw UnimplementedError('TimeSheetRepository.getProjectId');
   }
+  Future<BaseResponse<bool>> editOdooRow(OdooTimeSheetRow row) async {
+    throw UnimplementedError('TimeSheetRepository.getProjectId');
+  }
 }

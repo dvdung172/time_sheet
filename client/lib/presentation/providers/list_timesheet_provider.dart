@@ -1,11 +1,11 @@
-import 'package:flutter/cupertino.dart';
 import 'package:hsc_timesheet/core/logger.dart';
-import 'package:hsc_timesheet/data/models/timesheet.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:collection/collection.dart';
 import 'package:hsc_timesheet/data/repositories/index.dart';
 import 'package:hsc_timesheet/presentation/providers/base_provider.dart';
+
+import '../../data/models/index.dart';
 
 class ListTimeSheetsProvider extends ChangeNotifier with BaseProvider {
   final TimeSheetRepository timeSheetRepository;
@@ -109,4 +109,5 @@ class ListTimeSheetsProvider extends ChangeNotifier with BaseProvider {
       timeSheet = TimeSheet(sheetsDate: _date, employeeId: timeSheet.employeeId, rows: list, approval: timeSheet.approval);
       return timeSheet;
   }
+
 }

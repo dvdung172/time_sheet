@@ -1,8 +1,10 @@
+import 'package:hsc_timesheet/core/di.dart';
 import 'package:hsc_timesheet/core/theme.dart';
 import 'package:hsc_timesheet/data/models/timesheet.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_expandable_table/flutter_expandable_table.dart';
+import 'package:hsc_timesheet/presentation/providers/index.dart';
 
 class TableView extends StatefulWidget {
   const TableView({Key? key, required this.timeSheet, this.canChanged})
@@ -34,10 +36,12 @@ class _TableViewState extends State<TableView> {
       var rowColor = null;
       if (isWeekend) {
         rowColor = Theme.of(context).primaryColor.withOpacity(0.2);
-      } else if(row.generalComing==0&&row.overTime==0&&row.leave==null&&row.contents==''){
+      } else if (row.generalComing == 0 &&
+          row.overTime == 0 &&
+          row.leave == null &&
+          row.contents == '') {
         rowColor = CustomColor.alertColor;
-      }
-      else if (row.leave != null) {
+      } else if (row.leave != null) {
         rowColor = CustomColor.errorColor;
       }
       return InkWell(
@@ -189,7 +193,6 @@ class _TableViewState extends State<TableView> {
                 ),
                 TextButton(
                   onPressed: () {
-                    setState(() {
                       if (_leaveController.text == "") {
                         _leaveController.text = '0';
                       }
@@ -209,13 +212,7 @@ class _TableViewState extends State<TableView> {
                                   reason: dropdownValue!,
                                   timeoff:
                                       double.parse(_leaveController.text)));
-                    });
-                    //
-                    // _gcController.dispose();
-                    // _contentController.dispose();
-                    // _leaveController.dispose();
-                    // _otController.dispose();
-
+                      sl<TimeSheetProvider>().timeSheet = widget.timeSheet;
                     Navigator.pop(context, null);
                   },
                   child: const Text('OK'),

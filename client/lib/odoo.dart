@@ -41,15 +41,12 @@ void main() async {
       'kwargs': {
         'context': {'bin_size': true},
         'domain': [
-          // ['id','=','7']
-          // ['project_id','=','General coming']
-          // ['user_id', '=', 1],
-          // ["date", ">=", "2022-06-01"],
-          // ["date", "<=", "2022-06-30"],
+          ['date', '=', '2022-05-31'],
+          ['project_id', '=', 6],
+
         ],
         'fields': [
-           "name",
-          'id'
+          // 'id',
         ],
       },
     });
@@ -72,29 +69,26 @@ void main() async {
     //   'kwargs': {},
     // });
     // print(partner_id);
-    // // Update partner by id
+    // Update partner by id
     // var res = await client.callKw({
     //   'model': 'account.analytic.line',
-    //   'method': 'create',
+    //   'method': 'write',
     //   'args': [
-    //     [{
-    //       'unit_amount': 9.0,
-    //       'date': '2022-06-17',
-    //       'project_id': 8,
-    //       'employee_id': 7,
-    //       'task_id': null,
-    //       'user_id': null,
-    //       'name': 'hotro'
-    //     },
-    //       {
-    //         'unit_amount': 9.0,
-    //         'date': '2022-06-17',
-    //         'project_id': 6,
-    //         'employee_id': 9,
-    //         'task_id': null,
-    //         'user_id': null,
-    //         'name': 'hotro'
-    //       }]
+    //     [132],
+    //     {
+    //       "name": 'id iss 133',
+    //     }
+    //
+    //     // {
+    //     //   'unit_amount': 9.0,
+    //     //   'date': '2022-06-17',
+    //     //   'project_id': 8,
+    //     //   'employee_id': 7,
+    //     //   'task_id': null,
+    //     //   'user_id': null,
+    //     //   'name': 'hotro'
+    //     // },
+    //
     //   ],
     //   'kwargs': {},
     // });

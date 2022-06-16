@@ -5,7 +5,7 @@ import 'package:hsc_timesheet/core/base/base_response.dart';
 import 'package:hsc_timesheet/core/logger.dart';
 import 'package:hsc_timesheet/data/models/index.dart';
 import 'package:hsc_timesheet/data/repositories/index.dart';
-import 'package:hsc_timesheet/data/transform/timesheet_transform.dart';
+import 'package:hsc_timesheet/data/transform/odoo_to_timesheet.dart';
 import 'package:odoo_rpc/odoo_rpc.dart';
 
 import 'odoo_connect.dart';
@@ -37,10 +37,11 @@ class OdooTimeSheetRepository extends TimeSheetRepository with OdooConnect {
             'task_id',
             'date',
             'display_name',
+            'id',
           ],
         },
       });
-      logger.d('getAllTimeSheet: $data');
+      // logger.d('getAllTimeSheet: $data');
       final odooTimesheetList = await data
           .map<OdooTimeSheetRow>((item) => OdooTimeSheetRow.fromJson(item))
           .toList();
@@ -80,11 +81,11 @@ class OdooTimeSheetRepository extends TimeSheetRepository with OdooConnect {
             'employee_id',
             'task_id',
             'date',
-            'display_name',
+            'name',
           ],
         },
       });
-      logger.d('getAllTimeSheet: $data');
+      // logger.d('getAllTimeSheet: $data');
       final odooTimesheetList = await data
           .map<OdooTimeSheetRow>((item) => OdooTimeSheetRow.fromJson(item))
           .toList();
@@ -93,39 +94,6 @@ class OdooTimeSheetRepository extends TimeSheetRepository with OdooConnect {
           TimeSheetTransform().transform(odooTimesheetList);
 
       return BaseResponse.success(timeSheets);
-    } on OdooException catch (e) {
-      await handleError(e);
-      return BaseResponse.fail([e.message]);
-    } on Exception catch (e) {
-      await handleError(e);
-      return BaseResponse.fail([tr('message.server_error')]);
-    }
-  }
-
-  @override
-  Future<BaseResponse<int>> createOdooTimeSheet(
-      OdooTimeSheetRow row) async {
-    try {
-      var data = await client.callKw({
-        'model': 'account.analytic.line',
-        'method': 'create',
-        'method': 'create',
-        'args': [
-          {
-            'unit_amount': row.unitAmount,
-            'date': row.date.toString(),
-            'project_id': row.projectIdOdoo == null ? false : row.projectId,
-            'employee_id': row.employeeIdOdoo == null ? false : row.employeeId,
-            'task_id': row.taskIdOdoo,
-            'user_id': row.userIdOdoo,
-            'name': row.displayName
-          },
-        ],
-        'kwargs': {},
-      });
-      logger.d('getAllTimeSheetPosted: $data');
-
-      return BaseResponse.success(data);
     } on OdooException catch (e) {
       await handleError(e);
       return BaseResponse.fail([e.message]);
@@ -165,6 +133,7 @@ class OdooTimeSheetRepository extends TimeSheetRepository with OdooConnect {
       return BaseResponse.fail([tr('message.server_error')]);
     }
   }
+
   @override
   Future<BaseResponse<int>> getTaskId(String name) async {
     try {
@@ -182,13 +151,99 @@ class OdooTimeSheetRepository extends TimeSheetRepository with OdooConnect {
           ],
         },
       });
-      // logger.d('id from Odoo: ${res[0]['id']}');
-
       var id = res[0]['id'];
 
       return BaseResponse.success(id);
     } on OdooException catch (e) {
       handleError(e, additionalMessage: 'UserRepository.callUser($name) error');
+      return BaseResponse.fail([e.message]);
+    } on Exception catch (e) {
+      await handleError(e);
+      return BaseResponse.fail([tr('message.server_error')]);
+    }
+  }
+  @override
+  Future<BaseResponse<dynamic>> getRowId(int projectId, DateTime date) async {
+    try {
+      var res = await client.callKw({
+        'model': 'project.task',
+        'method': 'search_read',
+        'args': [],
+        'kwargs': {
+          'context': {'bin_size': true},
+          'domain': [
+            ['date', '=', date],
+            ['project_id', '=', projectId],
+
+          ],
+          'fields': [
+            'id',
+          ],
+        },
+      });
+
+      return BaseResponse.success(res);
+    } on OdooException catch (e) {
+      handleError(e, additionalMessage: 'UserRepository.callU) error');
+      return BaseResponse.fail([e.message]);
+    } on Exception catch (e) {
+      await handleError(e);
+      return BaseResponse.fail([tr('message.server_error')]);
+    }
+  }
+
+  @override
+  Future<BaseResponse<int>> createOdooTimeSheet(OdooTimeSheetRow row) async {
+    try {
+      var data = await client.callKw({
+        'model': 'account.analytic.line',
+        'method': 'create',
+        'method': 'create',
+        'args': [
+          {
+            'unit_amount': row.unitAmount,
+            'date': row.date.toString(),
+            'project_id': row.projectIdOdoo == null ? false : row.projectId,
+            'employee_id': row.employeeIdOdoo == null ? false : row.employeeId,
+            'task_id': row.taskIdOdoo,
+            'user_id': row.userIdOdoo,
+            'name': row.name
+          },
+        ],
+        'kwargs': {},
+      });
+      // logger.d('getAllTimeSheetPosted: $data');
+
+      return BaseResponse.success(data);
+    } on OdooException catch (e) {
+      await handleError(e);
+      return BaseResponse.fail([e.message]);
+    } on Exception catch (e) {
+      await handleError(e);
+      return BaseResponse.fail([tr('message.server_error')]);
+    }
+  }
+
+  @override
+  Future<BaseResponse<bool>> editOdooRow(OdooTimeSheetRow row) async {
+    try {
+      var res = await client.callKw({
+        'model': 'account.analytic.line',
+        'method': 'write',
+        'args': [
+          [row.id],
+          {
+            'task_id': row.taskId,
+            'unit_amount': row.unitAmount,
+            "name": row.name,
+          }
+        ],
+        'kwargs': {},
+      });
+      logger.d(res.toString());
+      return BaseResponse.success(res);
+    } on OdooException catch (e) {
+      handleError(e, additionalMessage: 'Update $row error');
       return BaseResponse.fail([e.message]);
     } on Exception catch (e) {
       await handleError(e);

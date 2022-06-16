@@ -3,7 +3,7 @@ import 'package:hsc_timesheet/core/di.dart';
 import 'package:hsc_timesheet/core/logger.dart';
 import 'package:hsc_timesheet/core/theme.dart';
 import 'package:hsc_timesheet/data/models/odoo_timesheet_row.dart';
-import 'package:hsc_timesheet/presentation/providers/timesheet_creation_provider.dart';
+import 'package:hsc_timesheet/presentation/providers/timesheet_provider.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_expandable_table/flutter_expandable_table.dart';

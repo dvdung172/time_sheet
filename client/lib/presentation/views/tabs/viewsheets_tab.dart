@@ -1,5 +1,7 @@
+import 'package:hsc_timesheet/core/di.dart';
 import 'package:hsc_timesheet/core/theme.dart';
 import 'package:hsc_timesheet/data/models/timesheet.dart';
+import 'package:hsc_timesheet/presentation/providers/index.dart';
 import 'package:hsc_timesheet/presentation/providers/list_timesheet_provider.dart';
 import 'package:hsc_timesheet/presentation/providers/tab_index.dart';
 import 'package:hsc_timesheet/presentation/widgets/table_view.dart';
@@ -47,11 +49,11 @@ class _ViewSheets extends State<ViewSheets> {
             style: CustomTheme.mainTheme.textTheme.headline2,
           ),
         ),
-        Consumer<ListTimeSheetsProvider>(builder: (context, provider, child) {
-          if (provider.loading) {
+        Consumer<TimeSheetProvider>(builder: (context, provider, child) {
+          if (sl<ListTimeSheetsProvider>().loading) {
             return const Center(child: CircularProgressIndicator());
           }
-          final TimeSheet? timeSheet = provider.timeSheets.firstWhereOrNull(
+          final TimeSheet? timeSheet = sl<ListTimeSheetsProvider>().timeSheets.firstWhereOrNull(
               (p) =>
                   DateFormat(DateFormat.YEAR_MONTH)
                       .format(p.sheetsDate)
@@ -63,9 +65,10 @@ class _ViewSheets extends State<ViewSheets> {
               child: Text('No Time Sheet Available'),
             );
           } else {
+            provider.timeSheet = timeSheet;//TODO: error 'setState() or markNeedsBuild() called during build.'
             return TableView(
-                timeSheet: timeSheet,
-                canChanged: timeSheet.approval == true ? false : true);
+                timeSheet: provider.timeSheet,
+                canChanged: provider.timeSheet.approval == true ? false : true);
           }
         }),
       ],

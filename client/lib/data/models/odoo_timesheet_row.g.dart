@@ -8,7 +8,7 @@ part of 'odoo_timesheet_row.dart';
 
 OdooTimeSheetRow _$OdooTimeSheetRowFromJson(Map<String, dynamic> json) =>
     OdooTimeSheetRow(
-      displayName: json['display_name'] as String,
+      name: json['name'] as String?,
       projectIdOdoo: json['project_id'],
       employeeIdOdoo: json['employee_id'],
       taskIdOdoo: json['task_id'],
@@ -20,7 +20,7 @@ OdooTimeSheetRow _$OdooTimeSheetRowFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$OdooTimeSheetRowToJson(OdooTimeSheetRow instance) =>
     <String, dynamic>{
-      'display_name': instance.displayName,
+      'name': instance.name,
       'project_id': instance.projectIdOdoo,
       'employee_id': instance.employeeIdOdoo,
       'task_id': instance.taskIdOdoo,
