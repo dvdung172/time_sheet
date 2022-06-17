@@ -1,3 +1,4 @@
+import 'package:hsc_timesheet/core/app_style.dart';
 import 'package:hsc_timesheet/core/di.dart';
 import 'package:hsc_timesheet/core/logger.dart';
 import 'package:hsc_timesheet/core/routes.dart';
@@ -17,8 +18,9 @@ class ManageTab extends StatefulWidget {
 
 class _ManageTabState extends State<ManageTab> {
   bool visible = false;
+
   // List<TimeSheet> listsheet = [];
-  List<Employee>? listUser = [];
+  List<Employee>? listEmployee = [];
 
   @override
   void initState() {
@@ -34,10 +36,11 @@ class _ManageTabState extends State<ManageTab> {
   @override
   Widget build(BuildContext context) {
     final employeeProvider =
-        Provider.of<ListEmployeeProvider>(context, listen: false);
-    final timesheetProvider =
-        Provider.of<ListTimeSheetsProvider>(context, listen: false);
-    listUser = employeeProvider.users;
+        Provider.of<ListEmployeeProvider>(context);
+    final listTimeSheetProvider =
+        Provider.of<ListTimeSheetsProvider>(context);
+    final timesheetProvider = sl<TimeSheetProvider>();
+    listEmployee = employeeProvider.users;
 
     if (employeeProvider.loading) {
       return const Center(child: CircularProgressIndicator());
@@ -70,14 +73,12 @@ class _ManageTabState extends State<ManageTab> {
               child: TabBarView(
                 children: <Widget>[
                   ListView.builder(
-                      itemCount: timesheetProvider.unapprovedTimeSheets.length,
+                      itemCount: listTimeSheetProvider.unapprovedTimeSheets.length,
                       itemBuilder: (context, index) {
                         var rows =
-                            timesheetProvider.unapprovedTimeSheets[index].rows;
+                            listTimeSheetProvider.unapprovedTimeSheets[index].rows;
                         var unapprovedTimesheetRow =
-                            timesheetProvider.unapprovedTimeSheets[index];
-                        logger.d(listUser);
-                        logger.d(unapprovedTimesheetRow.employeeId);
+                            listTimeSheetProvider.unapprovedTimeSheets[index];
                         return SizedBox(
                           height: 175,
                           child: Card(
@@ -100,7 +101,7 @@ class _ManageTabState extends State<ManageTab> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                          "Employee's Name: ${listUser?.firstWhereOrNull((element) => element.id == unapprovedTimesheetRow.employeeId)?.name}"),
+                                          "Employee's Name: ${listEmployee?.firstWhereOrNull((element) => element.id == unapprovedTimesheetRow.employeeId)?.name}"),
                                       Text(
                                           "General Coming: ${rows.map((e) => e.generalComing).toList().sum}"),
                                       Text(
@@ -140,8 +141,18 @@ class _ManageTabState extends State<ManageTab> {
                                             10,
                                     child: TextButton(
                                       child: const Text('APPROVE'),
-                                      onPressed: () {
-                                        /* ... */
+                                      onPressed: () async {
+                                        //TODO rebuild state
+                                        await timesheetProvider.approveTimeSheet(unapprovedTimesheetRow);
+
+                                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                          content: Text(timesheetProvider.error??'Declined Time Sheet ',
+                                            textAlign: TextAlign.center,
+                                            style: AppStyles.messageStyle,
+                                          ),
+                                          duration: const Duration(seconds: 2),
+                                          backgroundColor: Colors.red,
+                                        ));
                                       },
                                     ),
                                   ),
@@ -154,8 +165,19 @@ class _ManageTabState extends State<ManageTab> {
                                         'DECLINE',
                                         style: TextStyle(color: Colors.red),
                                       ),
-                                      onPressed: () {
-                                        /* ... */
+                                      onPressed: () async {
+                                        //TODO rebuild state
+
+                                        await timesheetProvider.deleteTimeSheet(unapprovedTimesheetRow);
+
+                                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                          content: Text(timesheetProvider.error??'Declined Time Sheet ',
+                                            textAlign: TextAlign.center,
+                                            style: AppStyles.messageStyle,
+                                          ),
+                                          duration: const Duration(seconds: 2),
+                                          backgroundColor: Colors.red,
+                                        ));
                                       },
                                     ),
                                   ),
@@ -166,10 +188,10 @@ class _ManageTabState extends State<ManageTab> {
                         );
                       }),
                   ListView.builder(
-                    itemCount: listUser?.length ?? 0,
+                    itemCount: listEmployee?.length ?? 0,
                     itemBuilder: (context, index) {
-                      var idxUser = listUser?[index];
-                      if (idxUser == null) {
+                      var idxEmployee = listEmployee?[index];
+                      if (idxEmployee == null) {
                         return const SizedBox.shrink();
                       }
 
@@ -179,16 +201,13 @@ class _ManageTabState extends State<ManageTab> {
                         child: InkWell(
                           splashColor: Colors.blue.withAlpha(30),
                           onTap: () {
+                            sl<ListTimeSheetsProvider>().getAllApprovedTimeSheets(idxEmployee.id);
 
-                            sl<ListTimeSheetsProvider>()
-                                .getAllApprovedTimesheets(idxUser.id);
-
-                            logger.d('current userId: ${idxUser}');
+                            logger.d('current userId: $idxEmployee');
 
                             // Navigator.pushNamed(context, Routes.manageView,
                             //     arguments: 'employee');
-                            Navigator.pushNamed(
-                                context, Routes.manageView,
+                            Navigator.pushNamed(context, Routes.manageView,
                                 arguments: [index, "'employee'"]);
                           },
                           child: ListTile(
@@ -199,13 +218,13 @@ class _ManageTabState extends State<ManageTab> {
                                   'http://172.29.4.126:8069/web/image?model=hr.employee&id=12&field=image_medium&unique=05312022084057'),
                             ),
                             // leading: Image.network('https://i.pravatar.cc/100'),
-                            title: Text(idxUser.name),
+                            title: Text(idxEmployee.name),
                             subtitle: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(idxUser.position),
-                                Text(idxUser.workPhone),
-                                Text(idxUser.email),
+                                Text(idxEmployee.position),
+                                Text(idxEmployee.workPhone),
+                                Text(idxEmployee.email),
                               ],
                             ),
                             isThreeLine: true,

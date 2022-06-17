@@ -40,6 +40,6 @@ class TimeSheetRepositoryMock extends TimeSheetRepository {
         .map<TimeSheet>((item) => TimeSheet.fromJson(item))
         .toList();
     return BaseResponse.success(
-        timeSheets.where((e) => e.approval == false).toList());
+        timeSheets.where((e) => e.userId == false).toList());
   }
 }

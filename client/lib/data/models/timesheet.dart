@@ -41,16 +41,16 @@ class SheetsRow {
 class TimeSheet {
   late int? id;
   late DateTime sheetsDate;
-  late dynamic employeeId;
+  late int employeeId;
   late List<SheetsRow> rows;
-  late bool approval;
+  late int? userId;
 
   TimeSheet({
     this.id,
     required this.sheetsDate,
     required this.employeeId,
     required this.rows,
-    required this.approval,
+    required this.userId,
   });
 
   SheetsRow addRow(SheetsRow newRow) {

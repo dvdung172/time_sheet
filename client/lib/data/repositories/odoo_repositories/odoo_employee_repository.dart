@@ -38,11 +38,9 @@ class OdooEmployeeRepository extends EmployeeRepository with OdooConnect {
         },
       });
 
-      logger.d('response from odoo: $res');
 
       final List<Employee> employeeList =
           await res.map<Employee>((item) => Employee.fromJson(item)).toList();
-      logger.d('employer list got from odoo: $employeeList');
       return BaseResponse.success(employeeList);
     } on OdooException catch (e) {
       await handleError(e);

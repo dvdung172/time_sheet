@@ -122,7 +122,7 @@ class AppDrawer extends StatelessWidget {
                 .getAllEmployee();
 
             await Provider.of<ListTimeSheetsProvider>(context, listen: false)
-                .getTimeSheetUnapproved();
+                .getAllUnApprovedTimeSheets();
             Navigator.pop(context);
             provider.currentIndex = 2;
           },

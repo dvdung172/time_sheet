@@ -43,7 +43,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    sl<ListTimeSheetsProvider>().getAllTimeSheets(sl<UserProvider>().currentUser!.id);
+    sl<ListTimeSheetsProvider>().getAllTimeSheets(sl<UserProvider>().currentUser!.employeeIds[0]);
   }
 
   @override
@@ -58,16 +58,16 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         title: Text(_tabTitleList[tabIndexProvider.currentIndex]),
         backgroundColor: Theme.of(context).primaryColor,
-        actions: tabIndexProvider.currentIndex == 1
-            ? [
-                IconButton(
-                    onPressed: () async {
-                      timeSheetProvider.editTimeSheet();
-                      logger.d('TimeSHeet date: ${timeSheetProvider.timeSheet.sheetsDate}');
-                    },
-                    icon: const Icon(Icons.save_outlined)),
-              ]
-            : null,
+        // actions: tabIndexProvider.currentIndex == 1
+        //     ? [
+        //         IconButton(
+        //             onPressed: () async {
+        //               // timeSheetProvider.editTimeSheet();
+        //               logger.d('TimeSHeet date: ${timeSheetProvider.timeSheet.sheetsDate}');
+        //             },
+        //             icon: const Icon(Icons.save_outlined)),
+        //       ]
+        //     : null,
       ),
       drawer: AppDrawer(scaffoldKey: _scaffoldKey),
       body: widget._tabList[tabIndexProvider.currentIndex],

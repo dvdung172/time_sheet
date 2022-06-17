@@ -18,14 +18,15 @@ class TimeSheetProvider extends ChangeNotifier with BaseProvider {
   String? error;
 
   TimeSheet get timeSheet => _timeSheet;
-  set timeSheet(TimeSheet value){
+
+  set timeSheet(TimeSheet value) {
     _timeSheet = value;
     notifyListeners();
   }
 
   void createTimeSheet(DateTime _date) async {
-    var currentUser = sl<UserProvider>().currentUser!.employeeIds;
-
+    var currentEmployee = sl<UserProvider>().currentUser!.employeeIds[0];
+    var curentUser = sl<UserProvider>().currentUser!.id;
     date = _date;
     List<SheetsRow> list = [];
     for (int i = 1;
@@ -50,8 +51,8 @@ class TimeSheetProvider extends ChangeNotifier with BaseProvider {
     timeSheet = TimeSheet(
         rows: list,
         sheetsDate: _date,
-        employeeId: currentUser,
-        approval: false);
+        employeeId: currentEmployee,
+        userId: curentUser);
   }
 
   void setLeave(int index, String reason, double timeoff) {
@@ -67,40 +68,65 @@ class TimeSheetProvider extends ChangeNotifier with BaseProvider {
     loading = true;
     notifyListeners();
 
-    await transformTimeSheetToOdoo(timeSheet).then((value) async {
-      var odooRow = value;
-      for (var row in odooRow!) {
-        var response = await timeSheetRepository.createOdooTimeSheet(row!);
-        if (response.status == 0) {
-          error = null;
-          logger.d('$response ok');
-        } else {
-          error = response.errors![0].message;
-          logger.d('not ok');
+    for (var row in timeSheet.rows) {
+      await transformRowToOdoo(row, timeSheet.employeeId).then((value) async {
+        var odooRow = value;
+        for (OdooTimeSheetRow? row in odooRow!) {
+          if (row!.unitAmount > 0) {
+            var response = await timeSheetRepository.createOdooTimeSheet(row);
+            if (response.status == 0) {
+              error = null;
+              logger.d('$response ok');
+            } else {
+              error = response.errors![0].message;
+              logger.d('not ok');
+            }
+          }
         }
-      }
-    });
+      });
+    }
 
     loading = false;
     notifyListeners();
   }
-  Future<void> editTimeSheet() async {
+
+  Future<void> editTimeSheet(SheetsRow row, int employeeId) async {
     loading = true;
     notifyListeners();
 
-    print('=========================');
-
-    await transformTimeSheetToOdoo(timeSheet).then((value) async {
+    await transformRowToOdoo(row, employeeId).then((value) async {
       var odooRow = value;
-      logger.d('transformed row: $odooRow');
-      for (var row in odooRow!) {
-        var response = await timeSheetRepository.editOdooRow(row!);//TODO: get OdooRowId
-        if (response.status == 0) {
-          error = null;
-          logger.d('$response ok');
-        } else {
-          error = response.errors![0].message;
-          logger.d('not ok');
+      for (OdooTimeSheetRow? row in odooRow!) {
+        logger.d(row);
+        if (row!.id != null) {
+          if (row.unitAmount > 0) {
+            var response = await timeSheetRepository.editOdooRow(row);
+            if (response.status == 0) {
+              error = null;
+              logger.d('$response ok');
+            } else {
+              error = response.errors![0].message;
+              logger.d('not ok');
+            }
+          } else {
+            var response = await timeSheetRepository.deleteOdooRow(row);
+            if (response.status == 0) {
+              error = null;
+              logger.d('$response ok');
+            } else {
+              error = response.errors![0].message;
+              logger.d('not ok');
+            }
+          }
+        } else if(row.unitAmount>0) {
+          var response = await timeSheetRepository.createOdooTimeSheet(row);
+          if (response.status == 0) {
+            error = null;
+            logger.d('$response ok');
+          } else {
+            error = response.errors![0].message;
+            logger.d('not ok');
+          }
         }
       }
     });
@@ -109,7 +135,60 @@ class TimeSheetProvider extends ChangeNotifier with BaseProvider {
     notifyListeners();
   }
 
-  Future<List?> transformTimeSheetToOdoo(TimeSheet? timesheet) async {
+  Future<void> approveTimeSheet(TimeSheet approvalTimeSheet) async {
+    loading = true;
+    notifyListeners();
+
+    for (var row in approvalTimeSheet.rows) {
+      await transformRowToOdoo(row, approvalTimeSheet.employeeId).then((value) async {
+        var odooRow = value;
+        for (OdooTimeSheetRow? row in odooRow!) {
+          if (row!.unitAmount > 0) {
+            var response = await timeSheetRepository.approveOdooRow(row);
+            if (response.status == 0) {
+              error = null;
+              logger.d('$response ok');
+            } else {
+              error = response.errors![0].message;
+              logger.d('not ok');
+            }
+          }
+        }
+      });
+    }
+
+    loading = false;
+    notifyListeners();
+  }
+
+  Future<void> deleteTimeSheet(TimeSheet declineTimeSheet) async {
+    loading = true;
+    notifyListeners();
+
+    for (var row in declineTimeSheet.rows) {
+      await transformRowToOdoo(row, declineTimeSheet.employeeId).then((value) async {
+        var odooRow = value;
+        for (OdooTimeSheetRow? row in odooRow!) {
+          if (row!.unitAmount > 0) {
+            var response = await timeSheetRepository.deleteOdooRow(row);
+            if (response.status == 0) {
+              error = null;
+              logger.d('$response ok');
+            } else {
+              error = response.errors![0].message;
+              logger.d('not ok');
+            }
+          }
+        }
+      });
+    }
+
+    loading = false;
+    notifyListeners();
+  }
+
+
+  Future<List?> transformRowToOdoo(SheetsRow row, int employeeId) async {
     int gcId = await timeSheetRepository
         .getProjectId('General coming')
         .then((value) => value.data!);
@@ -122,43 +201,56 @@ class TimeSheetProvider extends ChangeNotifier with BaseProvider {
         .then((value) => value.data!);
 
     List<OdooTimeSheetRow?> odooRow = [];
-    if (timesheet!.rows.isEmpty) {
-      return null;
-    }
-    for (var row in timesheet.rows) {
-      if (row.generalComing > 0) {
-        odooRow.add(OdooTimeSheetRow(
-            name: row.contents,
-            projectIdOdoo: gcId,
-            employeeIdOdoo: timesheet.employeeId,
-            taskIdOdoo: null,
-            date: row.date,
-            userIdOdoo: null,
-            unitAmount: row.generalComing));
-      }
-      if (row.overTime > 0) {
-        odooRow.add(OdooTimeSheetRow(
-            name: row.contents,
-            projectIdOdoo: otId,
-            employeeIdOdoo: timesheet.employeeId,
-            taskIdOdoo: null,
-            date: row.date,
-            userIdOdoo: null,
-            unitAmount: row.overTime));
-      }
-      if (row.leave != null) {
-        odooRow.add(OdooTimeSheetRow(
-            name: row.contents,
-            projectIdOdoo: leaveId,
-            employeeIdOdoo: timesheet.employeeId,
-            taskIdOdoo: await timeSheetRepository
+
+    var rowGC = await timeSheetRepository
+        .getRowId(gcId, row.date, employeeId)
+        .then((value) => value.data);
+
+    var rowOT = await timeSheetRepository
+        .getRowId(otId, row.date, employeeId)
+        .then((value) => value.data);
+
+    var rowLeave = await timeSheetRepository
+        .getRowId(leaveId, row.date, employeeId)
+        .then((value) => value.data);
+    odooRow.add(OdooTimeSheetRow(
+        id: rowGC,
+        name: row.contents,
+        projectIdOdoo: gcId,
+        employeeIdOdoo: employeeId,
+        taskIdOdoo: null,
+        date: row.date,
+        userIdOdoo: null,
+        unitAmount: row.generalComing));
+
+    odooRow.add(OdooTimeSheetRow(
+        id: rowOT,
+        name: row.contents,
+        projectIdOdoo: otId,
+        employeeIdOdoo: employeeId,
+        taskIdOdoo: null,
+        date: row.date,
+        userIdOdoo: null,
+        unitAmount: row.overTime));
+
+    odooRow.add(OdooTimeSheetRow(
+        id: rowLeave,
+        name: row.contents,
+        projectIdOdoo: row.leave==null?null:leaveId,
+        employeeIdOdoo: employeeId,
+        taskIdOdoo: row.leave == null
+            ? null
+            : await timeSheetRepository
                 .getTaskId(row.leave!.reason!)
                 .then((value) => value.data!),
-            date: row.date,
-            userIdOdoo: null,
-            unitAmount: row.leave!.timeoff!));
-      }
-    }
+        date: row.date,
+        userIdOdoo: null,
+        unitAmount: row.leave == null ? 0 : row.leave!.timeoff!));
+
+    logger.d(odooRow);
     return odooRow;
   }
+
+
+
 }

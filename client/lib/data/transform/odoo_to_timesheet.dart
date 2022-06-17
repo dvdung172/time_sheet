@@ -10,10 +10,13 @@ class TimeSheetTransform {
   List<TimeSheet> transform(List<OdooTimeSheetRow> odooTimesheetList) {
     final List<TimeSheet> timesheetList = <TimeSheet>[];
     final dateFormatter = DateFormat('yyyyMM');
+
     var groupByMonth = groupBy(odooTimesheetList,
         (OdooTimeSheetRow obj) => dateFormatter.format(obj.date));
+
     groupByMonth.forEach((date, groupedRowsByMonth) {
-      final timesheetByOneMonth = transformByOneMonth(groupedRowsByMonth);
+      final timesheetByOneMonth =
+          transformByOneMonth(groupedRowsByMonth);
       if (timesheetByOneMonth != null) {
         timesheetList.add(timesheetByOneMonth);
       }
@@ -22,7 +25,8 @@ class TimeSheetTransform {
     return timesheetList;
   }
 
-  TimeSheet? transformByOneMonth(List<OdooTimeSheetRow> odooTimesheetList) {
+  TimeSheet? transformByOneMonth(
+      List<OdooTimeSheetRow> odooTimesheetList) {
     if (odooTimesheetList.isEmpty) {
       return null;
     }
@@ -32,9 +36,9 @@ class TimeSheetTransform {
     var fistDateOfMonth = DateTime(firstDate.year, firstDate.month, 1);
     TimeSheet timesheetRow = TimeSheet(
       sheetsDate: fistDateOfMonth,
-      employeeId: firstOdooRow.userId,
+      employeeId: firstOdooRow.employeeId,
       rows: [],
-      approval: false, // TODO: need implement at server-side
+      userId: firstOdooRow.userId,
     );
 
     var groupByDate =
@@ -56,7 +60,7 @@ class TimeSheetTransform {
         }
         // end leave
         else {
-          generalComing += odooRow.unitAmount;
+          generalComing = odooRow.unitAmount;
         }
 
         if (odooRow.name != null) {

@@ -2,7 +2,6 @@ import 'package:hsc_timesheet/core/logger.dart';
 import 'package:hsc_timesheet/core/theme.dart';
 import 'package:hsc_timesheet/data/models/timesheet.dart';
 import 'package:hsc_timesheet/presentation/providers/list_timesheet_provider.dart';
-import 'package:hsc_timesheet/presentation/providers/timesheet_provider.dart';
 import 'package:hsc_timesheet/presentation/widgets/table_view.dart';
 import 'package:hsc_timesheet/presentation/widgets/custom_month_picker.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -23,7 +22,6 @@ class _ManageViewState extends State<ManageView> {
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)?.settings.arguments as List<dynamic> ;
-    logger.d(args[0].toString());
     return Scaffold(
         backgroundColor: args[1] == "approval" ? null : const Color(0xFFD5D3D3),
         appBar: AppBar(

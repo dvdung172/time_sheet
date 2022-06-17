@@ -16,7 +16,7 @@ class OdooTimeSheetRepository extends TimeSheetRepository with OdooConnect {
   OdooTimeSheetRepository(this.client);
 
   @override
-  Future<BaseResponse<List<TimeSheet>>> getAllTimeSheet(int userId) async {
+  Future<BaseResponse<List<TimeSheet>>> getAllTimeSheet(int employeeId) async {
     try {
       var data = await client.callKw({
         'model': 'account.analytic.line',
@@ -25,7 +25,7 @@ class OdooTimeSheetRepository extends TimeSheetRepository with OdooConnect {
         'kwargs': {
           'context': {'bin_size': true},
           'domain': [
-            ['user_id', '=', userId],
+            ['employee_id', '=', employeeId],
             // ["date", ">=", "2022-06-01"],
             // ["date", "<=", "2022-06-30"],
           ],
@@ -70,9 +70,7 @@ class OdooTimeSheetRepository extends TimeSheetRepository with OdooConnect {
         'kwargs': {
           'context': {'bin_size': true},
           'domain': [
-            // ['user_id', '=', userId],
-            // ["date", ">=", "2022-06-01"],
-            // ["date", "<=", "2022-06-30"],
+            ['user_id', '!=', 1]
           ],
           'fields': [
             'user_id',
@@ -81,7 +79,53 @@ class OdooTimeSheetRepository extends TimeSheetRepository with OdooConnect {
             'employee_id',
             'task_id',
             'date',
-            'name',
+            'display_name',
+            'id',
+          ],
+        },
+      });
+      // logger.d('getAllTimeSheet: $data');
+      final odooTimesheetList = await data
+          .map<OdooTimeSheetRow>((item) => OdooTimeSheetRow.fromJson(item))
+          .toList();
+
+      final List<TimeSheet> timeSheets =
+          TimeSheetTransform().transform(odooTimesheetList);
+
+      return BaseResponse.success(timeSheets);
+    } on OdooException catch (e) {
+      await handleError(e);
+      return BaseResponse.fail([e.message]);
+    } on Exception catch (e) {
+      await handleError(e);
+      return BaseResponse.fail([tr('message.server_error')]);
+    }
+  }
+
+  @override
+  Future<BaseResponse<List<TimeSheet>>> getTimeSheetApproved(
+      int employeeId) async {
+    // getProjectId('Over Time');
+    try {
+      var data = await client.callKw({
+        'model': 'account.analytic.line',
+        'method': 'search_read',
+        'args': [],
+        'kwargs': {
+          'context': {'bin_size': true},
+          'domain': [
+            ['employee_id', '=', employeeId],
+            ['user_id', '=', 1]
+          ],
+          'fields': [
+            'user_id',
+            'unit_amount',
+            'project_id',
+            'employee_id',
+            'task_id',
+            'date',
+            'display_name',
+            'id',
           ],
         },
       });
@@ -126,7 +170,8 @@ class OdooTimeSheetRepository extends TimeSheetRepository with OdooConnect {
 
       return BaseResponse.success(id);
     } on OdooException catch (e) {
-      handleError(e, additionalMessage: 'UserRepository.callUser($name) error');
+      handleError(e,
+          additionalMessage: 'UserRepository.GetProjectId($name) error');
       return BaseResponse.fail([e.message]);
     } on Exception catch (e) {
       await handleError(e);
@@ -155,36 +200,38 @@ class OdooTimeSheetRepository extends TimeSheetRepository with OdooConnect {
 
       return BaseResponse.success(id);
     } on OdooException catch (e) {
-      handleError(e, additionalMessage: 'UserRepository.callUser($name) error');
+      handleError(e,
+          additionalMessage: 'UserRepository.getTaskId($name) error');
       return BaseResponse.fail([e.message]);
     } on Exception catch (e) {
       await handleError(e);
       return BaseResponse.fail([tr('message.server_error')]);
     }
   }
+
   @override
-  Future<BaseResponse<dynamic>> getRowId(int projectId, DateTime date) async {
+  Future<BaseResponse<int?>> getRowId(
+      int projectId, DateTime date, int employeeId) async {
     try {
       var res = await client.callKw({
-        'model': 'project.task',
+        'model': 'account.analytic.line',
         'method': 'search_read',
         'args': [],
         'kwargs': {
           'context': {'bin_size': true},
           'domain': [
-            ['date', '=', date],
             ['project_id', '=', projectId],
-
+            ["date", "=", (DateFormat("yyyy-MM-dd").format(date))],
+            ["employee_id", "=", employeeId],
           ],
-          'fields': [
-            'id',
-          ],
+          'fields': ['id'],
         },
       });
-
-      return BaseResponse.success(res);
+      var id;
+      (res.isEmpty) ? (id = null) : (id = res[0]['id']);
+      return BaseResponse.success(id);
     } on OdooException catch (e) {
-      handleError(e, additionalMessage: 'UserRepository.callU) error');
+      handleError(e, additionalMessage: 'UserRepository.getRowId error');
       return BaseResponse.fail([e.message]);
     } on Exception catch (e) {
       await handleError(e);
@@ -197,7 +244,6 @@ class OdooTimeSheetRepository extends TimeSheetRepository with OdooConnect {
     try {
       var data = await client.callKw({
         'model': 'account.analytic.line',
-        'method': 'create',
         'method': 'create',
         'args': [
           {
@@ -240,10 +286,53 @@ class OdooTimeSheetRepository extends TimeSheetRepository with OdooConnect {
         ],
         'kwargs': {},
       });
-      logger.d(res.toString());
       return BaseResponse.success(res);
     } on OdooException catch (e) {
       handleError(e, additionalMessage: 'Update $row error');
+      return BaseResponse.fail([e.message]);
+    } on Exception catch (e) {
+      await handleError(e);
+      return BaseResponse.fail([tr('message.server_error')]);
+    }
+  }
+  @override
+  Future<BaseResponse<bool>> approveOdooRow(OdooTimeSheetRow row) async {
+    try {
+      var res = await client.callKw({
+        'model': 'account.analytic.line',
+        'method': 'write',
+        'args': [
+          [row.id],
+          {
+            'user_id': 1,
+          }
+        ],
+        'kwargs': {},
+      });
+      return BaseResponse.success(res);
+    } on OdooException catch (e) {
+      handleError(e, additionalMessage: 'Approve $row error');
+      return BaseResponse.fail([e.message]);
+    } on Exception catch (e) {
+      await handleError(e);
+      return BaseResponse.fail([tr('message.server_error')]);
+    }
+  }
+
+  @override
+  Future<BaseResponse<bool>> deleteOdooRow(OdooTimeSheetRow row) async {
+    try {
+      var res = await client.callKw({
+        'model': 'account.analytic.line',
+        'method': 'unlink',
+        'args': [
+          [row.id],
+        ],
+        'kwargs': {},
+      });
+      return BaseResponse.success(res);
+    } on OdooException catch (e) {
+      handleError(e, additionalMessage: 'Unlink $row error');
       return BaseResponse.fail([e.message]);
     } on Exception catch (e) {
       await handleError(e);

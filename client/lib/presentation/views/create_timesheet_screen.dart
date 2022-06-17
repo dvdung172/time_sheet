@@ -48,11 +48,20 @@ class _NewTimeSheet extends State<NewTimeSheet> {
         actions: [
           IconButton(
               onPressed: () async {
-                // print(sl<TimeSheetProvider>().timeSheet.toJson());
                 await sl<TimeSheetProvider>().postTimeSheet();
-                // logger.d('===================');
-                //   logger.d(t);
-                //   logger.d(t![1]);
+                var error = sl<TimeSheetProvider>().error;
+                showDialog(
+                    context: context,
+                    builder: (_) => AlertDialog(
+                      content: Text(error ?? 'Create success'),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.pop(context, null),
+                          child: const Text('OK'),
+                        ),
+                      ],
+                    )
+                );
 
               },
               icon: const Icon(Icons.send))
@@ -287,6 +296,9 @@ class _LeaveDialog extends State<LeaveDialog> {
         ),
         TextButton(
           onPressed: () {
+
+
+
             if (dropdownValue != null) {
               leaveList.add(dropdownValue!);
               leaveList.add(_textcontroller.text);

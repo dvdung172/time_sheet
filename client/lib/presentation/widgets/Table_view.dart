@@ -193,6 +193,9 @@ class _TableViewState extends State<TableView> {
                 ),
                 TextButton(
                   onPressed: () {
+
+                    // ui
+                    setState(() {
                       if (_leaveController.text == "") {
                         _leaveController.text = '0';
                       }
@@ -206,13 +209,16 @@ class _TableViewState extends State<TableView> {
                               : _otController.text),
                           contents: _contentController.text,
                           leave: dropdownValue == null ||
-                                  _leaveController.text == '0'
+                              _leaveController.text == '0'
                               ? null
                               : Leave(
-                                  reason: dropdownValue!,
-                                  timeoff:
-                                      double.parse(_leaveController.text)));
-                      sl<TimeSheetProvider>().timeSheet = widget.timeSheet;
+                              reason: dropdownValue!,
+                              timeoff:
+                              double.parse(_leaveController.text)));
+                    });
+
+                    sl<TimeSheetProvider>().editTimeSheet(widget.timeSheet.rows[index], widget.timeSheet.employeeId);
+
                     Navigator.pop(context, null);
                   },
                   child: const Text('OK'),

@@ -49,26 +49,25 @@ class _ViewSheets extends State<ViewSheets> {
             style: CustomTheme.mainTheme.textTheme.headline2,
           ),
         ),
-        Consumer<TimeSheetProvider>(builder: (context, provider, child) {
-          if (sl<ListTimeSheetsProvider>().loading) {
+        Consumer<ListTimeSheetsProvider>(builder: (context, provider, child) {
+          if (provider.loading) {
             return const Center(child: CircularProgressIndicator());
           }
-          final TimeSheet? timeSheet = sl<ListTimeSheetsProvider>().timeSheets.firstWhereOrNull(
-              (p) =>
-                  DateFormat(DateFormat.YEAR_MONTH)
-                      .format(p.sheetsDate)
-                      .compareTo(
-                          DateFormat(DateFormat.YEAR_MONTH).format(_date)) ==
+          final TimeSheet? timeSheet = provider.timeSheets.firstWhereOrNull(
+                  (p) =>
+              DateFormat(DateFormat.YEAR_MONTH)
+                  .format(p.sheetsDate)
+                  .compareTo(
+                  DateFormat(DateFormat.YEAR_MONTH).format(_date)) ==
                   0);
           if (timeSheet == null) {
             return const Center(
               child: Text('No Time Sheet Available'),
             );
           } else {
-            provider.timeSheet = timeSheet;//TODO: error 'setState() or markNeedsBuild() called during build.'
             return TableView(
-                timeSheet: provider.timeSheet,
-                canChanged: provider.timeSheet.approval == true ? false : true);
+                timeSheet: timeSheet,
+                canChanged: timeSheet.userId != sl<UserProvider>().currentUser!.id ? false : true);
           }
         }),
       ],

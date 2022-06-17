@@ -1,8 +1,7 @@
 import 'package:charts_flutter/flutter.dart';
-import 'package:hsc_timesheet/core/logger.dart';
+import 'package:hsc_timesheet/core/di.dart';
 import 'package:hsc_timesheet/data/models/timesheet.dart';
-import 'package:hsc_timesheet/presentation/providers/list_timesheet_provider.dart';
-import 'package:hsc_timesheet/presentation/providers/tab_index.dart';
+import 'package:hsc_timesheet/presentation/providers/index.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
